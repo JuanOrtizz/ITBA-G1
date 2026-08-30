@@ -133,8 +133,8 @@ h1, h2, h3, .footer-col h3 {
   flex-shrink: 0;
 }
 .logo img {
-  width: 120px !important; /* Cumplimos el ancho mínimo del manual */
-  max-height: 65px !important; /* Forzamos un límite de alto para que no explote */
+  width: 120px !important;
+  max-height: 65px !important; 
   object-fit: contain;
   border: none !important;
   box-shadow: none !important;
@@ -256,7 +256,7 @@ h1, h2, h3, .footer-col h3 {
   color: var(--color-accent);
 }
 .hero h1 {
-  max-width: 24ch; /* Le damos más espacio a lo ancho al texto */
+  max-width: 24ch; 
   font-size: var(--fs-hero);
   line-height: 1.2;
 }
