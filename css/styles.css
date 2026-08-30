@@ -1,0 +1,64 @@
+body {
+    background-color: #F5E6D3;
+}
+
+#buscador {
+    display: block;
+    width: 60%;
+    margin: 40px auto;
+    padding: 15px 25px;
+    
+    background-color: #FFFDF9;
+    border: 2px solid #A0522D;
+    border-radius: 5px;
+    box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
+    
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    color: #A0522D;
+    outline: none;
+}
+
+#contenedor-catalogo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+}
+
+.tarjeta-producto {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30%;
+    height: 75vh;
+    padding: 20px;
+    box-sizing: border-box;
+    color: black;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px #A0522D;
+    border: 1px solid #A0522D;
+}
+
+.tarjeta-producto h2 {
+    font-family: 'Playfair Display';
+    font-size: 35px;
+    margin: 10px 0;
+    color: #A0522D;
+}
+
+.tarjeta-producto img {
+    height: 250px;
+    width: 100%;
+    object-fit: contain;
+}
+
+.tarjeta-producto p {
+    font-family: 'Inter Regular';
+    font-size: 12pt;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    margin-top: auto;
+}
