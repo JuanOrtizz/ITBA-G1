@@ -1,0 +1,120 @@
+/* =============================================================================
+   Hermanos Jota — Estilos exclusivos de Contacto (Persona 4)
+   ============================================================================= */
+
+/* 1. AISLAMIENTO: Contenedor principal de la sección */
+.seccion-contacto {
+    padding-block: var(--space-3xl);
+    text-align: center;
+  }
+  
+  .seccion-contacto h2 {
+    font-size: var(--fs-xl);
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+  }
+  
+  .seccion-contacto p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+  }
+  
+  /* 2. MOBILE-FIRST Y FLEXBOX: Layout del formulario */
+  #formulario-contacto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: var(--color-surface); /* Usa el mismo fondo que las tarjetas de productos */
+    padding: var(--space-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: left;
+  }
+  
+  /* Estilos de las etiquetas (Labels) */
+  #formulario-contacto label {
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    /* Acerca el texto ligeramente a su input reduciendo el espacio generado por el gap */
+    margin-bottom: calc(var(--space-xs) * -1); 
+  }
+  
+  /* 3 y 4. USO DE VARIABLES, INPUTS Y TEXTAREA */
+  #formulario-contacto input,
+  #formulario-contacto textarea {
+    width: 100%;
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    padding: var(--space-sm) var(--space-md); /* Vertical --space-sm, horizontal --space-md para que respire */
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
+    color: var(--color-text);
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  
+  /* Prevenir que el textarea deforme el diseño horizontalmente */
+  #formulario-contacto textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  /* 5. ESTADOS DE INTERACCIÓN (Focus) */
+  #formulario-contacto input:focus,
+  #formulario-contacto textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    /* Sombra sutil y elegante usando el mismo tono primary */
+    box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.15); 
+  }
+  
+  /* 6. BOTÓN: Coincidiendo con el estilo global (.btn-primary) */
+  #formulario-contacto button[type="submit"] {
+    margin-top: var(--space-sm);
+    background-color: var(--color-primary);
+    color: var(--color-bg-alt); /* Blanco global */
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px; /* Forma de píldora idéntica al resto de la web */
+    font-family: var(--font-body);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: none;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    width: 100%; /* Ocupa todo el ancho en celulares */
+  }
+  
+  /* Interacción Hover del botón */
+  #formulario-contacto button[type="submit"]:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px); /* Efecto de que el botón se levanta */
+  }
+  
+  /* Estilos de los spans de error creados con JS */
+  #formulario-contacto .error-span {
+    font-size: var(--fs-xs);
+    color: #d93025; /* Este es un rojo de alerta estándar para feedback negativo */
+    margin-top: calc(var(--space-xs) * -1);
+  }
+  
+  /* Mensaje final de éxito */
+  #mensaje-feedback {
+    text-align: center;
+    font-size: var(--fs-md);
+    margin-top: var(--space-md);
+  }
+  
+  /* -----------------------------------------------------------------------------
+     Tablet / Desktop Ajustes Menores
+     ----------------------------------------------------------------------------- */
+  @media (min-width: 768px) {
+    #formulario-contacto button[type="submit"] {
+      width: fit-content; /* En pantallas grandes el botón no se estira de más */
+      align-self: center; /* Lo centramos dentro de la tarjeta del formulario */
+    }
+  }
