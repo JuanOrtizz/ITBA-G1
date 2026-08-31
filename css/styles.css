@@ -2,20 +2,22 @@ body {
     background-color: #F5E6D3;
 }
 
+/* productos.html */
+
 #buscador {
     display: block;
-    width: 60%;
-    margin: 40px auto;
-    padding: 15px 25px;
-    
-    background-color: #FFFDF9;
-    border: 2px solid #A0522D;
+    width: 90%;
+    margin: 20px auto;
+    padding: 12px 20px;
+
+    background-color: #fffdf9;
+    border: 2px solid #a0522d;
     border-radius: 5px;
     box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
-    
+
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
-    color: #A0522D;
+    font-size: 16px;
+    color: #a0522d;
     outline: none;
 }
 
@@ -24,41 +26,73 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
-    padding: 20px;
+    padding: 15px;
 }
 
 .tarjeta-producto {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 30%;
-    height: 75vh;
-    padding: 20px;
+    width: 90%;
+    height: auto;
+    min-height: 400px;
+    padding: 15px;
     box-sizing: border-box;
     color: black;
     text-align: center;
     cursor: pointer;
-    box-shadow: 5px 5px 10px #A0522D;
-    border: 1px solid #A0522D;
+    box-shadow: 5px 5px 10px #a0522d;
+    border: 1px solid #a0522d;
 }
 
 .tarjeta-producto h2 {
-    font-family: 'Playfair Display';
-    font-size: 35px;
+    font-family: "Playfair Display";
+    font-size: 26px;
     margin: 10px 0;
-    color: #A0522D;
+    color: #a0522d;
 }
 
 .tarjeta-producto img {
-    height: 250px;
+    height: 200px;
     width: 100%;
     object-fit: contain;
 }
 
 .tarjeta-producto p {
-    font-family: 'Inter Regular';
-    font-size: 12pt;
-    line-height: 1.6;
+    font-family: "Inter Regular";
+    font-size: 11pt;
+    line-height: 1.5;
     letter-spacing: 0.02em;
     margin-top: auto;
+}
+
+@media (min-width: 768px) {
+    #buscador {
+        width: 60%;
+        margin: 40px auto;
+        padding: 15px 25px;
+        font-size: 18px;
+    }
+
+    #contenedor-catalogo {
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .tarjeta-producto {
+        width: 30%;
+    }
+
+    .tarjeta-producto h2 {
+        font-size: 35px;
+    }
+    
+    .tarjeta-producto img {
+        height: 250px;
+    }
+
+    .tarjeta-producto p {
+        font-size: 12pt;
+        line-height: 1.6;
+    }
 }
