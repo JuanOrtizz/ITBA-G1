@@ -1,4 +1,5 @@
 import { catalogo } from "./datos.js";
+//import { agregarAlCarrito } from "./cart.js";
 
 const contenedorCatalogo = document.querySelector("#contenedor-catalogo");
 const inputBuscador = document.querySelector("#buscador");
@@ -45,7 +46,15 @@ function mostrarProductos(arrayMuebles) {
         const descripcion = document.createElement("p");
         descripcion.textContent = mueble.descripcion;
         divProducto.appendChild(descripcion);
-
+        
+        const boton = document.createElement("button");
+        boton.textContent = "Añadir al Carrito";
+        boton.addEventListener("click", function(evento) {
+            evento.stopPropagation();
+            agregarAlCarrito(mueble);
+        });
+        divProducto.appendChild(boton);
+        
         contenedorCatalogo.appendChild(divProducto);
     });
 }
@@ -53,7 +62,6 @@ function mostrarProductos(arrayMuebles) {
 // Campo de Búsqueda
 inputBuscador.addEventListener("input", function (evento) {
     const textoBuscado = quitarAcentos(evento.target.value.toLowerCase());
-
     const resultadosFiltrados = catalogo.filter(function (mueble) {
         const nombreMueble = quitarAcentos(mueble.nombre.toLowerCase());
         const categoriaMueble = quitarAcentos(mueble.categoria.toLowerCase());
