@@ -54,14 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarError(inputEmail, 'El email solo acepta letras, números y los caracteres especiales "." y "_".');
         }
 
-        // 4c. Validación estricta del Mensaje (Hasta 150 caracteres, diferenciando mayúsculas/minúsculas)
-        // Nota: JavaScript diferencia por naturaleza las mayúsculas de minúsculas al leer el 'value'.
-        const textoMensaje = inputMensaje.value.trim();
-        if (textoMensaje === '') {
-            mostrarError(inputMensaje, 'El mensaje no puede estar vacío.');
-        } else if (textoMensaje.length > 150) {
-            mostrarError(inputMensaje, `El mensaje no puede superar los 150 caracteres. Actualmente tiene ${textoMensaje.length}.`);
-        }
+         // Nota: JavaScript diferencia por naturaleza las mayúsculas de minúsculas al leer el 'value'.
+        // 4c. Validación estricta del Mensaje (Mínimo 15 y Máximo 400 caracteres)
+    const textoMensaje = inputMensaje.value.trim();
+
+    if (textoMensaje === '') {
+        mostrarError(inputMensaje, 'El mensaje no puede estar vacío.');
+    } else if (textoMensaje.length < 15) {
+        mostrarError(inputMensaje, `El mensaje es muy corto. Debe tener al menos 15 caracteres (actualmente tiene ${textoMensaje.length}).`);
+    } else if (textoMensaje.length > 400) {
+    mostrarError(inputMensaje, `El mensaje no puede superar los 400 caracteres (actualmente tiene ${textoMensaje.length}).`);
+    }
 
         // 5. Feedback Visual Exitoso
         if (formularioValido) {

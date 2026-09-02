@@ -32,6 +32,7 @@
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     text-align: left;
+    align-items: center;
   }
   
   /* Estilos de las etiquetas (Labels) */
@@ -44,23 +45,28 @@
   }
   
   /* 3 y 4. USO DE VARIABLES, INPUTS Y TEXTAREA */
-  #formulario-contacto input,
-  #formulario-contacto textarea {
-    width: 100%;
-    background-color: var(--color-bg-alt);
-    border: 1px solid var(--color-border);
-    padding: var(--space-sm) var(--space-md); /* Vertical --space-sm, horizontal --space-md para que respire */
-    border-radius: var(--radius);
-    font-family: var(--font-body);
-    font-size: var(--fs-base);
-    color: var(--color-text);
-    transition: border-color var(--transition), box-shadow var(--transition);
-  }
+#formulario-contacto input,
+#formulario-contacto textarea {
+  width: 100%;
+  
+  box-sizing: border-box; /* Evita que las cajas blancas se salgan o peguen a los bordes */
+  max-width: 500px;       /* Evita que los campos se hagan súper largos en PC */
+
+  background-color: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  color: var(--color-text);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
   
   /* Prevenir que el textarea deforme el diseño horizontalmente */
   #formulario-contacto textarea {
     resize: vertical;
     min-height: 120px;
+    max-height: 250px;
   }
   
   /* 5. ESTADOS DE INTERACCIÓN (Focus) */
@@ -68,7 +74,6 @@
   #formulario-contacto textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    /* Sombra sutil y elegante usando el mismo tono primary */
     box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.15); 
   }
   
@@ -76,9 +81,9 @@
   #formulario-contacto button[type="submit"] {
     margin-top: var(--space-sm);
     background-color: var(--color-primary);
-    color: var(--color-bg-alt); /* Blanco global */
+    color: var(--color-bg-alt);
     padding: 0.85rem 1.4rem;
-    border-radius: 999px; /* Forma de píldora idéntica al resto de la web */
+    border-radius: 999px; 
     font-family: var(--font-body);
     font-weight: 500;
     text-transform: uppercase;
@@ -86,21 +91,26 @@
     border: none;
     cursor: pointer;
     transition: background var(--transition), transform var(--transition);
-    width: 100%; /* Ocupa todo el ancho en celulares */
+    width: 100%; 
   }
   
   /* Interacción Hover del botón */
   #formulario-contacto button[type="submit"]:hover {
     background-color: var(--color-primary-dark);
-    transform: translateY(-2px); /* Efecto de que el botón se levanta */
+    transform: translateY(-2px); 
   }
   
   /* Estilos de los spans de error creados con JS */
-  #formulario-contacto .error-span {
-    font-size: var(--fs-xs);
-    color: #d93025; /* Este es un rojo de alerta estándar para feedback negativo */
-    margin-top: calc(var(--space-xs) * -1);
-  }
+#formulario-contacto .error-span {
+  font-size: var(--fs-xs);
+  color: #d93025; /* Rojo de alerta estándar */
+  
+  /* ESTO ES LO NUEVO PARA ARREGLAR EL CORTE: */
+  padding-bottom: 0.3rem; /* Le da el colchón abajo a la 'y', 'g', 'p', etc. */
+  line-height: 1.5;       /* Asegura que el texto tenga buen espacio vertical */
+  
+  margin-top: 4px; /* Lo separamos un pelín del input para que no se pegue */
+}
   
   /* Mensaje final de éxito */
   #mensaje-feedback {
@@ -109,12 +119,21 @@
     margin-top: var(--space-md);
   }
   
-  /* -----------------------------------------------------------------------------
-     Tablet / Desktop Ajustes Menores
-     ----------------------------------------------------------------------------- */
-  @media (min-width: 768px) {
-    #formulario-contacto button[type="submit"] {
-      width: fit-content; /* En pantallas grandes el botón no se estira de más */
-      align-self: center; /* Lo centramos dentro de la tarjeta del formulario */
-    }
+/* -----------------------------------------------------------------------------
+   Tablet / Desktop Ajustes Menores
+   ----------------------------------------------------------------------------- */
+ @media (min-width: 768px) {
+  #formulario-contacto button[type="submit"] {
+    width: fit-content; 
+    align-self: center; 
+  }
+    
+  /* ESTOS DOS BLOQUES SON NUEVOS: Vuelven al tamaño grande en PC */
+  .seccion-contacto h2 {
+    font-size: var(--fs-xl);
+  }
+    
+  #formulario-contacto {
+    padding: var(--space-xl);
+  }
   }
