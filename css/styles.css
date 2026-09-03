@@ -1,11 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap');
 
+
+/* -------------------------------------
+                GLOBALES 
+------------------------------------- */
+
+/* Textos del cuerpo */
 body {
-    background-color: #F5E6D3;
+    background-color: #F5E6D3;      /* Fondos principales, fotografía */
+    color: black;
     font-family: 'Inter', sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
 }
 
-/* productos.html */
+/* Títulos principales */
+h1, h2, h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #A0522D;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0;
+}
+
+p, li {
+    margin: 0 0 8px 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+/*
+a:hover {
+    color: #87A96B;
+} */
+
+/* -------------------------------------------
+                productos.html
+------------------------------------------- */
 
 #buscador {
     display: block;

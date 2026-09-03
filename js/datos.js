@@ -16,6 +16,7 @@ export const catalogo = [
             peso: "68 kg",
             capacidad: "6 compartimentos interiores",
         },
+        destacado: false,
     },
     {
         id: 2,
@@ -32,6 +33,7 @@ export const catalogo = [
             capacidad: "45 kg por estante",
             modulares: "5 estantes ajustables",
         },
+        destacado: false,
     },
     {
         id: 3,
@@ -48,6 +50,7 @@ export const catalogo = [
             tapizado: "Repelente al agua y manchas",
             confort: "Espuma alta densidad",
         },
+        destacado: false,
     },
     {
         id: 4,
@@ -64,6 +67,7 @@ export const catalogo = [
             rotacion: "360° silenciosa y suave",
             garantia: "10 años en estructura",
         },
+        destacado: false,
     },
     {
         id: 5,
@@ -80,6 +84,7 @@ export const catalogo = [
             peso: "42 kg",
             cargaMaxima: "25 kg distribuidos",
         },
+        destacado: false,
     },
     {
         id: 6,
@@ -96,6 +101,7 @@ export const catalogo = [
             almacenamiento: "1 cajón + repisa inferior",
             caracteristicas: "Cajón con cierre suave",
         },
+        destacado: true,
     },
     {
         id: 7,
@@ -112,6 +118,7 @@ export const catalogo = [
             relleno: "Espuma HR + plumón reciclado",
             sostenibilidad: "Materiales 100% reciclables",
         },
+        destacado: false,
     },
     {
         id: 8,
@@ -128,6 +135,7 @@ export const catalogo = [
             capacidad: "6-10 comensales",
             extension: "Sistema de mariposa central",
         },
+        destacado: true,
     },
     {
         id: 9,
@@ -144,6 +152,7 @@ export const catalogo = [
             apilables: "Hasta 6 sillas",
             incluye: "Set de 4 sillas",
         },
+        destacado: true,
     },
     {
         id: 10,
@@ -160,6 +169,7 @@ export const catalogo = [
             almacenamiento: "1 cajón con organizador",
             cables: "Pasacables integrado",
         },
+        destacado: true,
     },
     {
         id: 11,
@@ -176,5 +186,14 @@ export const catalogo = [
             regulacion: "Altura + inclinación respaldo",
             certificacion: "Ergonomía europea EN 1335",
         },
+        destacado: false,
     },
 ];
+
+export function pedirDatos() {
+    return new Promise(function (resolver) {
+        setTimeout(function() {
+            resolver(catalogo);
+        }, 1500);
+    });
+}
