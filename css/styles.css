@@ -1,0 +1,667 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+
+
+/* -------------------------------------
+                GLOBALES 
+------------------------------------- */
+
+/* Textos del cuerpo */
+body {
+    background-color: #F5E6D3;      /* Fondos principales, fotografía */
+    color: black;
+    font-family: 'Inter', sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* Títulos principales */
+h1, h2, h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #A0522D;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0;
+}
+
+p, li {
+    margin: 0 0 8px 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+/*
+a:hover {
+    color: #87A96B;
+} */
+
+/* -------------------------------------------
+                productos.html
+------------------------------------------- */
+
+#buscador {
+    display: block;
+    width: 90%;
+    margin: 20px auto;
+    padding: 12px 20px;
+
+    background-color: #fffdf9;
+    border: 2px solid #a0522d;
+    border-radius: 5px;
+    box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
+
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #a0522d;
+    outline: none;
+}
+
+#contenedor-catalogo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+}
+
+.tarjeta-producto {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 90%;
+    height: auto;
+    min-height: 400px;
+    padding: 15px;
+    box-sizing: border-box;
+    color: black;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px #a0522d;
+    border: 2px solid #a0522d;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.tarjeta-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 10px 20px rgba(160, 82, 45, 0.25); 
+}
+
+.tarjeta-producto:active {
+    transform: translateY(0);
+    box-shadow: 4px 4px 10px rgba(160, 82, 45, 0.2);
+}
+
+.tarjeta-producto h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    margin: 10px 0;
+    color: #a0522d;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.tarjeta-producto img {
+    height: 200px;
+    width: 100%;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.tarjeta-producto p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 11pt;
+    line-height: 1.6;
+    margin-top: auto;
+}
+
+.tarjeta-producto button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background-color: #A0522D;
+    color: #F5E6D3;
+    border: 2px solid #a0522d;
+    border-radius: 5px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tarjeta-producto button:hover {
+    box-shadow: 2px 6px 15px rgba(160, 82, 45, 0.25);
+    transform: translateY(-2px);
+}
+
+.tarjeta-producto button:active {
+    transform: translateY(0);
+    box-shadow: 2px 2px 5px rgba(160, 82, 45, 0.15);
+}
+
+@media (min-width: 768px) {
+    #buscador {
+        width: 60%;
+        margin: 40px auto;
+        padding: 15px 25px;
+        font-size: 18px;
+    }
+
+    #contenedor-catalogo {
+        gap: 40px;
+        padding: 20px;
+    }
+
+    .tarjeta-producto {
+        width: 30%;
+    }
+
+    .tarjeta-producto h2 {
+        font-size: 35px;
+    }
+    
+    .tarjeta-producto img {
+        height: 250px;
+    }
+
+    .tarjeta-producto p {
+        font-size: 12pt;
+        line-height: 1.6;
+    }
+}
+/* =============================================================================
+   Hermanos Jota — estilos globales (Home)
+   ============================================================================= */
+
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  scroll-behavior: smooth;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+}
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+:root {
+  /* Colores */
+  --color-primary: #a0522d;      
+  --color-primary-dark: #7a3c20;
+  --color-secondary: #3d4f3a;    
+  --color-accent: #c4a35a;       
+  --color-bg: #f6efe4;           
+  --color-bg-alt: #ffffff;
+  --color-surface: #fffaf3;
+  --color-text: #2c1810;
+  --color-text-muted: #6b5344;
+  --color-border: #e4d4c2;
+  --color-header: #fffdf9;
+  --color-footer: #2c1810;
+  --color-footer-text: #f6efe4;
+  
+  /* Tipografía */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  
+  /* Escala de tipo */
+  --fs-xs: 0.75rem; 
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.5rem;
+  --fs-xl: 2rem;
+  --fs-hero: 2.25rem;
+  
+  /* Espaciado */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+  
+  /* Layout */
+  --container: 72rem;
+  --header-h: 9rem; 
+  --radius: 0.75rem;
+  --shadow: 0 8px 24px rgba(44, 24, 16, 0.08);
+  --transition: 0.2s ease;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+}
+.container {
+  width: min(100% - var(--space-xl), var(--container));
+  margin-inline: auto;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   Reglas Tipográficas Estrictas 
+   ----------------------------------------------------------------------------- */
+h1, h2, h3, .footer-col h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* -----------------------------------------------------------------------------
+   Header + navegación
+   ----------------------------------------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-header);
+  border-bottom: 1px solid var(--color-border);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: var(--header-h);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+.logo img {
+  width: 120px !important;
+  max-height: 65px !important; 
+  object-fit: contain;
+  border: none !important;
+  box-shadow: none !important;
+}
+.logo-text {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.4rem;
+}
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 2px;
+}
+.site-nav {
+  position: absolute;
+  top: var(--header-h);
+  left: 0;
+  right: 0;
+  background: var(--color-header);
+  border-bottom: 1px solid var(--color-border);
+  display: none;
+}
+.site-nav.is-open {
+  display: block;
+}
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  gap: var(--space-sm);
+}
+.nav-list a {
+  padding: var(--space-sm);
+  border-radius: 0.4rem;
+  font-weight: 500;
+}
+.nav-list a:hover,
+.nav-list a[aria-current="page"] {
+  color: var(--color-primary);
+  background: var(--color-bg);
+}
+.cart-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  color: var(--color-text);
+}
+.cart-btn:hover {
+  background: var(--color-bg);
+  color: var(--color-primary);
+}
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+/* -----------------------------------------------------------------------------
+   Hero 
+   ----------------------------------------------------------------------------- */
+.hero {
+  --hero-image: url("../assets/img/placeholder.svg");
+  display: flex;
+  flex-direction: column;
+  min-height: 70vh;
+  background-color: var(--color-secondary);
+  background-image:
+    linear-gradient(160deg, rgba(44, 24, 16, 0.72) 0%, rgba(61, 79, 58, 0.55) 100%),
+    var(--hero-image);
+  background-size: cover;
+  background-position: center;
+  color: var(--color-footer-text);
+}
+.hero-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-md);
+  flex: 1;
+  padding-block: var(--space-3xl);
+}
+.hero-kicker {
+  font-weight: 300; 
+  font-size: var(--fs-xs); 
+  letter-spacing: 0.02em; 
+  color: var(--color-accent);
+}
+.hero h1 {
+  max-width: 24ch; 
+  font-size: var(--fs-hero);
+  line-height: 1.2;
+}
+.hero-subtitle {
+  max-width: 38ch;
+  font-size: var(--fs-md);
+  color: #f3e8d8;
+}
+
+/* -----------------------------------------------------------------------------
+   Botones
+   ----------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: fit-content;
+  padding: 0.85rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: background var(--transition), transform var(--transition);
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+.btn-ghost:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* -----------------------------------------------------------------------------
+   Productos destacados
+   ----------------------------------------------------------------------------- */
+.featured {
+  padding-block: var(--space-3xl);
+}
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+.section-head h2 {
+  font-size: var(--fs-xl);
+}
+.section-head p {
+  color: var(--color-text-muted);
+  max-width: 42ch;
+}
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+.product-card {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.product-card__media {
+  aspect-ratio: 4 / 3;
+  background: #e8d9c4;
+  overflow: hidden;
+}
+.product-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.product-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  flex: 1;
+}
+.product-card__body h3 {
+  font-size: var(--fs-lg);
+  line-height: 1.25;
+}
+.product-card__price {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: var(--fs-md);
+  margin-top: auto;
+}
+.products-empty {
+  color: var(--color-text-muted);
+}
+
+/* -----------------------------------------------------------------------------
+   Footer 
+   ----------------------------------------------------------------------------- */
+.site-footer {
+  background: var(--color-footer);
+  color: var(--color-footer-text);
+  padding-block: var(--space-2xl) var(--space-lg);
+  margin-top: auto;
+}
+.footer-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.footer-brand img {
+  min-width: 120px;
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+.footer-brand p,
+.footer-col p,
+.footer-col a {
+  color: #d9c9b6;
+  font-size: var(--fs-sm);
+}
+.footer-col h3 {
+  margin-bottom: var(--space-sm);
+}
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.footer-bottom {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: var(--fs-xs);
+  color: #b9a894;
+  font-weight: 300;
+}
+
+/* -----------------------------------------------------------------------------
+   Tablet  (min-width: 768px)
+   ----------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  :root {
+    --fs-hero: 3rem;
+  }
+  .nav-toggle {
+    display: none;
+  }
+  .site-nav {
+    position: static;
+    display: block;
+    border: 0;
+    background: transparent;
+  }
+  .nav-list {
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    gap: var(--space-md);
+  }
+  .nav-list a {
+    padding: 0.35rem 0.5rem;
+  }
+  .hero-inner {
+    padding-block: 5.5rem;
+  }
+  .section-head {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .product-card {
+    flex: 1 1 calc(50% - var(--space-lg));
+  }
+  .footer-grid {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--space-2xl);
+  }
+  .footer-brand {
+    flex: 1.2;
+  }
+  .footer-col {
+    flex: 1;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Desktop (min-width: 1024px)
+   ----------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  :root {
+    --fs-hero: 3.6rem;
+  }
+  .hero {
+    min-height: 78vh;
+  }
+  .product-card {
+    flex: 1 1 calc(25% - var(--space-lg));
+  }
+}

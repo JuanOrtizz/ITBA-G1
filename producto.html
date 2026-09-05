@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle de producto | Hermanos Jota — Muebles de autor</title>
+    <meta
+      name="description"
+      content="Mueblería Hermanos Jota. Piezas de madera hechas en taller familiar en Buenos Aires."
+    />
+    <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/detalle.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="index.html" aria-label="Hermanos Jota — inicio">
+          <img src="assets/img/logo.svg" alt="Logotipo Hermanos Jota" />
+          <span class="logo-text">Hermanos Jota</span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Principal">
+          <ul class="nav-list">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="productos.html" aria-current="page">Catálogo</a></li>
+            <li><a href="contacto.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <div class="header-actions">
+          <a class="cart-btn" href="#" aria-label="Carrito de compras">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M6 6h15l-1.5 9h-12L5 3H2"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <circle cx="9" cy="20" r="1.4" fill="currentColor" />
+              <circle cx="18" cy="20" r="1.4" fill="currentColor" />
+            </svg>
+            <span class="cart-count" id="contador-carrito">0</span>
+          </a>
+          <button
+            class="nav-toggle"
+            id="nav-toggle"
+            type="button"
+            aria-controls="site-nav"
+            aria-expanded="false"
+            aria-label="Abrir menú"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <a class="volver" href="productos.html">&larr; Volver al catálogo</a>
+
+        <!-- detalle.js completa esta sección con el producto según ?id= de la URL -->
+        <section class="detalle-producto" id="detalle-producto" aria-live="polite">
+          <p class="detalle-cargando" id="detalle-cargando">Cargando producto…</p>
+        </section>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <img src="assets/img/logo.svg" alt="" />
+            <strong>Hermanos Jota</strong>
+            <p>
+              Mueblería de autor. Carpintería de banco, maderas locales y
+              terminaciones al aceite.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h3>Contacto</h3>
+            <p>Av. San Juan 2847, CABA</p>
+            <p>Lun a Vie: 10:00 - 19:00<br>Sábados: 10:00 - 14:00</p>
+            <a href="mailto:info@hermanosjota.com.ar">info@hermanosjota.com.ar</a>
+            <a href="tel:+541145678900">WhatsApp: +54 11 4567-8900</a>
+            <a href="https://instagram.com/hermanosjota_ba" target="_blank" rel="noopener">@hermanosjota_ba</a>
+          </div>
+          <div class="footer-col">
+            <h3>Sitio</h3>
+            <a href="index.html">Inicio</a>
+            <a href="productos.html">Catálogo</a>
+            <a href="contacto.html">Contacto</a>
+          </div>
+        </div>
+        <p class="footer-bottom">
+          © 2026 Hermanos Jota. Todos los derechos reservados.
+        </p>
+      </div>
+    </footer>
+    <script type="module" src="js/detalle.js"></script>
+  </body>
+</html>
