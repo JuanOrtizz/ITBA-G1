@@ -41,10 +41,6 @@ a {
     transition: color 0.3s ease;
 }
 
-/*
-a:hover {
-    color: #87A96B;
-} */
 
 /* -------------------------------------------
                 productos.html
@@ -128,20 +124,8 @@ a:hover {
 }
 
 .tarjeta-producto button {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    background-color: #A0522D;
-    color: #F5E6D3;
-    border: 2px solid #a0522d;
-    border-radius: 5px;
-    width: 70%;
     margin-left: auto;
     margin-right: auto;
-    padding: 12px 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 .tarjeta-producto button:hover {

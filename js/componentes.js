@@ -94,6 +94,7 @@ export function mostrarProductos(arrayMuebles, contenedorDestino) {
         divProducto.appendChild(descripcion);
         
         const boton = document.createElement("button");
+        boton.className = "btn btn-primary detalle-boton-carrito";
         boton.textContent = "Añadir al Carrito";
         boton.addEventListener("click", function(evento) {
             evento.stopPropagation();
