@@ -34,15 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarError(inputNombre, 'El campo Nombre no puede estar vacío.');
         }
 
-        const emailRegex = /^[a-zA-Z0-9@._]+$/;
-        
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if (inputEmail.value.trim() === '') {
             mostrarError(inputEmail, 'El campo Email no puede estar vacío.');
-        } else if (!inputEmail.value.includes('@')) {
-            mostrarError(inputEmail, 'El email debe contener obligatoriamente el símbolo "@".');
-        } else if (!emailRegex.test(inputEmail.value)) {
-            mostrarError(inputEmail, 'El email solo acepta letras, números y los caracteres especiales "." y "_".');
-        }
+        } else if (!emailRegex.test(inputEmail.value.trim())) {
+        mostrarError(inputEmail, 'Ingresa un correo electrónico real (ej: juan@gmail.com).');
+}
 
     const textoMensaje = inputMensaje.value.trim();
 
@@ -54,12 +52,31 @@ document.addEventListener('DOMContentLoaded', () => {
     mostrarError(inputMensaje, `El mensaje no puede superar los 400 caracteres (actualmente tiene ${textoMensaje.length}).`);
     }
 
-        if (formularioValido) {
-            feedbackContenedor.textContent = '¡Tu consulta fue enviada correctamente!';
-            feedbackContenedor.style.color = 'green';
-            feedbackContenedor.style.fontWeight = 'bold';
-            feedbackContenedor.style.marginTop = '15px';            
-            formulario.reset();
+       if (formularioValido) {
+        
+            const datosFormulario = new FormData(formulario);
+
+            fetch('https://formspree.io/f/xdeolaka', {
+                method: 'POST',
+                body: datosFormulario,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(respuesta => {
+                if (respuesta.ok) {
+                    feedbackContenedor.textContent = '¡Tu consulta fue enviada correctamente y ya la recibimos!';
+                    feedbackContenedor.style.color = 'green';
+                    feedbackContenedor.style.fontWeight = 'bold';
+                    feedbackContenedor.style.marginTop = '15px';            
+                    formulario.reset();
+                } else {
+                    alert('Hubo un problema de conexión con el servidor de correos.');
+                }
+            })
+            .catch(error => {
+                alert('Error al intentar enviar el mensaje.');
+            });
         }
     });
 });
