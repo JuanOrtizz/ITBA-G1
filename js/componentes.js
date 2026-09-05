@@ -1,3 +1,5 @@
+import { agregarAlCarrito } from "./cart.js";
+
 export function cargarHeader() {
     const header = document.createElement("header");
     header.innerHTML = `
