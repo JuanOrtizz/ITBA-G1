@@ -197,3 +197,18 @@ export function pedirDatos() {
         }, 1500);
     });
 }
+
+
+export function obtenerDestacados(cantidad) {
+    return catalogo.filter(function (producto) {
+        return producto.destacado;
+    }).slice(0, cantidad);
+}
+
+export function formatearPrecio(precio) {
+    return new Intl.NumberFormat("es-AR", {
+        style: "currency",
+        currency: "ARS",
+        maximumFractionDigits: 0,
+    }).format(precio);
+}
