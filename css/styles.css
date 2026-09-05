@@ -1,3 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap');
+
+
+/* -------------------------------------
+                GLOBALES 
+------------------------------------- */
+
+/* Textos del cuerpo */
+body {
+    background-color: #F5E6D3;      /* Fondos principales, fotografía */
+    color: black;
+    font-family: 'Inter', sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* Títulos principales */
+h1, h2, h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #A0522D;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0;
+}
+
+p, li {
+    margin: 0 0 8px 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+/*
+a:hover {
+    color: #87A96B;
+} */
+
+/* -------------------------------------------
+                productos.html
+------------------------------------------- */
+
+#buscador {
+    display: block;
+    width: 90%;
+    margin: 20px auto;
+    padding: 12px 20px;
+
+    background-color: #fffdf9;
+    border: 2px solid #a0522d;
+    border-radius: 5px;
+    box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
+
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #a0522d;
+    outline: none;
+}
+
+#contenedor-catalogo {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 15px;
+}
+
+.tarjeta-producto {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 90%;
+    height: auto;
+    min-height: 400px;
+    padding: 15px;
+    box-sizing: border-box;
+    color: black;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 5px 5px 10px #a0522d;
+    border: 2px solid #a0522d;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.tarjeta-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 10px 20px rgba(160, 82, 45, 0.25); 
+}
+
+.tarjeta-producto:active {
+    transform: translateY(0);
+    box-shadow: 4px 4px 10px rgba(160, 82, 45, 0.2);
+}
+
+.tarjeta-producto h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    margin: 10px 0;
+    color: #a0522d;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.tarjeta-producto img {
+    height: 200px;
+    width: 100%;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.tarjeta-producto p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 11pt;
+    line-height: 1.6;
+    margin-top: auto;
+}
+
+.tarjeta-producto button {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background-color: #A0522D;
+    color: #F5E6D3;
+    border: 2px solid #a0522d;
+    border-radius: 5px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tarjeta-producto button:hover {
+    box-shadow: 2px 6px 15px rgba(160, 82, 45, 0.25);
+    transform: translateY(-2px);
+}
+
+.tarjeta-producto button:active {
+    transform: translateY(0);
+    box-shadow: 2px 2px 5px rgba(160, 82, 45, 0.15);
+}
+
+@media (min-width: 768px) {
+    #buscador {
+        width: 60%;
+        margin: 40px auto;
+        padding: 15px 25px;
+        font-size: 18px;
+    }
+
+    #contenedor-catalogo {
+        gap: 40px;
+        padding: 20px;
+    }
+
+    .tarjeta-producto {
+        width: 30%;
+    }
+
+    .tarjeta-producto h2 {
+        font-size: 35px;
+    }
+    
+    .tarjeta-producto img {
+        height: 250px;
+    }
+
+    .tarjeta-producto p {
+        font-size: 12pt;
+        line-height: 1.6;
+    }
+}
 /* =============================================================================
    Hermanos Jota — estilos globales (Home)
    ============================================================================= */
