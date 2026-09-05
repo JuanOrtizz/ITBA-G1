@@ -1,5 +1,4 @@
 import { obtenerDestacados, formatearPrecio } from "./data.js";
-import { iniciarCarrito } from "./js/cart.js";
 
 const SELECTORES = {
   grid: "#productos-destacados",
@@ -42,18 +41,26 @@ function crearTarjeta(producto) {
 function renderDestacados() {
   const grid = document.querySelector(SELECTORES.grid);
   if (!grid) return;
-  const destacados = obtenerDestacados(4);
-  grid.replaceChildren();
-  if (!destacados.length) {
-    const vacio = document.createElement("p");
-    vacio.className = "products-empty";
-    vacio.textContent = "Todavía no hay productos destacados.";
-    grid.appendChild(vacio);
-    return;
-  }
-  destacados.forEach((producto) => {
-    grid.appendChild(crearTarjeta(producto));
-  });
+
+  const cargando = document.createElement("p");
+  cargando.className = "products-empty";
+  cargando.textContent = "Cargando productos...";
+  grid.replaceChildren(cargando);
+
+  setTimeout(() => {
+    const destacados = obtenerDestacados(4);
+    grid.replaceChildren();
+    if (!destacados.length) {
+      const vacio = document.createElement("p");
+      vacio.className = "products-empty";
+      vacio.textContent = "Todavía no hay productos destacados.";
+      grid.appendChild(vacio);
+      return;
+    }
+    destacados.forEach((producto) => {
+      grid.appendChild(crearTarjeta(producto));
+    });
+  }, 2000);
 }
 
 function initNavMovil() {
@@ -68,7 +75,6 @@ function initNavMovil() {
 
 function init() {
   initNavMovil();
-  iniciarCarrito();
   renderDestacados();
 }
 

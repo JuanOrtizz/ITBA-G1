@@ -2,6 +2,7 @@
    Hermanos Jota — estilos globales (Home)
    ============================================================================= */
 
+*,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -85,7 +86,7 @@ body {
   min-height: 100vh;
 }
 .container {
-  width: min(100% - var(--space-xl), var(--container));
+  width: min(calc(100% - 2rem), var(--container));
   margin-inline: auto;
 }
 .sr-only {
@@ -259,6 +260,7 @@ h1, h2, h3, .footer-col h3 {
   max-width: 24ch; 
   font-size: var(--fs-hero);
   line-height: 1.2;
+  overflow-wrap: break-word;
 }
 .hero-subtitle {
   max-width: 38ch;
@@ -414,6 +416,44 @@ h1, h2, h3, .footer-col h3 {
   font-size: var(--fs-xs);
   color: #b9a894;
   font-weight: 300;
+}
+
+/* -----------------------------------------------------------------------------
+   Mobile
+   ----------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  :root {
+    --header-h: 5.5rem;
+    --fs-hero: 2rem;
+  }
+  .header-inner {
+    gap: var(--space-sm);
+  }
+  .logo {
+    min-width: 0;
+  }
+  .logo img {
+    width: 72px !important;
+    max-height: 48px !important;
+  }
+  .logo-text {
+    font-size: var(--fs-sm);
+    line-height: 1.2;
+  }
+  .hero-inner {
+    padding-block: var(--space-2xl);
+  }
+  .hero h1 {
+    max-width: 100%;
+    font-size: 1.8rem;
+    letter-spacing: 0.06em;
+  }
+  .hero-subtitle {
+    font-size: var(--fs-base);
+  }
+  .featured {
+    padding-block: var(--space-2xl);
+  }
 }
 
 /* -----------------------------------------------------------------------------
