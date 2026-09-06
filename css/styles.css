@@ -181,9 +181,12 @@ h1, h2, h3, .footer-col h3 {
   gap: var(--space-sm);
 }
 .nav-list a {
+  display: block;
+  width: 100%;
   padding: var(--space-sm);
   border-radius: 0.4rem;
   font-weight: 500;
+  text-align: center;
 }
 .nav-list a:hover,
 .nav-list a[aria-current="page"] {
@@ -236,6 +239,7 @@ h1, h2, h3, .footer-col h3 {
   min-height: 70vh;
   background-color: var(--color-secondary);
   background-image:
+    linear-gradient(90deg, rgba(20, 12, 8, 0.8) 0%, rgba(20, 12, 8, 0.45) 50%, rgba(20, 12, 8, 0.15) 75%),
     linear-gradient(160deg, rgba(44, 24, 16, 0.72) 0%, rgba(61, 79, 58, 0.55) 100%),
     var(--hero-image);
   background-size: cover;
@@ -251,10 +255,11 @@ h1, h2, h3, .footer-col h3 {
   padding-block: var(--space-3xl);
 }
 .hero-kicker {
-  font-weight: 300; 
-  font-size: var(--fs-xs); 
-  letter-spacing: 0.02em; 
+  font-weight: 300;
+  font-size: var(--fs-md);
+  letter-spacing: 0.02em;
   color: var(--color-accent);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 .hero h1 {
   max-width: 24ch; 
@@ -266,6 +271,7 @@ h1, h2, h3, .footer-col h3 {
   max-width: 38ch;
   font-size: var(--fs-md);
   color: #f3e8d8;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
 }
 
 /* -----------------------------------------------------------------------------
@@ -386,7 +392,9 @@ h1, h2, h3, .footer-col h3 {
 .footer-brand {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--space-sm);
+  text-align: center;
 }
 .footer-brand img {
   min-width: 120px;
@@ -407,7 +415,9 @@ h1, h2, h3, .footer-col h3 {
 .footer-col {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.35rem;
+  text-align: center;
 }
 .footer-bottom {
   margin-top: var(--space-xl);
@@ -416,6 +426,7 @@ h1, h2, h3, .footer-col h3 {
   font-size: var(--fs-xs);
   color: #b9a894;
   font-weight: 300;
+  text-align: center;
 }
 
 /* -----------------------------------------------------------------------------
@@ -479,6 +490,8 @@ h1, h2, h3, .footer-col h3 {
     gap: var(--space-md);
   }
   .nav-list a {
+    display: inline-block;
+    width: auto;
     padding: 0.35rem 0.5rem;
   }
   .hero-inner {
@@ -499,9 +512,16 @@ h1, h2, h3, .footer-col h3 {
   }
   .footer-brand {
     flex: 1.2;
+    align-items: flex-start;
+    text-align: left;
   }
   .footer-col {
     flex: 1;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .footer-bottom {
+    text-align: left;
   }
 }
 
@@ -599,30 +619,8 @@ h1, h2, h3, .footer-col h3 {
 }
 
 .tarjeta-producto button {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  background-color: #a0522d;
-  color: #f5e6d3;
-  border: 2px solid #a0522d;
-  border-radius: 5px;
-  width: 70%;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.tarjeta-producto button:hover {
-  box-shadow: 2px 6px 15px rgba(160, 82, 45, 0.25);
-  transform: translateY(-2px);
-}
-
-.tarjeta-producto button:active {
-  transform: translateY(0);
-  box-shadow: 2px 2px 5px rgba(160, 82, 45, 0.15);
+  align-self: center;
+  margin-top: var(--space-sm);
 }
 
 /* -----------------------------------------------------------------------------

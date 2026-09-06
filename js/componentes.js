@@ -1,5 +1,3 @@
-import { agregarAlCarrito } from "./cart.js";
-
 export function cargarHeader() {
     const header = document.createElement("header");
     header.innerHTML = `
@@ -97,10 +95,10 @@ export function mostrarProductos(arrayMuebles, contenedorDestino) {
         
         const boton = document.createElement("button");
         boton.className = "btn btn-primary detalle-boton-carrito";
-        boton.textContent = "Añadir al Carrito";
+        boton.textContent = "Ver detalle";
         boton.addEventListener("click", function(evento) {
             evento.stopPropagation();
-            agregarAlCarrito(mueble);
+            window.location.href = `producto.html?id=${mueble.id}`;
         });
         divProducto.appendChild(boton);
 
