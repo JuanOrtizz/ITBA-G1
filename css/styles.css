@@ -230,7 +230,7 @@ h1, h2, h3, .footer-col h3 {
    Hero 
    ----------------------------------------------------------------------------- */
 .hero {
-  --hero-image: url("../assets/img/placeholder.svg");
+  --hero-image: url("../assets/img/hero-banner.jpeg");
   display: flex;
   flex-direction: column;
   min-height: 70vh;
