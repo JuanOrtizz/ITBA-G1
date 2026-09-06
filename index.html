@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hermanos Jota — Muebles de autor</title>
+    <meta
+      name="description"
+      content="Mueblería Hermanos Jota. Piezas de madera hechas en taller familiar en Buenos Aires."
+    />
+    <link rel="icon" href="assets/img/logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-inner">
+          <p class="hero-kicker">Mobiliario con alma y herencia</p>
+          <h1 id="hero-title">El redescubrimiento de un arte olvidado</h1>
+          <p class="hero-subtitle">
+            Cada pieza cuenta la historia de manos expertas y materiales nobles. 
+            Honramos la tradición mientras abrazamos el futuro.
+          </p>
+          <a class="btn btn-primary" href="productos.html">Ver catálogo</a>
+        </div>
+      </section>
+      <section class="featured" aria-labelledby="featured-title">
+        <div class="container">
+          <header class="section-head">
+            <div>
+              <h2 id="featured-title">Productos destacados</h2>
+            </div>
+            <a class="btn btn-ghost" href="productos.html">Ver todo</a>
+          </header>
+          <!-- Contenedor vacío: js/index.js inserta 3–4 cards destacadas -->
+          <div class="products-grid" id="productos-destacados"></div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="js/index.js"></script>
+  </body>
+</html>
