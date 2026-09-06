@@ -92,20 +92,26 @@ export function mostrarProductos(arrayMuebles, contenedorDestino) {
             window.location.href = `producto.html?id=${mueble.id}`;
         });
 
+        const imagen = document.createElement("img");
+        imagen.src = mueble.imagenURL;
+        divProducto.appendChild(imagen);
+        
         const nombre = document.createElement("h2");
         nombre.textContent = mueble.nombre;
         divProducto.appendChild(nombre);
 
-        const imagen = document.createElement("img");
-        imagen.src = mueble.imagenURL;
-        divProducto.appendChild(imagen);
+        const precio = document.createElement("p");
+        precio.classList.add("precio");
+        precio.textContent = `$ ${mueble.precio.toLocaleString("es-AR")}`;
+        divProducto.appendChild(precio);
 
         const descripcion = document.createElement("p");
+        descripcion.classList.add("descripcion-tarjeta");
         descripcion.textContent = mueble.descripcion;
         divProducto.appendChild(descripcion);
 
         const boton = document.createElement("button");
-        boton.className = "btn btn-primary detalle-boton-carrito";
+        boton.className = "btn-outline";
         boton.textContent = "Ver detalle";
         boton.addEventListener("click", function(evento) {
             evento.stopPropagation();
