@@ -1,3 +1,5 @@
+import { formatearPrecio } from "./datos.js"
+
 // Estado del carrito (arreglo de objetos producto)
 let carrito = []
 
@@ -57,17 +59,6 @@ function vaciarCarrito() {
     actualizarContador()
 }
 
-// Devuelve el arreglo actual de productos en el carrito
-function obtenerCarrito() {
-    return carrito
-}
-
-// Devuelve la cantidad total de productos en el carrito
-function obtenerCantidadCarrito() {
-    return carrito.length
-}
-
-
 // Persiste el estado actual en el almacenamiento local
 function guardarCarrito() {
     try {
@@ -83,14 +74,6 @@ function actualizarContador() {
     if (contador) {
         contador.textContent = String(carrito.length)
     }
-}
-
-function formatearPrecio(precio) {
-    return new Intl.NumberFormat("es-AR", {
-        style: "currency",
-        currency: "ARS",
-        maximumFractionDigits: 0,
-    }).format(precio)
 }
 
 function crearPanelCarrito() {
@@ -192,4 +175,4 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 // Exportaciones para que se pueda integrar el carrito
-export { iniciarCarrito, agregarAlCarrito, eliminarDelCarrito, vaciarCarrito, obtenerCarrito, obtenerCantidadCarrito, actualizarContador }
+export { iniciarCarrito, agregarAlCarrito, eliminarDelCarrito, vaciarCarrito, actualizarContador }
