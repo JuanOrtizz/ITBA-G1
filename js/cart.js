@@ -27,12 +27,17 @@ async function iniciarCarrito() {
     actualizarContador()
 }
 
+window.addEventListener("pageshow", function () {
+    iniciarCarrito()
+})
+
 
 // Agrega un producto al carrito
 async function agregarAlCarrito(producto) {
     await new Promise(function (resolver) {
         setTimeout(resolver, 100)
     })
+    carrito = await pedirCarritoGuardado()
     carrito.push(producto)
     guardarCarrito()
     actualizarContador()
