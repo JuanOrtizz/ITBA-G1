@@ -14,40 +14,41 @@ Proyecto grupal del curso de **Desarrollo Web (ITBA)**. Sitio web de una muebler
 
 ## Funcionalidades
 
-- **Home / Layout**: Plantilla base con HTML5 semántico, header con logo y menú de navegación, footer y sección Hero Banner. Renderiza en el home de 3 a 4 productos destacados desde el archivo central de datos. Diseño Mobile-First con Flexbox.
+- **Home / Layout**: Header con logo y menú de navegación, footer y sección Hero Banner, generados dinámicamente desde `componentes.js` y compartidos por las 4 páginas. Renderiza en el home los 4 productos destacados desde el archivo central de datos. Diseño Mobile-First con Flexbox.
 - **Catálogo y Búsqueda**: Grilla responsiva de tarjetas de productos (imagen, nombre, precio y enlace al detalle). Barra de búsqueda que filtra en tiempo real por nombre o categoría.
-- **Detalle de producto**: Vista individual con imagen ampliada, descripción completa, detalles de fabricación, precio y botón de compra. Captura el id desde la URL y renderiza la información correspondiente.
-- **Contacto y Feedback**: Formulario con validación en el cliente (campos requeridos y formato de correo), mensajes de error en tiempo real y confirmación de envío sin recargar la página.
-- **Carrito**: Estado del carrito simulado con contador dinámico en el header. Simula la petición asíncrona de datos (setTimeout / async-await) y persiste el carrito en el almacenamiento local del navegador.
+- **Detalle de producto**: Vista individual con imagen ampliada, descripción completa, detalles de fabricación, precio y botón para agregar al carrito. Captura el id desde la URL y renderiza la información correspondiente.
+- **Contacto y Feedback**: Formulario con validación en el cliente (campos requeridos y formato de correo), mensajes de error en tiempo real y envío real del mensaje mediante Formspree, sin recargar la página.
+- **Carrito**: Estado del carrito con contador dinámico en el header, persistido en el almacenamiento local del navegador. Simula la latencia de una API real con setTimeout / async-await al cargar y modificar el carrito.
 
 ## Tecnologías utilizadas
 
 - **HTML5** — Estructura semántica de las páginas.
 - **CSS3** — Estilos, layout con Flexbox, diseño Mobile-First.
 - **JavaScript (ES Modules)** — Renderizado dinámico del DOM, eventos, búsqueda en tiempo real, estado del carrito y lógica asíncrona.
-- **Git y GitHub** — Control de versiones, ramas por persona y trabajo colaborativo.
+- **Git y GitHub** — Control de versiones y trabajo colaborativo.
 - **GitHub Pages** — Hosting estático del sitio.
 
 ## Estructura del proyecto
 
 ```
 /
-├── index.html            # Home y layout global (Persona 1)
-├── productos.html        # Catálogo y búsqueda (Persona 2)
-├── producto.html         # Detalle de producto (Persona 3)
-├── contacto.html         # Formulario de contacto (Persona 4)
-├── README.md             # Documentación (Persona 5)
+├── index.html            # Home
+├── productos.html        # Catálogo y búsqueda
+├── producto.html         # Detalle de producto
+├── contacto.html         # Formulario de contacto
+├── README.md             # Documentación
 ├── css/
 │   └── styles.css        # Estilos globales
 ├── js/
 │   ├── datos.js          # Datos del catálogo (data central)
-│   ├── productos.js      # Lógica del catálogo (Persona 2)
-│   ├── detalle.js        # Lógica del detalle (Persona 3)
-│   ├── contacto.js       # Validación del contacto (Persona 4)
-│   └── cart.js           # Estado del carrito y contador (Persona 5)
+│   ├── componentes.js    # Header, footer y tarjetas de producto compartidos
+│   ├── index.js          # Lógica del home
+│   ├── productos.js      # Lógica del catálogo
+│   ├── detalle.js        # Lógica del detalle
+│   ├── contacto.js       # Validación y envío del formulario de contacto
+│   └── cart.js           # Estado del carrito y contador
 └── assets/
-    ├── img/              # Imágenes de los productos
-    └── icons/            # Iconos del sitio
+    └── img/              # Imágenes y logo del sitio
 ```
 
 ## Cómo ejecutar
