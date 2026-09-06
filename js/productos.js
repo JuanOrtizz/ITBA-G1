@@ -1,12 +1,12 @@
 import { catalogo, pedirDatos } from "./datos.js";
-//import { agregarAlCarrito } from "./carrito.js"
 import { cargarHeader, mostrarProductos, cargarFooter } from "./componentes.js";
 
 const contenedorCatalogo = document.querySelector("#contenedor-catalogo");
 const inputBuscador = document.querySelector("#buscador");
 let mueblesDescargados = [];
 
-//cargarHeader();
+cargarHeader("catalogo");
+cargarFooter();
 
 iniciarCatalogo();
 inputBuscador.addEventListener("input", function (evento) {
@@ -20,8 +20,6 @@ inputBuscador.addEventListener("input", function (evento) {
     // Faltaba agregar contenedorCatalogo como destino
     mostrarProductos(resultadosFiltrados, contenedorCatalogo);
 });
-
-//cargarFooter();
 
 //Simular una petición de datos asíncrona para cargar el catálogo
 async function iniciarCatalogo() {

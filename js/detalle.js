@@ -1,16 +1,9 @@
-import { catalogo } from "./datos.js";
+import { catalogo, formatearPrecio } from "./datos.js";
 import { iniciarCarrito, agregarAlCarrito } from "./cart.js";
+import { cargarHeader, cargarFooter } from "./componentes.js";
 
 const IMG_FALLBACK = "assets/img/placeholder.svg";
 const RETRASO_SIMULADO_MS = 600;
-
-function formatearPrecio(precio) {
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS",
-    maximumFractionDigits: 0,
-  }).format(precio);
-}
 
 function obtenerIdDesdeURL() {
   const parametros = new URLSearchParams(window.location.search);
@@ -120,18 +113,10 @@ function renderProducto(producto) {
   contenedor.append(figura, info);
 }
 
-function initNavMovil() {
-  const nav = document.querySelector("#site-nav");
-  const toggle = document.querySelector("#nav-toggle");
-  if (!nav || !toggle) return;
-  toggle.addEventListener("click", () => {
-    const abierto = nav.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", String(abierto));
-  });
-}
+cargarHeader("catalogo");
+cargarFooter();
 
 async function init() {
-  initNavMovil();
   iniciarCarrito();
 
   const contenedor = document.querySelector("#detalle-producto");

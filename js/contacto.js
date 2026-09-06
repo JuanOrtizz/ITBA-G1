@@ -1,6 +1,10 @@
+import { cargarHeader, cargarFooter } from "./componentes.js";
+
+cargarHeader("contacto");
+cargarFooter();
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     const formulario = document.getElementById('formulario-contacto');
 
     formulario.addEventListener('submit', function(e) {
