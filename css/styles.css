@@ -11,6 +11,7 @@
 }
 html {
   scroll-behavior: smooth;
+  overflow-y: scroll;
 }
 img {
   max-width: 100%;
@@ -33,11 +34,11 @@ button {
 
 :root {
   /* Colores */
-  --color-primary: #a0522d;      
+  --color-primary: #a0522d;
   --color-primary-dark: #7a3c20;
-  --color-secondary: #3d4f3a;    
-  --color-accent: #c4a35a;       
-  --color-bg: #f6efe4;           
+  --color-secondary: #3d4f3a;
+  --color-accent: #c4a35a;
+  --color-bg: #f6efe4;
   --color-bg-alt: #ffffff;
   --color-surface: #fffaf3;
   --color-text: #2c1810;
@@ -46,20 +47,20 @@ button {
   --color-header: #fffdf9;
   --color-footer: #2c1810;
   --color-footer-text: #f6efe4;
-  
+
   /* Tipografía */
   --font-display: "Playfair Display", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
-  
+
   /* Escala de tipo */
-  --fs-xs: 0.75rem; 
+  --fs-xs: 0.75rem;
   --fs-sm: 0.875rem;
   --fs-base: 1rem;
   --fs-md: 1.125rem;
   --fs-lg: 1.5rem;
   --fs-xl: 2rem;
   --fs-hero: 2.25rem;
-  
+
   /* Espaciado */
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;
@@ -68,22 +69,24 @@ button {
   --space-xl: 2rem;
   --space-2xl: 3rem;
   --space-3xl: 4.5rem;
-  
+
   /* Layout */
   --container: 72rem;
-  --header-h: 9rem; 
+  --header-h: 9rem;
   --radius: 0.75rem;
   --shadow: 0 8px 24px rgba(44, 24, 16, 0.08);
   --transition: 0.2s ease;
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: var(--font-body);
   font-size: var(--fs-base);
   line-height: 1.6;
   color: var(--color-text);
   background-color: var(--color-bg);
-  min-height: 100vh;
 }
 .container {
   width: min(calc(100% - 2rem), var(--container));
@@ -101,7 +104,7 @@ body {
 }
 
 /* -----------------------------------------------------------------------------
-   Reglas Tipográficas Estrictas 
+   Reglas Tipográficas Estrictas
    ----------------------------------------------------------------------------- */
 h1, h2, h3, .footer-col h3 {
   font-family: var(--font-display);
@@ -135,7 +138,7 @@ h1, h2, h3, .footer-col h3 {
 }
 .logo img {
   width: 120px !important;
-  max-height: 65px !important; 
+  max-height: 65px !important;
   object-fit: contain;
   border: none !important;
   box-shadow: none !important;
@@ -161,6 +164,16 @@ h1, h2, h3, .footer-col h3 {
   height: 2px;
   background: var(--color-text);
   border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 .site-nav {
   position: absolute;
@@ -230,7 +243,7 @@ h1, h2, h3, .footer-col h3 {
 }
 
 /* -----------------------------------------------------------------------------
-   Hero 
+   Hero
    ----------------------------------------------------------------------------- */
 .hero {
   --hero-image: url("../assets/img/hero-banner.jpeg");
@@ -262,7 +275,7 @@ h1, h2, h3, .footer-col h3 {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 .hero h1 {
-  max-width: 24ch; 
+  max-width: 24ch;
   font-size: var(--fs-hero);
   line-height: 1.2;
   overflow-wrap: break-word;
@@ -376,7 +389,7 @@ h1, h2, h3, .footer-col h3 {
 }
 
 /* -----------------------------------------------------------------------------
-   Footer 
+   Footer
    ----------------------------------------------------------------------------- */
 .site-footer {
   background: var(--color-footer);
@@ -548,13 +561,13 @@ h1, h2, h3, .footer-col h3 {
   width: 90%;
   margin: 20px auto;
   padding: 12px 20px;
-  background-color: #fffdf9;
-  border: 2px solid #a0522d;
+  background-color: var(--color-header);
+  border: 2px solid var(--color-primary);
   border-radius: 5px;
   box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  color: #a0522d;
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  color: var(--color-primary);
   outline: none;
 }
 
@@ -574,12 +587,11 @@ h1, h2, h3, .footer-col h3 {
   height: auto;
   min-height: 400px;
   padding: 15px;
-  box-sizing: border-box;
   color: black;
   text-align: center;
   cursor: pointer;
-  box-shadow: 5px 5px 10px #a0522d;
-  border: 2px solid #a0522d;
+  box-shadow: 5px 5px 10px var(--color-primary);
+  border: 2px solid var(--color-primary);
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -595,10 +607,10 @@ h1, h2, h3, .footer-col h3 {
 }
 
 .tarjeta-producto h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-display);
   font-size: 22px;
   margin: 10px 0;
-  color: #a0522d;
+  color: var(--color-primary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -611,7 +623,7 @@ h1, h2, h3, .footer-col h3 {
 }
 
 .tarjeta-producto p {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
   font-size: 11pt;
   line-height: 1.6;
