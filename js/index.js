@@ -1,9 +1,8 @@
-import { obtenerDestacados, formatearPrecio } from "./data.js";
+import { obtenerDestacados, formatearPrecio } from "./datos.js";
+import { cargarHeader, cargarFooter } from "./componentes.js";
 
 const SELECTORES = {
-  grid: "#productos-destacados",
-  nav: "#site-nav",
-  toggle: "#nav-toggle"
+  grid: "#productos-destacados"
 };
 
 const IMG_FALLBACK = "assets/img/placeholder.svg";
@@ -14,7 +13,7 @@ function crearTarjeta(producto) {
   const media = document.createElement("div");
   media.className = "product-card__media";
   const img = document.createElement("img");
-  img.src = producto.imagen;
+  img.src = producto.imagenURL;
   img.alt = producto.nombre;
   img.loading = "lazy";
   img.onerror = () => {
@@ -63,19 +62,7 @@ function renderDestacados() {
   }, 2000);
 }
 
-function initNavMovil() {
-  const nav = document.querySelector(SELECTORES.nav);
-  const toggle = document.querySelector(SELECTORES.toggle);
-  if (!nav || !toggle) return;
-  toggle.addEventListener("click", () => {
-    const abierto = nav.classList.toggle("is-open");
-    toggle.setAttribute("aria-expanded", String(abierto));
-  });
-}
+cargarHeader("inicio");
+cargarFooter();
 
-function init() {
-  initNavMovil();
-  renderDestacados();
-}
-
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", renderDestacados);
