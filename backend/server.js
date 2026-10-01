@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const logger = require("./middlewares/logger");
-const errorHandler = require("./middlewares/errorHandler");
+const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const productosRoutes = require("./routes/productosRoutes");
 
 const PORT = 3000;
@@ -17,11 +17,7 @@ app.get("/", (req, res) => {
     res.send("¡Bienvenido al servidor de Muebleria Jota!");
 });
 
-app.use((req, res, next) => {
-    const error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
-    error.status = 404;
-    next(error);
-});
+app.use(notFound);
 
 app.use(errorHandler);
 
