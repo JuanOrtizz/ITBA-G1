@@ -1,6 +1,5 @@
 const logger = (req, res, next) => {
-    const fechaHora = new Date();
-    console.log(`${fechaHora} - [${req.method}] ${req.originalUrl}`);
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
     next();
 };
 
