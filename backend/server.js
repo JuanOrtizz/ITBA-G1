@@ -6,7 +6,7 @@ const logger = require("./middlewares/logger");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const productosRoutes = require("./routes/productosRoutes");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
 
 app.use(logger);
 app.use(cors());
