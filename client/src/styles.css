@@ -1,0 +1,263 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap");
+
+/* ==========================================================================
+   VARIABLES
+   ========================================================================== */
+
+:root {
+    /* --- Colores --- */
+    --color-primary: #a0522d;
+    --color-secondary: #87a96b;
+    --color-background: #f5e6d3;
+    --color-details: #d4a437;
+    --color-femenine: #c47a6d;
+    --color-button: #6b5344;
+    --color-header: #f3eee5;
+    --color-footer: #402115;
+    --color-img-background: #e8d9c4;
+
+    /* --- Tipografía --- */
+    --font-title: "Playfair Display", Georgia;
+    --font-body: "Inter", sans-serif;
+}
+
+/* ==========================================================================
+   GLOBALES (MOTOR RESPONSIVE REM)
+   ========================================================================== */
+
+html {
+    font-size: 11pt;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 12pt;
+    }
+}
+
+body {
+    background-color: var(--color-background);
+    color: black;
+    font-family: var(--font-body);
+    font-size: 1rem; /* 11pt en celu, 12pt en PC */
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- Títulos principales --- */
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-title);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2,
+h3,
+h4 {
+    font-size: 2rem;
+}
+
+p,
+li,
+ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+a, button {
+    font-family: var(--font-body);
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   COMPONENTES REUTILIZABLES
+   ========================================================================== */
+
+.boton-primario,
+.boton-secundario {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
+    border: 2px solid var(--color-primary);
+    border-radius: 35px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.boton-primario {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+.boton-secundario {
+    background-color: var(--color-header);
+    color: var(--color-primary);
+}
+
+.boton-primario:hover,
+.boton-secundario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.boton-primario:hover {
+    background-color: var(--color-header);
+    color: var(--color-primary);
+}
+
+.boton-secundario:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+
+/* ==========================================================================
+   VISTAS ESPECIFICAS
+   ========================================================================== */
+   
+   
+   
+   
+
+/* --- Catalogo (ProductList.jsx) --- */
+
+#titulo-catalogo {
+    color: var(--color-primary);
+    text-align: center;
+}
+
+#buscador {
+    display: block;
+    width: 80%;
+    margin: 40px auto;
+    padding: 15px 25px;
+    border: 3px solid var(--color-primary);
+    border-radius: 25px;
+    box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#buscador:hover {
+    transform: translateY(1px);
+}
+
+#contenedor-catalogo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+#contenedor-catalogo h3 {
+    text-align: center;
+}
+
+/* --- Tarjeta de Producto (ProductCard.jsx) --- */
+
+.tarjeta-producto {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: auto;
+    min-height: 400px;
+    background-color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    text-align: left;
+    overflow: hidden;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.tarjeta-producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 10px 20px rgba(160, 82, 45, 0.25);
+}
+
+.tarjeta-producto:active {
+    transform: translateY(0);
+    box-shadow: 4px 4px 10px rgba(160, 82, 45, 0.2);
+}
+
+.tarjeta-producto img {
+    height: 250px;
+    width: 100%;
+    object-fit: contain;
+    background-color: var(--color-img-background);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.tarjeta-producto h2 {
+    margin: 0 20px 10px 20px;
+    font-size: 1.5rem;
+}
+
+.producto-precio {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    font-weight: bold;
+    line-height: 1.5;
+    margin: 0 20px 15px 20px;
+}
+
+.producto-descripcion {
+    margin: 0 20px 15px 20px;
+    flex-grow: 1;
+    font-size: 1rem;
+}
+
+.tarjeta-producto .boton-primario {
+    align-self: center;
+    margin-bottom: 20px;
+    margin-top: auto;
+}
+
+@media (min-width: 768px) {
+    #buscador {
+        width: 50%;
+        font-size: 1.2rem;
+    }
+
+    #contenedor-catalogo {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: stretch;
+    }
+
+    .tarjeta-producto {
+        width: 25%;
+        overflow: hidden;
+    }
+}
+
+
