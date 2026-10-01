@@ -127,7 +127,9 @@ cd client
 npm run dev
 ```
 
-Vite imprime la URL del cliente, por defecto `http://localhost:3000`.
+Vite imprime la URL del cliente: `http://localhost:3000`.
+
+El puerto del cliente no es el que trae Vite por defecto (5173), sino que está fijado en `client/vite.config.js` junto con `strictPort`. Con `strictPort` activo, si el 3000 está ocupado Vite falla con un mensaje claro en vez de moverse en silencio a otro puerto, que es lo que rompería la configuración de CORS y de la API.
 
 Los dos puertos están fijados a propósito: **5000 para la API y 3000 para el cliente**. No se pisan, así que se pueden levantar en cualquier orden.
 
