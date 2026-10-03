@@ -12,7 +12,7 @@ function Navbar({ cartCount, onNavigate }) {
     <header className="site-header">
       <div className="container header-inner">
         <div className="logo">
-          <img src="/assets/img/logo.svg" alt="Hermanos Jota" />
+          <img src="../assets/img/logo.svg" alt="Hermanos Jota" />
 
           <span className="logo-text">Hermanos Jota</span>
         </div>
@@ -75,7 +75,13 @@ function Navbar({ cartCount, onNavigate }) {
             type="button"
             aria-label={`Carrito con ${cartCount} productos`}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
               <path
                 d="M6 6h15l-1.5 9h-12L5 3H2"
                 stroke="currentColor"
