@@ -95,7 +95,7 @@ export function mostrarProductos(arrayMuebles, contenedorDestino) {
         const imagen = document.createElement("img");
         imagen.src = mueble.imagenURL;
         divProducto.appendChild(imagen);
-        
+
         const nombre = document.createElement("h2");
         nombre.textContent = mueble.nombre;
         divProducto.appendChild(nombre);
@@ -113,7 +113,7 @@ export function mostrarProductos(arrayMuebles, contenedorDestino) {
         const boton = document.createElement("button");
         boton.className = "btn-outline";
         boton.textContent = "Ver detalle";
-        boton.addEventListener("click", function(evento) {
+        boton.addEventListener("click", function (evento) {
             evento.stopPropagation();
             window.location.href = `producto.html?id=${mueble.id}`;
         });

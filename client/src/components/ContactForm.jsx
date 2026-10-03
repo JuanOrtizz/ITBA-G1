@@ -1,28 +1,28 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-const FORMSPREE_URL = 'https://formspree.io/f/xdeolaka';
+const FORMSPREE_URL = "https://formspree.io/f/xdeolaka";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const FORM_INICIAL = { nombre: '', email: '', mensaje: '' };
+const FORM_INICIAL = { nombre: "", email: "", mensaje: "" };
 
 const estiloError = {
-  color: 'red',
-  display: 'block',
-  fontSize: '0.85rem',
-  marginTop: '4px',
+  color: "red",
+  display: "block",
+  fontSize: "0.85rem",
+  marginTop: "4px",
 };
 
 const estiloExito = {
-  color: 'green',
-  fontWeight: 'bold',
-  marginTop: '15px',
+  color: "green",
+  fontWeight: "bold",
+  marginTop: "15px",
 };
 
 function ContactForm() {
   const [formData, setFormData] = useState(FORM_INICIAL);
   const [errores, setErrores] = useState({});
-  const [exito, setExito] = useState('');
-  const [errorEnvio, setErrorEnvio] = useState('');
+  const [exito, setExito] = useState("");
+  const [errorEnvio, setErrorEnvio] = useState("");
   const [enviando, setEnviando] = useState(false);
 
   const handleChange = (e) => {
@@ -33,21 +33,21 @@ function ContactForm() {
   const validar = () => {
     const nuevosErrores = {};
 
-    if (formData.nombre.trim() === '') {
-      nuevosErrores.nombre = 'El campo Nombre no puede estar vacío.';
+    if (formData.nombre.trim() === "") {
+      nuevosErrores.nombre = "El campo Nombre no puede estar vacío.";
     }
 
     const email = formData.email.trim();
-    if (email === '') {
-      nuevosErrores.email = 'El campo Email no puede estar vacío.';
+    if (email === "") {
+      nuevosErrores.email = "El campo Email no puede estar vacío.";
     } else if (!EMAIL_REGEX.test(email)) {
       nuevosErrores.email =
-        'Ingresa un correo electrónico real (ej: juan@gmail.com).';
+        "Ingresa un correo electrónico real (ej: juan@gmail.com).";
     }
 
     const mensaje = formData.mensaje.trim();
-    if (mensaje === '') {
-      nuevosErrores.mensaje = 'El mensaje no puede estar vacío.';
+    if (mensaje === "") {
+      nuevosErrores.mensaje = "El mensaje no puede estar vacío.";
     } else if (mensaje.length < 15) {
       nuevosErrores.mensaje = `El mensaje es muy corto. Debe tener al menos 15 caracteres (actualmente tiene ${mensaje.length}).`;
     } else if (mensaje.length > 400) {
@@ -60,8 +60,8 @@ function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setExito('');
-    setErrorEnvio('');
+    setExito("");
+    setErrorEnvio("");
 
     const nuevosErrores = validar();
     setErrores(nuevosErrores);
@@ -72,26 +72,27 @@ function ContactForm() {
 
     try {
       const respuesta = await fetch(FORMSPREE_URL, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (respuesta.ok) {
-        setExito('¡Tu consulta fue enviada correctamente y ya la recibimos!');
+        setExito("¡Tu consulta fue enviada correctamente y ya la recibimos!");
         setFormData(FORM_INICIAL);
       } else {
-        setErrorEnvio('Hubo un problema de conexión con el servidor de correos.');
+        setErrorEnvio(
+          "Hubo un problema de conexión con el servidor de correos."
+        );
       }
-
     } catch (error) {
-        console.error(error);
-        setErrorEnvio('Error al intentar enviar el mensaje.');
+      console.error(error);
+      setErrorEnvio("Error al intentar enviar el mensaje.");
     } finally {
-        setEnviando(false);
+      setEnviando(false);
     }
   };
 
@@ -150,7 +151,7 @@ function ContactForm() {
           )}
 
           <button type="submit" id="btn-enviar" disabled={enviando}>
-            {enviando ? 'Enviando...' : 'Enviar Mensaje'}
+            {enviando ? "Enviando..." : "Enviar Mensaje"}
           </button>
         </form>
 
