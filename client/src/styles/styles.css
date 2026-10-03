@@ -124,12 +124,14 @@ h1, h2, h3, .footer-col h3 {
   border-bottom: 1px solid var(--color-border);
 }
 .header-inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-md);
   min-height: var(--header-h);
 }
+
 .logo {
   display: flex;
   align-items: center;
@@ -164,7 +166,9 @@ h1, h2, h3, .footer-col h3 {
   height: 2px;
   background: var(--color-text);
   border-radius: 2px;
-  transition: transform var(--transition), opacity var(--transition);
+  transition:
+    transform var(--transition),
+    opacity var(--transition);
 }
 .nav-toggle[aria-expanded="true"] span:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
@@ -176,7 +180,7 @@ h1, h2, h3, .footer-col h3 {
   transform: translateY(-7px) rotate(-45deg);
 }
 .site-nav {
-  position: absolute;
+ position: absolute;
   top: var(--header-h);
   left: 0;
   right: 0;
@@ -194,8 +198,8 @@ h1, h2, h3, .footer-col h3 {
   gap: var(--space-sm);
 }
 .nav-list a {
-  display: block;
-  width: 100%;
+  display: inline-block;
+  width: auto;
   padding: var(--space-sm);
   border-radius: 0.4rem;
   font-weight: 500;
@@ -246,7 +250,7 @@ h1, h2, h3, .footer-col h3 {
    Hero
    ----------------------------------------------------------------------------- */
 .hero {
-  --hero-image: url("../assets/img/hero-banner.jpeg");
+  --hero-image: url("/assets/img/hero-banner.jpeg");
   display: flex;
   flex-direction: column;
   min-height: 70vh;
@@ -394,7 +398,7 @@ h1, h2, h3, .footer-col h3 {
 .site-footer {
   background: var(--color-footer);
   color: var(--color-footer-text);
-  padding-block: var(--space-2xl) var(--space-lg);
+  padding-top: var(--space-2xl);
   margin-top: auto;
 }
 .footer-grid {
@@ -442,6 +446,13 @@ h1, h2, h3, .footer-col h3 {
   text-align: center;
 }
 
+.footer-bottom p {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: #b9a894;
+  font-weight: 300;
+  text-align: center;
+}
 /* -----------------------------------------------------------------------------
    Mobile
    ----------------------------------------------------------------------------- */
@@ -558,18 +569,15 @@ h1, h2, h3, .footer-col h3 {
   }
   .footer-grid {
     flex-direction: row;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: var(--space-2xl);
+    gap: 4rem;
   }
   .footer-brand {
-    flex: 1.2;
-    align-items: flex-start;
-    text-align: left;
+    flex: 0.9;
   }
   .footer-col {
     flex: 1;
-    align-items: flex-start;
-    text-align: left;
   }
   .footer-bottom {
     text-align: left;

@@ -1,0 +1,63 @@
+function Footer() {
+  return (
+    <footer className="site-footer">
+      <div className="container">
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <img src="/assets/img/logo.svg" alt="Hermanos Jota" />
+
+            <h3>Hermanos Jota</h3>
+
+            <p>
+              Mueblería de autor.
+              <br />
+              Carpintería de banco,
+              <br />
+              maderas locales y
+              <br />
+              terminaciones al aceite.
+            </p>
+          </div>
+
+          <div className="footer-col">
+            <h3>Ubicación</h3>
+
+            <p>Av. San Juan 2847, CABA</p>
+
+            <p>Lun a Vie: 10:00 - 19:00</p>
+            <p>Sábados: 10:00 - 14:00</p>
+          </div>
+
+          <div className="footer-col">
+            <h3>Contacto</h3>
+
+            <p>WhatsApp: +54 11 4567-8890</p>
+
+            <p>Email: info@hermanosjota.com</p>
+
+            <p>Instagram: @muebleria_hnos_jota</p>
+          </div>
+
+          <div className="footer-col">
+            <h3>Sitio</h3>
+
+            <a href="#">Inicio</a>
+            <a href="#">Catálogo</a>
+            <a href="#">Contacto</a>
+          </div>
+        </div>
+      </div>
+
+      <div className="footer-bottom">
+        <div className="container">
+          <p>© 2026 Hermanos Jota. Todos los derechos reservados.</p>
+        </div>
+        <div className="container">
+          <p>Desarollado por Ctrl + 5</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default Footer;
