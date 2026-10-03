@@ -1,16 +1,20 @@
 import { useState, useEffect } from "react";
-import "./App.css";
 import ProductList from "./components/ProductList";
+import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
+import Footer from "./components/Footer";
+import "./styles/styles.css";
 
 function App() {
-    const [vista, setVista] = useState("home");
+    const [vistaActual, setVistaActual] = useState("inicio");
+    const [cartCount, setCartCount] = useState(0);
     const [carrito, setCarrito] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [productos, setProductos] = useState([]);
     const [productoSeleccionado, setProductoSeleccionado] = useState(null);
     const [error, setError] = useState(null);
-    
-    useEffect(() => {
+
+   useEffect(() => {
         const url = "http://localhost:3000/api/productos";
         fetch(url)
             .then((res) => {
@@ -40,29 +44,27 @@ function App() {
             return [...prevCarrito, { ...producto, cantidad: 1 }];
         });
     }
-    
-    
-    
-    
-    
+  
+  
+  
+  return (
+    <>
+      <Navbar cartCount={cartCount} onNavigate={setVistaActual} />
 
-    return (
-        <>
-            
-            
-            <main>
-                
-                
-                {vista === "productos" && <ProductList setVista={setVista} productos={productos} setProductoSeleccionado={setProductoSeleccionado} agregarAlCarrito={agregarAlCarrito} />}
-                
-                
-                
-            </main>
-        
-        
-        </>
-        
-    );
+      <main>
+        {vistaActual === "inicio" && <Hero onExplore={() => setVistaActual("catalogo")} />}
+
+        {vistaActual === "productos" && <ProductList setVista={setVistaActual} productos={productos} setProductoSeleccionado={setProductoSeleccionado} agregarAlCarrito={agregarAlCarrito} />}
+
+        {vistaActual === "detalle" && <h1>Detalle del producto</h1>}
+
+        {vistaActual === "contacto" && <h1>Contacto</h1>}
+      </main>
+
+      <Footer />
+    </>
+  );
+
 }
 
 export default App;
