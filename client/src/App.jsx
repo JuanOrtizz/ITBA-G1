@@ -10,6 +10,8 @@ import FeaturedProducts from "./components/FeaturedProducts";
 
 import "./styles/styles.css";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function App() {
   const [vistaActual, setVistaActual] = useState("inicio");
   const [carrito, setCarrito] = useState([]);
@@ -21,9 +23,7 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const url = "http://localhost:5000/api/productos";
-
-    fetch(url)
+    fetch(`${API_URL}/api/productos`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Error al conectar con el servidor");
@@ -196,6 +196,8 @@ function App() {
           <ProductList
             setVista={setVistaActual}
             productos={productos}
+            cargando={cargando}
+            error={error}
             setProductoSeleccionado={setProductoSeleccionado}
             agregarAlCarrito={agregarAlCarrito}
           />

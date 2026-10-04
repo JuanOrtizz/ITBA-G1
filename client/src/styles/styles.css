@@ -655,6 +655,20 @@ h3,
     transform: translateY(1px);
 }
 
+.catalogo-estado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 420px;
+    padding-inline: var(--space-lg);
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.catalogo-estado p {
+    max-width: 40ch;
+}
+
 #contenedor-catalogo {
     display: flex;
     flex-direction: column;

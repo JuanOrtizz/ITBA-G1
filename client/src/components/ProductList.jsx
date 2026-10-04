@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ProductCard from "./ProductCard";
 
-function ProductList({ setVista, productos, setProductoSeleccionado, agregarAlCarrito }) {
+function ProductList({ setVista, productos, cargando, error, setProductoSeleccionado, agregarAlCarrito }) {
     const [busqueda, setBusqueda] = useState("");
 
     const quitarAcentos = (str) => {
@@ -17,6 +17,22 @@ function ProductList({ setVista, productos, setProductoSeleccionado, agregarAlCa
         const categoriaMueble = quitarAcentos(mueble.categoria || "");
         return nombreMueble.startsWith(textoBuscado) || categoriaMueble.startsWith(textoBuscado);
     });
+
+    if (cargando) {
+        return (
+            <section className="catalogo-estado">
+                <p role="status">Cargando productos…</p>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className="catalogo-estado">
+                <p role="alert">No pudimos cargar el catálogo. Revisá que el servidor esté funcionando y probá de nuevo en unos minutos.</p>
+            </section>
+        );
+    }
 
     return (
         <section>
