@@ -72,7 +72,7 @@ function ContactForm() {
         setFormData(FORM_INICIAL);
       } else {
         setErrorEnvio(
-          "Hubo un problema de conexión con el servidor de correos.",
+          "Hubo un problema de conexión con el servidor de correos."
         );
       }
     } catch (error) {
