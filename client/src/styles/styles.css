@@ -696,6 +696,7 @@ h3,
 /* --- Tarjeta del Producto (ProductCard.jsx) --- */
 
 .tarjeta-producto {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 80%;
@@ -751,7 +752,21 @@ h3,
     font-size: 1rem;
 }
 
+.tarjeta-producto__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+.tarjeta-producto__link:focus-visible {
+    outline: none;
+}
+.tarjeta-producto:has(.tarjeta-producto__link:focus-visible) {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+}
 .tarjeta-producto .btn-primary {
+    position: relative;
+    z-index: 1;
     align-self: center;
     margin-bottom: 20px;
     margin-top: auto;
@@ -1012,7 +1027,8 @@ h3,
     transform: translateY(-2px);
 }
 
-#formulario-contacto .error-span {
+.seccion-contacto .error-span {
+    display: block;
     font-size: var(--fs-xs);
     color: #d93025;
     padding-bottom: 0.3rem;
@@ -1024,6 +1040,11 @@ h3,
     text-align: center;
     font-size: var(--fs-md);
     margin-top: var(--space-md);
+}
+
+.mensaje-exito {
+    color: var(--color-secondary);
+    font-weight: 700;
 }
 
 /* -----------------------------------------------------------------------------

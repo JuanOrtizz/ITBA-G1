@@ -5,19 +5,6 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const FORM_INICIAL = { nombre: "", email: "", mensaje: "" };
 
-const estiloError = {
-  color: "red",
-  display: "block",
-  fontSize: "0.85rem",
-  marginTop: "4px",
-};
-
-const estiloExito = {
-  color: "green",
-  fontWeight: "bold",
-  marginTop: "15px",
-};
-
 function ContactForm() {
   const [formData, setFormData] = useState(FORM_INICIAL);
   const [errores, setErrores] = useState({});
@@ -114,7 +101,7 @@ function ContactForm() {
           required
         />
         {errores.nombre && (
-          <span className="error-span" style={estiloError}>
+          <span className="error-span">
             {errores.nombre}
           </span>
         )}
@@ -129,7 +116,7 @@ function ContactForm() {
           required
         />
         {errores.email && (
-          <span className="error-span" style={estiloError}>
+          <span className="error-span">
             {errores.email}
           </span>
         )}
@@ -144,7 +131,7 @@ function ContactForm() {
           required
         />
         {errores.mensaje && (
-          <span className="error-span" style={estiloError}>
+          <span className="error-span">
             {errores.mensaje}
           </span>
         )}
@@ -155,9 +142,9 @@ function ContactForm() {
       </form>
 
       <div id="mensaje-feedback">
-        {exito && <p style={estiloExito}>{exito}</p>}
+        {exito && <p className="mensaje-exito">{exito}</p>}
         {errorEnvio && (
-          <p className="error-span" style={estiloError}>
+          <p className="error-span">
             {errorEnvio}
           </p>
         )}
