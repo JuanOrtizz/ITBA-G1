@@ -97,74 +97,72 @@ function ContactForm() {
   };
 
   return (
-    <main>
-      <section className="seccion-contacto">
-        <h2>Centro de Ayuda y Contacto</h2>
-        <p>Completá los datos y te responderemos a la brevedad.</p>
+    <section className="seccion-contacto">
+      <h2>Centro de Ayuda y Contacto</h2>
+      <p>Completá los datos y te responderemos a la brevedad.</p>
 
-        {/* noValidate: evita que el navegador bloquee el submit y
-            permite que se muestren nuestros mensajes de error */}
-        <form id="formulario-contacto" onSubmit={handleSubmit} noValidate>
-          <label htmlFor="nombre">Nombre Completo:</label>
-          <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-          />
-          {errores.nombre && (
-            <span className="error-span" style={estiloError}>
-              {errores.nombre}
-            </span>
-          )}
+      {/* noValidate: evita que el navegador bloquee el submit y
+          permite que se muestren nuestros mensajes de error */}
+      <form id="formulario-contacto" onSubmit={handleSubmit} noValidate>
+        <label htmlFor="nombre">Nombre Completo:</label>
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          value={formData.nombre}
+          onChange={handleChange}
+          required
+        />
+        {errores.nombre && (
+          <span className="error-span" style={estiloError}>
+            {errores.nombre}
+          </span>
+        )}
 
-          <label htmlFor="email">Correo Electrónico:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          {errores.email && (
-            <span className="error-span" style={estiloError}>
-              {errores.email}
-            </span>
-          )}
+        <label htmlFor="email">Correo Electrónico:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        {errores.email && (
+          <span className="error-span" style={estiloError}>
+            {errores.email}
+          </span>
+        )}
 
-          <label htmlFor="mensaje">Tu Mensaje / Feedback:</label>
-          <textarea
-            id="mensaje"
-            name="mensaje"
-            rows="4"
-            value={formData.mensaje}
-            onChange={handleChange}
-            required
-          />
-          {errores.mensaje && (
-            <span className="error-span" style={estiloError}>
-              {errores.mensaje}
-            </span>
-          )}
+        <label htmlFor="mensaje">Tu Mensaje / Feedback:</label>
+        <textarea
+          id="mensaje"
+          name="mensaje"
+          rows="4"
+          value={formData.mensaje}
+          onChange={handleChange}
+          required
+        />
+        {errores.mensaje && (
+          <span className="error-span" style={estiloError}>
+            {errores.mensaje}
+          </span>
+        )}
 
-          <button type="submit" id="btn-enviar" disabled={enviando}>
-            {enviando ? "Enviando..." : "Enviar Mensaje"}
-          </button>
-        </form>
+        <button type="submit" id="btn-enviar" disabled={enviando}>
+          {enviando ? "Enviando..." : "Enviar Mensaje"}
+        </button>
+      </form>
 
-        <div id="mensaje-feedback">
-          {exito && <p style={estiloExito}>{exito}</p>}
-          {errorEnvio && (
-            <p className="error-span" style={estiloError}>
-              {errorEnvio}
-            </p>
-          )}
-        </div>
-      </section>
-    </main>
+      <div id="mensaje-feedback">
+        {exito && <p style={estiloExito}>{exito}</p>}
+        {errorEnvio && (
+          <p className="error-span" style={estiloError}>
+            {errorEnvio}
+          </p>
+        )}
+      </div>
+    </section>
   );
 }
 
