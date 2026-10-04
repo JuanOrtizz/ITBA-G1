@@ -45,6 +45,8 @@ El objetivo de la migración es desacoplar el frontend de los datos. El catálog
 - **Errores sin filtrar internos.** El `errorHandler` centralizado responde `{ error, mensaje }` y deja el stack únicamente en la consola del servidor. Una respuesta de error nunca expone rutas absolutas del proyecto.
 - **Puerto y URL de la API por variable de entorno.** El servidor lee `process.env.PORT` y el catálogo arma las URLs de sus imágenes a partir de `process.env.API_BASE_URL`, con valores por defecto para desarrollo local. El mismo código sirve en la máquina de cada integrante y en un hosting, sin editar archivos.
 - **Los assets se resuelven con `__dirname`.** La carpeta de imágenes se resuelve relativa al archivo del servidor y no al directorio desde donde se lo invoca, así se sirve el directorio correcto sin importar el `cwd`.
+- **Navegación por estado, sin router.** `App.jsx` guarda la vista actual (`inicio`, `catalogo`, `detalle`, `contacto`) en un `useState` y renderiza condicionalmente cada pantalla. No hay recargas ni cambios de URL.
+- **Estado global en `App.jsx`.** El catálogo, el carrito y el producto seleccionado viven en `App` y bajan por props. El catálogo se pide una sola vez a `GET /api/productos` y se reutiliza en el inicio (destacados) y en el listado, con estados de carga y error. El detalle pide su producto a `GET /api/productos/:id`.
 
 ## Estructura del proyecto
 
@@ -64,7 +66,17 @@ El objetivo de la migración es desacoplar el frontend de los datos. El catálog
 ├── client/                     # SPA React (Vite)
 │   ├── public/
 │   ├── src/
-│   │   ├── App.jsx
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx              # Navegación y contador del carrito
+│   │   │   ├── Hero.jsx                # Portada con CTA al catálogo
+│   │   │   ├── FeaturedProducts.jsx    # Productos destacados del inicio
+│   │   │   ├── ProductList.jsx         # Catálogo con buscador, carga y error
+│   │   │   ├── ProductCard.jsx         # Tarjeta de un producto
+│   │   │   ├── ProductDetail.jsx       # Detalle por id, con fallbacks
+│   │   │   ├── ContactForm.jsx         # Formulario controlado con validaciones
+│   │   │   └── Footer.jsx
+│   │   ├── styles/styles.css           # Estilos globales y variables de marca
+│   │   ├── App.jsx                     # Vista actual, catálogo y carrito
 │   │   └── main.jsx
 │   ├── package.json
 │   └── vite.config.js
@@ -213,6 +225,7 @@ Ninguna es obligatoria: todas tienen un valor por defecto pensado para desarroll
 | `PORT` | `backend` | `5000` | Puerto de la API. Las plataformas de hosting lo inyectan solas. |
 | `API_BASE_URL` | `backend` | `http://localhost:5000` | Host con el que se arma `imagenURL`. En producción debe ser la URL pública del backend. |
 | `NODE_ENV` | `backend` | — | En `production` el stack de los errores no se imprime en consola. |
+| `VITE_API_URL` | `client` | `http://localhost:5000` | URL base de la API que consume el cliente. |
 
 En el cliente, Vite expone las variables con prefijo `VITE_` a través de `import.meta.env`. El archivo `.env` no se versiona; hay un `.env.example` como referencia.
 
