@@ -6,13 +6,14 @@ import Footer from "./components/Footer";
 import ProductList from "./components/ProductList";
 import ProductDetail from "./components/ProductDetail";
 import ContactForm from "./components/ContactForm";
+import FeaturedProducts from "./components/FeaturedProducts";
 
 import "./styles/styles.css";
 
 function App() {
   const [vistaActual, setVistaActual] = useState("inicio");
-
   const [carrito, setCarrito] = useState([]);
+  const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [productos, setProductos] = useState([]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
@@ -68,18 +69,127 @@ function App() {
     });
   }
 
+  function cambiarCantidad(productoId, cambio) {
+    setCarrito((carritoActual) =>
+      carritoActual
+        .map((producto) =>
+          producto.id === productoId
+            ? {
+                ...producto,
+                cantidad: producto.cantidad + cambio,
+              }
+            : producto,
+        )
+        .filter((producto) => producto.cantidad > 0),
+    );
+  }
+
+  function eliminarDelCarrito(productoId) {
+    setCarrito((carritoActual) =>
+      carritoActual.filter((producto) => producto.id !== productoId),
+    );
+  }
+
   const cartCount = carrito.reduce(
     (total, producto) => total + producto.cantidad,
     0,
   );
 
+  const totalCarrito = carrito.reduce(
+    (total, producto) => total + producto.precio * producto.cantidad,
+    0,
+  );
+
   return (
     <>
-      <Navbar cartCount={cartCount} onNavigate={setVistaActual} />
+      <Navbar
+        cartCount={cartCount}
+        onNavigate={setVistaActual}
+        onCartClick={() => setCarritoAbierto(true)}
+      />
+
+      {carritoAbierto && (
+        <div id="panel-carrito" className="is-open">
+          <div className="carrito-panel__contenido">
+            <div className="carrito-panel__encabezado">
+              <h2>Tu carrito</h2>
+
+              <button
+                type="button"
+                className="carrito-panel__cerrar"
+                aria-label="Cerrar carrito"
+                onClick={() => setCarritoAbierto(false)}
+              >
+                &times;
+              </button>
+            </div>
+
+            <div className="carrito-panel__productos">
+              {carrito.length === 0 ? (
+                <p>Tu carrito está vacío.</p>
+              ) : (
+                carrito.map((producto) => (
+                  <div className="carrito-item" key={producto.id}>
+                    <img src={producto.imagenURL} alt={producto.nombre} />
+
+                    <div>
+                      <h3>{producto.nombre}</h3>
+                      <div className="controles-cantidad">
+                        <button
+                          type="button"
+                          onClick={() => cambiarCantidad(producto.id, -1)}
+                        >
+                          -
+                        </button>
+
+                        <span>{producto.cantidad}</span>
+
+                        <button
+                          type="button"
+                          onClick={() => cambiarCantidad(producto.id, 1)}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <p>
+                        $
+                        {(producto.precio * producto.cantidad).toLocaleString(
+                          "es-AR",
+                        )}
+                      </p>
+                      <button
+                        type="button"
+                        className="boton-eliminar-item"
+                        onClick={() => eliminarDelCarrito(producto.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+            <div className="carrito-panel__pie">
+              <div className="carrito-panel__total">
+                <span>Total:</span>
+                <strong>${totalCarrito.toLocaleString("es-AR")}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main>
         {vistaActual === "inicio" && (
-          <Hero onExplore={() => setVistaActual("catalogo")} />
+          <>
+            <Hero onExplore={() => setVistaActual("catalogo")} />
+
+            <FeaturedProducts
+              productos={productos}
+              setVista={setVistaActual}
+              setProductoSeleccionado={setProductoSeleccionado}
+            />
+          </>
         )}
 
         {vistaActual === "catalogo" && (
@@ -91,7 +201,13 @@ function App() {
           />
         )}
 
-        {vistaActual === "detalle" && <h1>Detalle del producto</h1>}
+        {vistaActual === "detalle" && (
+          <ProductDetail
+            productoId={productoSeleccionado}
+            onAddToCart={agregarAlCarrito}
+            onBack={() => setVistaActual("catalogo")}
+          />
+        )}
 
         {vistaActual === "contacto" && <ContactForm />}
       </main>
