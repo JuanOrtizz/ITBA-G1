@@ -64,7 +64,7 @@ El objetivo de la migración es desacoplar el frontend de los datos. El catálog
 │   ├── package.json
 │   └── server.js               # Arranque del servidor (puerto 5000)
 ├── client/                     # SPA React (Vite)
-│   ├── public/
+│   ├── assets/img/             # Logo y portada (las fotos las sirve la API)
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── Navbar.jsx              # Navegación y contador del carrito
