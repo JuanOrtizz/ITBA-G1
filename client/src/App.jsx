@@ -104,6 +104,7 @@ function App() {
     <>
       <Navbar
         cartCount={cartCount}
+        vistaActual={vistaActual}
         onNavigate={setVistaActual}
         onCartClick={() => setCarritoAbierto(true)}
       />

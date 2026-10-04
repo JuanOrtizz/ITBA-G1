@@ -15,12 +15,7 @@ function Footer({ onNavigate }) {
             <h3>Hermanos Jota</h3>
 
             <p>
-              Mueblería de autor.
-              <br />
-              Carpintería de banco,
-              <br />
-              maderas locales y
-              <br />
+              Mueblería de autor. Carpintería de banco, maderas locales y
               terminaciones al aceite.
             </p>
           </div>
@@ -65,7 +60,7 @@ function Footer({ onNavigate }) {
           <p>© 2026 Hermanos Jota. Todos los derechos reservados.</p>
         </div>
         <div className="container">
-          <p>Desarollado por Ctrl + 5</p>
+          <p>Desarrollado por Ctrl + 5</p>
         </div>
       </div>
     </footer>

@@ -1,7 +1,11 @@
 import { useState } from "react";
 
-function Navbar({ cartCount, onNavigate, onCartClick }) {
+function Navbar({ cartCount, vistaActual, onNavigate, onCartClick }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
+
+  // El detalle de un producto se considera parte del catálogo
+  const seccionActual = vistaActual === "detalle" ? "catalogo" : vistaActual;
+  const marcarActual = (vista) => (seccionActual === vista ? "page" : undefined);
 
   const navegar = (vista) => {
     onNavigate(vista);
@@ -24,23 +28,12 @@ function Navbar({ cartCount, onNavigate, onCartClick }) {
           <span className="logo-text">Hermanos Jota</span>
         </a>
 
-        <button
-          className="nav-toggle"
-          type="button"
-          aria-label="Abrir menú"
-          aria-expanded={menuAbierto}
-          onClick={() => setMenuAbierto(!menuAbierto)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-
         <nav className={`site-nav ${menuAbierto ? "is-open" : ""}`}>
           <ul className="nav-list">
             <li>
               <a
                 href="#"
+                aria-current={marcarActual("inicio")}
                 onClick={(e) => {
                   e.preventDefault();
                   navegar("inicio");
@@ -53,6 +46,7 @@ function Navbar({ cartCount, onNavigate, onCartClick }) {
             <li>
               <a
                 href="#"
+                aria-current={marcarActual("catalogo")}
                 onClick={(e) => {
                   e.preventDefault();
                   navegar("catalogo");
@@ -65,6 +59,7 @@ function Navbar({ cartCount, onNavigate, onCartClick }) {
             <li>
               <a
                 href="#"
+                aria-current={marcarActual("contacto")}
                 onClick={(e) => {
                   e.preventDefault();
                   navegar("contacto");
@@ -101,6 +96,18 @@ function Navbar({ cartCount, onNavigate, onCartClick }) {
               <circle cx="18" cy="20" r="1.4" fill="currentColor" />
             </svg>
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+          </button>
+
+          <button
+            className="nav-toggle"
+            type="button"
+            aria-label={menuAbierto ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={menuAbierto}
+            onClick={() => setMenuAbierto(!menuAbierto)}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
           </button>
         </div>
       </div>
