@@ -4,9 +4,9 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import ProductList from "./components/ProductList";
+import ProductDetail from "./components/ProductDetail";
 import ContactForm from "./components/ContactForm";
 import FeaturedProducts from "./components/FeaturedProducts";
-import ProductDetail from "./components/ProductDetail";
 
 import "./styles/styles.css";
 
@@ -114,8 +114,13 @@ function App() {
             <div className="carrito-panel__encabezado">
               <h2>Tu carrito</h2>
 
-              <button type="button" onClick={() => setCarritoAbierto(false)}>
-                X
+              <button
+                type="button"
+                className="carrito-panel__cerrar"
+                aria-label="Cerrar carrito"
+                onClick={() => setCarritoAbierto(false)}
+              >
+                &times;
               </button>
             </div>
 

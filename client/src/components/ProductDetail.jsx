@@ -96,7 +96,7 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
           <p className="detalle-error" role="alert">
             {mensaje}
           </p>
-          <button type="button" className="boton-secundario" onClick={onBack}>
+          <button type="button" className="btn btn-ghost" onClick={onBack}>
             Volver al catálogo
           </button>
         </div>
@@ -137,7 +137,7 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
             <p className="detalle-precio">{formatearPrecio(precio)}</p>
             <button
               type="button"
-              className="boton-primario"
+              className="btn btn-primary"
               onClick={handleAgregar}
             >
               Añadir al carrito

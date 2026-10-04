@@ -17,7 +17,7 @@ function FeaturedProducts({ productos, setVista, setProductoSeleccionado }) {
         {productosDestacados.map((producto) => (
           <article className="product-card" key={producto.id}>
             <div className="product-card__media">
-              <img src={producto.imagen} alt={producto.nombre} />
+              <img src={producto.imagenURL} alt={producto.nombre} />
             </div>
 
             <div className="product-card__body">

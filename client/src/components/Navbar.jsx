@@ -90,9 +90,9 @@ function Navbar({ cartCount, onNavigate, onCartClick }) {
               <path
                 d="M6 6h15l-1.5 9h-12L5 3H2"
                 stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <circle cx="9" cy="20" r="1.4" fill="currentColor" />
               <circle cx="18" cy="20" r="1.4" fill="currentColor" />
