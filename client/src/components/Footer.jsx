@@ -1,8 +1,9 @@
+import logo from "../../assets/img/logo.svg";
+
 function Footer({ onNavigate }) {
   const irA = (vista) => (e) => {
     e.preventDefault();
     onNavigate(vista);
-    window.scrollTo(0, 0);
   };
 
   return (
@@ -10,7 +11,7 @@ function Footer({ onNavigate }) {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <img src="/assets/img/logo.svg" alt="Hermanos Jota" />
+            <img src={logo} alt="Hermanos Jota" />
 
             <h3>Hermanos Jota</h3>
 

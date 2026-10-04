@@ -53,6 +53,12 @@ function App() {
     return () => document.removeEventListener("keydown", cerrarConEscape);
   }, [carritoAbierto]);
 
+  // Cada cambio de vista arranca desde arriba de la página. "instant" evita
+  // la animación del scroll-behavior: smooth que tiene el html en styles.css
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [vistaActual]);
+
   function agregarAlCarrito(producto) {
     setCarrito((prevCarrito) => {
       const productoExistente = prevCarrito.find(

@@ -36,9 +36,9 @@ function ProductList({ setVista, productos, cargando, error, setProductoSeleccio
 
     return (
         <section>
-            <h2 id="titulo-catalogo">Nuestro Catalogo</h2>
+            <h2 id="titulo-catalogo">Nuestro catálogo</h2>
 
-            <input type="text" id="buscador" placeholder="Busque su mueble aquí" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+            <input type="text" id="buscador" placeholder="Buscá tu mueble" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
 
             <div id="contenedor-catalogo">
                 {productosFiltrados.length > 0 ? (

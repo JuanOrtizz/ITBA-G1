@@ -8,7 +8,14 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res, next) => {
-    const producto = productos.find(p => p.id === parseInt(req.params.id));
+    // Solo dígitos: parseInt("1abc") devolvería 1 y respondería un producto
+    if (!/^\d+$/.test(req.params.id)) {
+        const error = new Error("El id debe ser un número entero positivo");
+        error.status = 400;
+        return next(error);
+    }
+
+    const producto = productos.find(p => p.id === Number(req.params.id));
     if(!producto) {
         const error = new Error("Producto no encontrado");
         error.status = 404;

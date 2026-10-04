@@ -141,6 +141,8 @@ npm run dev
 
 Vite imprime la URL del cliente: `http://localhost:3000`.
 
+En las dos carpetas también funciona `npm start`, que es el comando de la guía del plan técnico: en `backend/` levanta el servidor sin recarga automática (`node server.js`) y en `client/` es equivalente a `npm run dev`.
+
 El puerto del cliente no es el que trae Vite por defecto (5173), sino que está fijado en `client/vite.config.js` junto con `strictPort`. Con `strictPort` activo, si el 3000 está ocupado Vite falla con un mensaje claro en vez de moverse en silencio a otro puerto, que es lo que rompería la configuración de CORS y de la API.
 
 Los dos puertos están fijados a propósito: **5000 para la API y 3000 para el cliente**. No se pisan, así que se pueden levantar en cualquier orden.
@@ -165,7 +167,7 @@ Base: `http://localhost:5000`
 | Método | Ruta | Descripción | Respuesta |
 |--------|------|-------------|-----------|
 | `GET` | `/api/productos` | Lista completa del catálogo | `200` con el array de productos |
-| `GET` | `/api/productos/:id` | Un producto por su id numérico | `200` con el objeto, o `404` si no existe |
+| `GET` | `/api/productos/:id` | Un producto por su id numérico | `200` con el objeto, `404` si no existe o `400` si el id no es un número |
 | `GET` | `/assets/img/:archivo` | Imágenes de los productos | `200` con la imagen |
 | `GET` | `/` | Mensaje de bienvenida | `200` con texto plano |
 | `POST` | `/api/productos` | Recibe un producto y lo devuelve en el eco. No persiste: sirve para verificar el parseo de JSON | `201` con el cuerpo recibido |

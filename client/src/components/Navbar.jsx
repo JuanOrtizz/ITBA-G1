@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import logo from "../../assets/img/logo.svg";
+
 function Navbar({ cartCount, vistaActual, onNavigate, onCartClick }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
@@ -23,7 +25,7 @@ function Navbar({ cartCount, vistaActual, onNavigate, onCartClick }) {
             navegar("inicio");
           }}
         >
-          <img src="../assets/img/logo.svg" alt="Hermanos Jota" />
+          <img src={logo} alt="Hermanos Jota" />
 
           <span className="logo-text">Hermanos Jota</span>
         </a>
