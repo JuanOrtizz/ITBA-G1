@@ -1,4 +1,10 @@
-function Footer() {
+function Footer({ onNavigate }) {
+  const irA = (vista) => (e) => {
+    e.preventDefault();
+    onNavigate(vista);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <footer className="site-footer">
       <div className="container">
@@ -41,9 +47,15 @@ function Footer() {
           <div className="footer-col">
             <h3>Sitio</h3>
 
-            <a href="#">Inicio</a>
-            <a href="#">Catálogo</a>
-            <a href="#">Contacto</a>
+            <a href="#" onClick={irA("inicio")}>
+              Inicio
+            </a>
+            <a href="#" onClick={irA("catalogo")}>
+              Catálogo
+            </a>
+            <a href="#" onClick={irA("contacto")}>
+              Contacto
+            </a>
           </div>
         </div>
       </div>

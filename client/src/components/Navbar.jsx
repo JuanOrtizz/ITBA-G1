@@ -11,15 +11,18 @@ function Navbar({ cartCount, onNavigate, onCartClick }) {
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <div
+        <a
+          href="#"
           className="logo"
-          onClick={() => navegar("inicio")}
-          aria-label="Hermanos Jota — inicio"
+          onClick={(e) => {
+            e.preventDefault();
+            navegar("inicio");
+          }}
         >
           <img src="../assets/img/logo.svg" alt="Hermanos Jota" />
 
           <span className="logo-text">Hermanos Jota</span>
-        </div>
+        </a>
 
         <button
           className="nav-toggle"

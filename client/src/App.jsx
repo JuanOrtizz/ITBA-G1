@@ -214,7 +214,7 @@ function App() {
         {vistaActual === "contacto" && <ContactForm />}
       </main>
 
-      <Footer />
+      <Footer onNavigate={setVistaActual} />
     </>
   );
 }
