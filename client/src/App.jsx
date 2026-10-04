@@ -42,6 +42,17 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    if (!carritoAbierto) return;
+
+    const cerrarConEscape = (e) => {
+      if (e.key === "Escape") setCarritoAbierto(false);
+    };
+
+    document.addEventListener("keydown", cerrarConEscape);
+    return () => document.removeEventListener("keydown", cerrarConEscape);
+  }, [carritoAbierto]);
+
   function agregarAlCarrito(producto) {
     setCarrito((prevCarrito) => {
       const productoExistente = prevCarrito.find(
@@ -110,7 +121,14 @@ function App() {
       />
 
       {carritoAbierto && (
-        <div id="panel-carrito" className="is-open">
+        <div
+          id="panel-carrito"
+          className="is-open"
+          onClick={(e) => {
+            // Solo cierra si el click fue en el fondo, no dentro del panel
+            if (e.target === e.currentTarget) setCarritoAbierto(false);
+          }}
+        >
           <div className="carrito-panel__contenido">
             <div className="carrito-panel__encabezado">
               <h2>Tu carrito</h2>
