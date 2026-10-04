@@ -608,28 +608,6 @@ h3,
     .footer-bottom {
         text-align: left;
     }
-
-    .detalle-contenido {
-        flex-direction: row;
-        align-items: flex-start;
-    }
-
-    .detalle-media,
-    .detalle-info {
-        flex: 1 1 50%;
-    }
-
-    .detalle-specs {
-        grid-template-columns: auto 1fr;
-    }
-
-    .detalle-specs dt {
-        grid-column: 1;
-    }
-
-    .detalle-specs dd {
-        grid-column: 2;
-    }
 }
 
 /* -----------------------------------------------------------------------------
@@ -787,8 +765,7 @@ h3,
     text-align: left;
 }
 
-.detalle-volver,
-.volver {
+.detalle-volver {
     display: inline-block;
     margin-bottom: var(--space-lg);
     padding: 0;
@@ -799,8 +776,7 @@ h3,
     cursor: pointer;
 }
 
-.detalle-volver:hover,
-.volver:hover {
+.detalle-volver:hover {
     text-decoration: underline;
 }
 
@@ -901,26 +877,15 @@ h3,
     color: var(--color-text-muted);
 }
 
-.detalle-boton-carrito:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.detalle-cargando,
-.detalle-estado,
-.detalle-error {
+.detalle-estado {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: var(--space-lg);
     min-height: 420px;
     text-align: center;
     color: var(--color-text-muted);
-}
-
-.detalle-estado {
-    flex-direction: column;
-    gap: var(--space-lg);
 }
 
 .detalle-error {
@@ -1039,7 +1004,7 @@ h3,
    Responsive de catalogo, detalle y contacto
    ----------------------------------------------------------------------------- */
 @media (min-width: 768px) {
-    .detalle-producto {
+    .detalle-contenido {
         flex-direction: row;
         align-items: flex-start;
     }
@@ -1049,16 +1014,10 @@ h3,
         flex: 1 1 50%;
     }
 
-    .detalle-specs {
-        grid-template-columns: auto 1fr;
-    }
-
-    .detalle-specs dt {
-        grid-column: 1;
-    }
-
-    .detalle-specs dd {
-        grid-column: 2;
+    .detalle-spec {
+        display: grid;
+        grid-template-columns: 9rem 1fr;
+        gap: var(--space-md);
     }
 
     #formulario-contacto button[type="submit"] {
