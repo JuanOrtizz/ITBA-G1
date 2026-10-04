@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import ProductList from "./components/ProductList";
+import ProductDetail from "./components/ProductDetail";
 import ContactForm from "./components/ContactForm";
 
 import "./styles/styles.css";

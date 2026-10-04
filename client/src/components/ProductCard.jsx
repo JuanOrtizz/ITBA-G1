@@ -11,7 +11,7 @@ function ProductCard({ setVista, producto, setProductoSeleccionado, agregarAlCar
             <p className="producto-precio">${producto.precio.toLocaleString("es-AR")}</p>
             <p className="producto-descripcion">{producto.descripcion}</p>
             <button
-                className="boton-primario"
+                className="btn btn-primary"
                 onClick={(e) => {
                     e.stopPropagation();
                     agregarAlCarrito(producto);
