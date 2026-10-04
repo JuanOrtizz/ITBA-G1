@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Navbar({ cartCount, onNavigate }) {
+function Navbar({ cartCount, onNavigate, onCartClick }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   const navegar = (vista) => {
@@ -11,7 +11,11 @@ function Navbar({ cartCount, onNavigate }) {
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <div className="logo">
+        <div
+          className="logo"
+          onClick={() => navegar("inicio")}
+          aria-label="Hermanos Jota — inicio"
+        >
           <img src="../assets/img/logo.svg" alt="Hermanos Jota" />
 
           <span className="logo-text">Hermanos Jota</span>
@@ -74,6 +78,7 @@ function Navbar({ cartCount, onNavigate }) {
             className="cart-btn"
             type="button"
             aria-label={`Carrito con ${cartCount} productos`}
+            onClick={onCartClick}
           >
             <svg
               width="22"
