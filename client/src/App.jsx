@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-
+import {
+  Routes,
+  Route,
+  useParams,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
@@ -12,7 +18,27 @@ import "./styles/styles.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
+function NotFound() {
+  return (
+    <section className="catalogo-estado">
+      <h1>Página no encontrada</h1>
+      <p>La página que buscás no existe.</p>
+      <a href="/">Volver al inicio</a>
+    </section>
+  );
+}
+
+function DetalleRuta({ onAddToCart, onBack }) {
+  const { id } = useParams();
+
+  return (
+    <ProductDetail productoId={id} onAddToCart={onAddToCart} onBack={onBack} />
+  );
+}
+
 function App() {
+  const navegarA = useNavigate();
+  const location = useLocation();
   const [vistaActual, setVistaActual] = useState("inicio");
   const [carrito, setCarrito] = useState([]);
   const [carritoAbierto, setCarritoAbierto] = useState(false);
@@ -21,6 +47,12 @@ function App() {
 
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+
+  function navegarVista(vista) {
+    if (vista === "inicio") navegarA("/");
+    if (vista === "catalogo") navegarA("/productos");
+    if (vista === "contacto") navegarA("/contacto");
+  }
 
   useEffect(() => {
     fetch(`${API_URL}/api/productos`)
@@ -57,7 +89,7 @@ function App() {
   // la animación del scroll-behavior: smooth que tiene el html en styles.css
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [vistaActual]);
+  }, [location.pathname]);
 
   function agregarAlCarrito(producto) {
     setCarrito((prevCarrito) => {
@@ -205,38 +237,50 @@ function App() {
       )}
 
       <main>
-        {vistaActual === "inicio" && (
-          <>
-            <Hero onExplore={() => setVistaActual("catalogo")} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Hero onExplore={() => navegarA("/productos")} />
 
-            <FeaturedProducts
-              productos={productos}
-              setVista={setVistaActual}
-              setProductoSeleccionado={setProductoSeleccionado}
-            />
-          </>
-        )}
-
-        {vistaActual === "catalogo" && (
-          <ProductList
-            setVista={setVistaActual}
-            productos={productos}
-            cargando={cargando}
-            error={error}
-            setProductoSeleccionado={setProductoSeleccionado}
-            agregarAlCarrito={agregarAlCarrito}
+                <FeaturedProducts
+                  productos={productos}
+                  setVista={navegarVista}
+                  setProductoSeleccionado={setProductoSeleccionado}
+                />
+              </>
+            }
           />
-        )}
 
-        {vistaActual === "detalle" && (
-          <ProductDetail
-            productoId={productoSeleccionado}
-            onAddToCart={agregarAlCarrito}
-            onBack={() => setVistaActual("catalogo")}
+          <Route
+            path="/productos"
+            element={
+              <ProductList
+                setVista={navegarVista}
+                productos={productos}
+                cargando={cargando}
+                error={error}
+                setProductoSeleccionado={setProductoSeleccionado}
+                agregarAlCarrito={agregarAlCarrito}
+              />
+            }
           />
-        )}
 
-        {vistaActual === "contacto" && <ContactForm />}
+          <Route
+            path="/productos/:id"
+            element={
+              <DetalleRuta
+                onAddToCart={agregarAlCarrito}
+                onBack={() => navegarA("/productos")}
+              />
+            }
+          />
+
+          <Route path="/contacto" element={<ContactForm />} />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </main>
 
       <Footer onNavigate={setVistaActual} />
