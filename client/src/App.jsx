@@ -4,6 +4,7 @@ import {
   Route,
   useParams,
   useNavigate,
+  Link,
   useLocation,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -23,7 +24,7 @@ function NotFound() {
     <section className="catalogo-estado">
       <h1>Página no encontrada</h1>
       <p>La página que buscás no existe.</p>
-      <a href="/">Volver al inicio</a>
+      <Link to="/">Volver al inicio</Link>
     </section>
   );
 }
@@ -39,7 +40,6 @@ function DetalleRuta({ onAddToCart, onBack }) {
 function App() {
   const navegarA = useNavigate();
   const location = useLocation();
-  const [vistaActual, setVistaActual] = useState("inicio");
   const [carrito, setCarrito] = useState([]);
   const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [productos, setProductos] = useState([]);
@@ -48,10 +48,14 @@ function App() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
 
-  function navegarVista(vista) {
+  function navegarVista(vista, productoId = null) {
     if (vista === "inicio") navegarA("/");
     if (vista === "catalogo") navegarA("/productos");
     if (vista === "contacto") navegarA("/contacto");
+
+    if (vista === "detalle" && productoId != null) {
+      navegarA(`/productos/${productoId}`);
+    }
   }
 
   useEffect(() => {
@@ -153,8 +157,6 @@ function App() {
     <>
       <Navbar
         cartCount={cartCount}
-        vistaActual={vistaActual}
-        onNavigate={setVistaActual}
         onCartClick={() => setCarritoAbierto(true)}
       />
 
@@ -283,7 +285,7 @@ function App() {
         </Routes>
       </main>
 
-      <Footer onNavigate={setVistaActual} />
+      <Footer />
     </>
   );
 }

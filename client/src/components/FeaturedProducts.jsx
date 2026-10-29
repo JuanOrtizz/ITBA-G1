@@ -29,10 +29,7 @@ function FeaturedProducts({ productos, setVista, setProductoSeleccionado }) {
 
               <button
                 className="btn btn-ghost"
-                onClick={() => {
-                  setProductoSeleccionado(producto.id);
-                  setVista("detalle");
-                }}
+                onClick={() => setVista("detalle", producto.id)}
               >
                 Ver detalle
               </button>

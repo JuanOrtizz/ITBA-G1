@@ -1,74 +1,45 @@
 import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 
 import logo from "../../assets/img/logo.svg";
 
-function Navbar({ cartCount, vistaActual, onNavigate, onCartClick }) {
+function Navbar({ cartCount, onCartClick }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
-  // El detalle de un producto se considera parte del catálogo
-  const seccionActual = vistaActual === "detalle" ? "catalogo" : vistaActual;
-  const marcarActual = (vista) => (seccionActual === vista ? "page" : undefined);
+  const cerrarMenu = () => setMenuAbierto(false);
 
-  const navegar = (vista) => {
-    onNavigate(vista);
-    setMenuAbierto(false);
-  };
+  const claseNav = ({ isActive }) => (isActive ? "activo" : undefined);
 
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <a
-          href="#"
-          className="logo"
-          onClick={(e) => {
-            e.preventDefault();
-            navegar("inicio");
-          }}
-        >
+        <Link to="/" className="logo" onClick={cerrarMenu}>
           <img src={logo} alt="Hermanos Jota" />
-
           <span className="logo-text">Hermanos Jota</span>
-        </a>
+        </Link>
 
         <nav className={`site-nav ${menuAbierto ? "is-open" : ""}`}>
           <ul className="nav-list">
             <li>
-              <a
-                href="#"
-                aria-current={marcarActual("inicio")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navegar("inicio");
-                }}
-              >
+              <NavLink to="/" end className={claseNav} onClick={cerrarMenu}>
                 Inicio
-              </a>
+              </NavLink>
             </li>
 
             <li>
-              <a
-                href="#"
-                aria-current={marcarActual("catalogo")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navegar("catalogo");
-                }}
+              <NavLink
+                to="/productos"
+                className={claseNav}
+                onClick={cerrarMenu}
               >
                 Catálogo
-              </a>
+              </NavLink>
             </li>
 
             <li>
-              <a
-                href="#"
-                aria-current={marcarActual("contacto")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navegar("contacto");
-                }}
-              >
+              <NavLink to="/contacto" className={claseNav} onClick={cerrarMenu}>
                 Contacto
-              </a>
+              </NavLink>
             </li>
           </ul>
         </nav>
@@ -97,6 +68,7 @@ function Navbar({ cartCount, vistaActual, onNavigate, onCartClick }) {
               <circle cx="9" cy="20" r="1.4" fill="currentColor" />
               <circle cx="18" cy="20" r="1.4" fill="currentColor" />
             </svg>
+
             {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
           </button>
 
