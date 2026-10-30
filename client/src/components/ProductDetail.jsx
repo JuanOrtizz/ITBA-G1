@@ -110,7 +110,7 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
     precio,
     descripcion,
     detalles = {},
-    imagenURL,
+    imagenUrl,
   } = productoMostrado;
 
   const handleAgregar = () => {
@@ -126,7 +126,7 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
 
       <div className="detalle-contenido">
         <figure className="detalle-media">
-          <img src={imagenURL} alt={nombre} />
+          <img src={imagenUrl} alt={nombre} />
         </figure>
 
         <div className="detalle-info">

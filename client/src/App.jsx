@@ -187,8 +187,8 @@ function App() {
                 <p>Tu carrito está vacío.</p>
               ) : (
                 carrito.map((producto) => (
-                  <div className="carrito-item" key={producto.id}>
-                    <img src={producto.imagenURL} alt={producto.nombre} />
+                  <div className="carrito-item" key={producto._id}>
+                    <img src={producto.imagenUrl} alt={producto.nombre} />
 
                     <div>
                       <h3>{producto.nombre}</h3>
