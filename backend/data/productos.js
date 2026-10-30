@@ -194,6 +194,5 @@ const productos = [
 
 module.exports = productos.map((producto) => ({
     ...producto,
-    imagenURL: `${BASE_URL}${producto.imagen}`,
-    materiales: producto.detalles.materiales || producto.detalles.estructura,
+    imagenUrl: `${BASE_URL}${producto.imagen}`,
 }));

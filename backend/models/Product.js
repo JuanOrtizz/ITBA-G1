@@ -7,25 +7,39 @@ const productSchema = new mongoose.Schema(
             required: [true, "El nombre del producto es obligatorio"],
             trim: true,
         },
-        descripcion: {
+        categoria: {
             type: String,
             trim: true,
-            default: "",
+            default: "A definir"
         },
         precio: {
             type: Number,
             required: [true, "El precio es obligatorio"],
             min: [0, "El precio no puede ser negativo"],
         },
+        imagenUrl: {
+            type: String,
+            trim: true,
+            default: "",
+        },
+        descripcion: {
+            type: String,
+            trim: true,
+            default: "",
+        },
+        detalles: {
+            type: Map,
+            of: String,
+            default: {},
+        },
         stock: {
             type: Number,
             default: 0,
             min: [0, "El stock no puede ser negativo"],
         },
-        imagenUrl: {
-            type: String,
-            trim: true,
-            default: "",
+        destacado: {
+            type: Boolean,
+            default: false,
         },
     },
     {

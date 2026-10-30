@@ -52,7 +52,6 @@ function App() {
     if (vista === "inicio") navegarA("/");
     if (vista === "catalogo") navegarA("/productos");
     if (vista === "contacto") navegarA("/contacto");
-
     if (vista === "detalle" && productoId != null) {
       navegarA(`/productos/${productoId}`);
     }
@@ -249,6 +248,8 @@ function App() {
                 <FeaturedProducts
                   productos={productos}
                   setVista={navegarVista}
+                  cargando={cargando}
+                  error={error}
                   setProductoSeleccionado={setProductoSeleccionado}
                 />
               </>
