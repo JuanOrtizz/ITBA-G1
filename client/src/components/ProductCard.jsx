@@ -14,8 +14,8 @@ function ProductCard({
           className="tarjeta-producto__link"
           onClick={(e) => {
             e.preventDefault();
-            setProductoSeleccionado(producto.id);
-            setVista("detalle");
+            setProductoSeleccionado(producto._id);
+            setVista("detalle", producto._id);
           }}
         >
           {producto.nombre}
