@@ -35,7 +35,7 @@ router.get("/:id", async (req, res, next) => {
 // POST /api/productos - Crear un nuevo producto
 router.post("/", async (req, res, next) => {
     try {
-        const { nombre, descripcion, precio, stock, imagenUrl } = req.body;
+        const { nombre, categoria, precio, imagenUrl, descripcion, detalles, stock } = req.body;
 
         // Validación preventiva antes de persistir
         if (!nombre || typeof nombre !== "string" || nombre.trim() === "") {
@@ -52,10 +52,12 @@ router.post("/", async (req, res, next) => {
 
         const nuevoProducto = await Product.create({
             nombre: nombre.trim(),
-            descripcion: typeof descripcion === "string" ? descripcion.trim() : "",
+            categoria: categoria !== undefined ? categoria.trim() : "A definir",
             precio: Number(precio),
-            stock: stock !== undefined && stock !== null ? Number(stock) : 0,
             imagenUrl: typeof imagenUrl === "string" ? imagenUrl.trim() : "",
+            descripcion: typeof descripcion === "string" ? descripcion.trim() : "",
+            detalles: detalles || {},
+            stock: stock !== undefined && stock !== null ? Number(stock) : 0,
         });
 
         res.status(201).json(nuevoProducto);
