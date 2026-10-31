@@ -40,11 +40,23 @@ const MENSAJES_ERROR = {
     servidor: "No pudimos conectarnos con el servidor. Probá de nuevo en unos minutos.",
 };
 
+// Lee el mensaje de error del backend ({ message }) o usa uno genérico
+async function mensajeDeError(res, porDefecto) {
+    try {
+        const datos = await res.json();
+        return datos.message || porDefecto;
+    } catch {
+        return porDefecto;
+    }
+}
+
 // Toma el id de la ruta /productos/:id y lo pide a GET /api/productos/:id
-function ProductDetail({ onAddToCart, onBack }) {
+function ProductDetail({ onAddToCart, onBack, onDelete }) {
     const { id: productoId } = useParams();
     const navigate = useNavigate();
     const [confirmando, setConfirmando] = useState(false);
+    const [eliminando, setEliminando] = useState(false);
+    const [errorEliminar, setErrorEliminar] = useState(null);
     const [respuesta, setRespuesta] = useState({
         id: null,
         producto: null,
@@ -102,7 +114,7 @@ function ProductDetail({ onAddToCart, onBack }) {
         );
     }
 
-    const { nombre, categoria, precio, descripcion, detalles = {}, imagenUrl } = productoMostrado;
+    const { _id, nombre, categoria, precio, descripcion, detalles = {}, imagenUrl } = productoMostrado;
     const especificaciones = Object.entries(detalles || {});
 
     const handleAgregar = () => {
@@ -111,17 +123,26 @@ function ProductDetail({ onAddToCart, onBack }) {
     };
 
     const handleDelete = async () => {
+        setEliminando(true);
+        setErrorEliminar(null);
+
         try {
-            const response = await fetch(`${API_URL}/api/productos/${productoId}`, {
+            const res = await fetch(`${API_URL}/api/productos/${_id}`, {
                 method: "DELETE",
             });
-            if (!response.ok) {
-                throw new Error("No se pudo eliminar el producto");
+
+            if (!res.ok) {
+                throw new Error(await mensajeDeError(res, "No se pudo eliminar el producto."));
             }
+
+            onDelete?.(_id);
             navigate("/productos");
         } catch (err) {
-            console.error("Error al eliminar:", err);
-            alert(err.message);
+            // Un TypeError de fetch es un fallo de red, no una respuesta del backend
+            const mensaje = err instanceof TypeError ? "No pudimos conectarnos con el servidor. El producto no se eliminó." : err.message;
+            setErrorEliminar(mensaje);
+            setConfirmando(false);
+            setEliminando(false);
         }
     };
 
@@ -133,26 +154,37 @@ function ProductDetail({ onAddToCart, onBack }) {
                 </button>
                 <div className="controles-admin">
                     {confirmando ? (
-                        <div className="alerta-eliminar">
-                            <span className="texto-alerta">¿Eliminar definitivamente?</span>
-                            <button className="btn btn-primary" onClick={handleDelete}>
-                                Si
+                        <div className="alerta-eliminar" role="alertdialog" aria-label="Confirmar eliminación">
+                            <span className="texto-alerta">¿Eliminar &quot;{nombre}&quot; definitivamente?</span>
+                            <button type="button" className="btn btn-primary" onClick={handleDelete} disabled={eliminando}>
+                                {eliminando ? "Eliminando…" : "Sí, eliminar"}
                             </button>
-                            <button className="btn btn-primary" onClick={() => setConfirmando(false)}>
-                                No
+                            <button type="button" className="btn btn-ghost" onClick={() => setConfirmando(false)} disabled={eliminando}>
+                                Cancelar
                             </button>
                         </div>
                     ) : (
                         <>
-                            <button className="btn btn-primary" onClick={() => navigate(`/admin/editar-producto/${productoId}`)}>
+                            <button type="button" className="btn btn-primary" onClick={() => navigate(`/admin/editar-producto/${_id}`)}>
                                 Editar Producto
                             </button>
-                            <button className="btn btn-primary" onClick={() => setConfirmando(true)}>
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={() => {
+                                    setErrorEliminar(null);
+                                    setConfirmando(true);
+                                }}>
                                 Eliminar Producto
                             </button>
                         </>
                     )}
                 </div>
+                {errorEliminar && (
+                    <p className="detalle-error-eliminar" role="alert">
+                        {errorEliminar}
+                    </p>
+                )}
             </div>
 
             <div className="detalle-contenido">
