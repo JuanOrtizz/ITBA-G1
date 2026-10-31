@@ -9,6 +9,8 @@ import ContactForm from "./components/ContactForm";
 import FeaturedProducts from "./components/FeaturedProducts";
 
 import "./styles/styles.css";
+import CreateProduct from "./components/CreateProduct";
+import EditProduct from "./components/EditProduct";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -211,6 +213,10 @@ function App() {
                     <Route path="/productos/:id" element={<DetalleRuta onAddToCart={agregarAlCarrito} onBack={() => navegarA("/productos")} />} />
 
                     <Route path="/contacto" element={<ContactForm />} />
+                    
+                    <Route path="/admin/crear-producto" element={<CreateProduct />} />
+                    
+                    <Route path="/admin/editar-producto/:id" element={<EditProduct />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>
