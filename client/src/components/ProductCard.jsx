@@ -1,16 +1,18 @@
 import { useNavigate } from "react-router-dom";
 
-function ProductCard({ producto, agregarAlCarrito }) {
+function ProductCard({ producto, agregarAlCarrito, esDestacado = false }) {
     const navigate = useNavigate();
     
     return (
-        <div className="tarjeta-producto" onClick={() => navigate(`/productos/${producto.id}`)}>
-            <img src={producto.imagenURL} alt={producto.nombre} />
+        <div className="tarjeta-producto" onClick={() => navigate(`/productos/${producto._id}`)}>
+            <img src={producto.imagenUrl} alt={producto.nombre} />
             <h2>{producto.nombre}</h2>
             <p className="producto-precio">${producto.precio.toLocaleString("es-AR")}</p>
-            <p className="producto-descripcion">{producto.descripcion}</p>
+            {!esDestacado && (
+                <p className="producto-descripcion">{producto.descripcion}</p>
+            )}
             <button
-                className="boton-primario"
+                className="btn btn-primary"
                 onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();

@@ -793,6 +793,12 @@ h3,
         width: 25%;
         overflow: hidden;
     }
+    
+    /* Agregá esto para que entren las 4 en una sola fila en Destacados */
+    .products-grid .tarjeta-producto {
+        width: calc(25% - var(--space-lg));
+        flex: 1 1 calc(25% - var(--space-lg));
+    }
 }
 
 /* -----------------------------------------------------------------------------
