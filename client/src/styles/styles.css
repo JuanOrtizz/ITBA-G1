@@ -943,6 +943,20 @@ h3,
     font-weight: 700;
 }
 
+.detalle-stock {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+}
+
+.detalle-producto .btn:disabled {
+    background: #b5aba1;
+    border-color: #b5aba1;
+    color: #fff;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .detalle-feedback {
     min-height: 1.2em;
     color: var(--color-secondary);

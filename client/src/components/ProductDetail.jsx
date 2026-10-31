@@ -114,7 +114,8 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
         );
     }
 
-    const { _id, nombre, categoria, precio, descripcion, detalles = {}, imagenUrl } = productoMostrado;
+    const { _id, nombre, categoria, precio, descripcion, detalles = {}, imagenUrl, stock = 0 } = productoMostrado;
+    const sinStock = !(stock > 0);
     const especificaciones = Object.entries(detalles || {});
 
     const handleAgregar = () => {
@@ -198,10 +199,11 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
 
                     <div className="detalle-compra">
                         <p className="detalle-precio">{formatearPrecio(precio)}</p>
-                        <button type="button" className="btn btn-primary" onClick={handleAgregar}>
-                            Añadir al carrito
+                        <button type="button" className="btn btn-primary" onClick={handleAgregar} disabled={sinStock}>
+                            {sinStock ? "Sin stock" : "Añadir al carrito"}
                         </button>
                     </div>
+                    <p className="detalle-stock">{sinStock ? "No hay unidades disponibles por ahora." : `Stock: ${stock} ${stock === 1 ? "unidad" : "unidades"}`}</p>
                     <p className="detalle-feedback" role="status">
                         {agregado && `${nombre} se agregó al carrito.`}
                     </p>
