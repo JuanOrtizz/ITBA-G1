@@ -1239,3 +1239,101 @@ h3,
   color: #b33a2b;
   border-color: #b33a2b;
 }
+
+
+/* 
+   ProductForm y Select (Botones y Selección)
+ */
+
+.contenedor-botones-admin {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 3rem 0;
+    margin-top: 2rem;
+}
+
+/* Botones "+ Nuevo Producto" y "✎ Editar Producto" con el estilo exacto de #buscador */
+.btn-admin-outline {
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: var(--color-bg-alt);
+    color: var(--color-primary);
+    border: 3px solid var(--color-primary);
+    border-radius: 20px;
+    box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-admin-outline:hover {
+    transform: translateY(1px);
+    background-color: var(--color-primary);
+    color: var(--color-bg-alt);
+}
+
+@media (min-width: 768px) {
+    .btn-admin-outline {
+        font-size: 1.2rem;
+    }
+}
+
+/* Pantalla de Selección de Producto (ProductSelect.jsx) */
+.seccion-admin-select {
+    max-width: 800px;
+    margin: 4rem auto;
+    padding-inline: var(--space-lg);
+    text-align: center;
+}
+
+.seccion-admin-select h2 {
+    font-size: var(--fs-xl);
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+}
+
+.seccion-admin-select p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+}
+
+.grilla-botones-productos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Botones de cada mueble con el estilo exacto de "AÑADIR AL CARRITO" (.btn + .btn-primary) */
+.btn-estilo-carrito {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    width: fit-content;
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: var(--fs-base);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: none;
+    cursor: pointer;
+    transition:
+        background var(--transition),
+        transform var(--transition);
+}
+
+.btn-estilo-carrito:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+}

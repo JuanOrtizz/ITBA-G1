@@ -7,6 +7,8 @@ import ProductList from "./components/ProductList";
 import ProductDetail from "./components/ProductDetail";
 import ContactForm from "./components/ContactForm";
 import FeaturedProducts from "./components/FeaturedProducts";
+import ProductForm from "./components/ProductForm";
+import ProductSelect from "./components/ProductSelect";
 
 import "./styles/styles.css";
 
@@ -211,6 +213,12 @@ function App() {
                     <Route path="/productos/:id" element={<DetalleRuta onAddToCart={agregarAlCarrito} onBack={() => navegarA("/productos")} />} />
 
                     <Route path="/contacto" element={<ContactForm />} />
+
+                    <Route path="/admin/crear-producto" element={<ProductForm />} />
+                    
+                    <Route path="/admin/seleccionar-edicion" element={<ProductSelect />} />
+
+                    <Route path="/admin/editar-producto/:id" element={<ProductForm />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>
