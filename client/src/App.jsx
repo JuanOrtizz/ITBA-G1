@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, useParams, useNavigate, Link, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, Link, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
@@ -24,12 +24,6 @@ function NotFound() {
     );
 }
 
-function DetalleRuta({ onAddToCart, onBack }) {
-    const { id } = useParams();
-
-    return <ProductDetail productoId={id} onAddToCart={onAddToCart} onBack={onBack} />;
-}
-
 function App() {
     const navegarA = useNavigate();
     const location = useLocation();
@@ -49,8 +43,10 @@ function App() {
         }
     }
 
-    useEffect(() => {
-        fetch(`${API_URL}/api/productos`)
+    // Se llama al montar y después de eliminar un producto, para que el catálogo
+    // refleje lo que quedó en la base
+    function cargarProductos() {
+        return fetch(`${API_URL}/api/productos`)
             .then((res) => {
                 if (!res.ok) {
                     throw new Error("Error al conectar con el servidor");
@@ -67,7 +63,17 @@ function App() {
                 setError(err.message);
                 setCargando(false);
             });
+    }
+
+    useEffect(() => {
+        cargarProductos();
     }, []);
+
+    // Saca el producto de la lista al instante y confirma contra la base
+    function quitarProductoEliminado(productoId) {
+        setProductos((actuales) => actuales.filter((producto) => producto._id !== productoId));
+        cargarProductos();
+    }
 
     useEffect(() => {
         if (!carritoAbierto) return;
@@ -210,7 +216,7 @@ function App() {
 
                     <Route path="/productos" element={<ProductList productos={productos} cargando={cargando} error={error} agregarAlCarrito={agregarAlCarrito} />} />
 
-                    <Route path="/productos/:id" element={<DetalleRuta onAddToCart={agregarAlCarrito} onBack={() => navegarA("/productos")} />} />
+                    <Route path="/productos/:id" element={<ProductDetail onAddToCart={agregarAlCarrito} onBack={() => navegarA("/productos")} onDelete={quitarProductoEliminado} />} />
 
                     <Route path="/contacto" element={<ContactForm />} />
                     
