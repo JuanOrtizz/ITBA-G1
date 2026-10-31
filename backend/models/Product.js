@@ -37,6 +37,10 @@ const productSchema = new mongoose.Schema(
             default: 0,
             min: [0, "El stock no puede ser negativo"],
         },
+        destacado: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,

@@ -1,11 +1,7 @@
+import { Link } from "react-router-dom";
 import logo from "../../assets/img/logo.svg";
 
-function Footer({ onNavigate }) {
-  const irA = (vista) => (e) => {
-    e.preventDefault();
-    onNavigate(vista);
-  };
-
+function Footer() {
   return (
     <footer className="site-footer">
       <div className="container">
@@ -25,7 +21,6 @@ function Footer({ onNavigate }) {
             <h3>Ubicación</h3>
 
             <p>Av. San Juan 2847, CABA</p>
-
             <p>Lun a Vie: 10:00 - 19:00</p>
             <p>Sábados: 10:00 - 14:00</p>
           </div>
@@ -34,24 +29,16 @@ function Footer({ onNavigate }) {
             <h3>Contacto</h3>
 
             <p>WhatsApp: +54 11 4567-8890</p>
-
             <p>Email: info@hermanosjota.com</p>
-
             <p>Instagram: @muebleria_hnos_jota</p>
           </div>
 
           <div className="footer-col">
             <h3>Sitio</h3>
 
-            <a href="#" onClick={irA("inicio")}>
-              Inicio
-            </a>
-            <a href="#" onClick={irA("catalogo")}>
-              Catálogo
-            </a>
-            <a href="#" onClick={irA("contacto")}>
-              Contacto
-            </a>
+            <Link to="/">Inicio</Link>
+            <Link to="/productos">Catálogo</Link>
+            <Link to="/contacto">Contacto</Link>
           </div>
         </div>
       </div>
@@ -60,6 +47,7 @@ function Footer({ onNavigate }) {
         <div className="container">
           <p>© 2026 Hermanos Jota. Todos los derechos reservados.</p>
         </div>
+
         <div className="container">
           <p>Desarrollado por Ctrl + 5</p>
         </div>
