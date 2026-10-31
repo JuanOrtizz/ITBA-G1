@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, useParams, useNavigate, Link, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, Link, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
@@ -22,12 +22,6 @@ function NotFound() {
             <Link to="/">Volver al inicio</Link>
         </section>
     );
-}
-
-function DetalleRuta({ onAddToCart, onBack }) {
-    const { id } = useParams();
-
-    return <ProductDetail productoId={id} onAddToCart={onAddToCart} onBack={onBack} />;
 }
 
 function App() {
@@ -210,7 +204,7 @@ function App() {
 
                     <Route path="/productos" element={<ProductList productos={productos} cargando={cargando} error={error} agregarAlCarrito={agregarAlCarrito} />} />
 
-                    <Route path="/productos/:id" element={<DetalleRuta onAddToCart={agregarAlCarrito} onBack={() => navegarA("/productos")} />} />
+                    <Route path="/productos/:id" element={<ProductDetail onAddToCart={agregarAlCarrito} onBack={() => navegarA("/productos")} />} />
 
                     <Route path="/contacto" element={<ContactForm />} />
                     

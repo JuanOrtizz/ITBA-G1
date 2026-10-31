@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -33,8 +33,16 @@ function etiquetaDetalle(clave) {
     return ETIQUETAS_DETALLES[clave] || clave.charAt(0).toUpperCase() + clave.slice(1);
 }
 
-// Recibe el producto completo, o solo su id y lo pide a GET /api/productos/:id
-function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
+// Mensajes para cada motivo por el que no se puede mostrar el producto
+const MENSAJES_ERROR = {
+    "id-invalido": "El enlace del producto no es válido. Volvé al catálogo y elegí un producto de la lista.",
+    "no-encontrado": "No encontramos el producto que buscás. Puede que haya sido eliminado.",
+    servidor: "No pudimos conectarnos con el servidor. Probá de nuevo en unos minutos.",
+};
+
+// Toma el id de la ruta /productos/:id y lo pide a GET /api/productos/:id
+function ProductDetail({ onAddToCart, onBack }) {
+    const { id: productoId } = useParams();
     const navigate = useNavigate();
     const [confirmando, setConfirmando] = useState(false);
     const [respuesta, setRespuesta] = useState({
@@ -44,32 +52,30 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
     });
     const [agregado, setAgregado] = useState(false);
 
-    const debeBuscar = !producto && productoId != null;
-
     useEffect(() => {
-        if (!debeBuscar) return;
-
         const controlador = new AbortController();
 
         fetch(`${API_URL}/api/productos/${productoId}`, {
             signal: controlador.signal,
         })
             .then((res) => {
+                if (res.status === 400) throw new Error("id-invalido");
                 if (res.status === 404) throw new Error("no-encontrado");
-                if (!res.ok) throw new Error(`Error ${res.status} al pedir el producto`);
+                if (!res.ok) throw new Error("servidor");
                 return res.json();
             })
             .then((datos) => setRespuesta({ id: productoId, producto: datos, error: null }))
             .catch((err) => {
                 if (err.name === "AbortError") return;
-                setRespuesta({ id: productoId, producto: null, error: err.message });
+                const motivo = MENSAJES_ERROR[err.message] ? err.message : "servidor";
+                setRespuesta({ id: productoId, producto: null, error: motivo });
             });
 
         return () => controlador.abort();
-    }, [debeBuscar, productoId]);
+    }, [productoId]);
 
-    const cargando = debeBuscar && respuesta.id !== productoId;
-    const productoMostrado = producto || (respuesta.id === productoId ? respuesta.producto : null);
+    const cargando = respuesta.id !== productoId;
+    const productoMostrado = respuesta.id === productoId ? respuesta.producto : null;
 
     if (cargando) {
         return (
@@ -82,13 +88,11 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
     }
 
     if (!productoMostrado) {
-        const mensaje = !debeBuscar || respuesta.error === "no-encontrado" ? "No encontramos el producto que buscás. Volvé al catálogo e intentá de nuevo." : "No pudimos conectarnos con el servidor. Probá de nuevo en unos minutos.";
-
         return (
             <section className="detalle-producto">
                 <div className="detalle-estado">
                     <p className="detalle-error" role="alert">
-                        {mensaje}
+                        {MENSAJES_ERROR[respuesta.error]}
                     </p>
                     <button type="button" className="btn btn-ghost" onClick={onBack}>
                         Volver al catálogo
@@ -99,6 +103,7 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
     }
 
     const { nombre, categoria, precio, descripcion, detalles = {}, imagenUrl } = productoMostrado;
+    const especificaciones = Object.entries(detalles || {});
 
     const handleAgregar = () => {
         onAddToCart(productoMostrado);
@@ -152,11 +157,11 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
 
             <div className="detalle-contenido">
                 <figure className="detalle-media">
-                    <img src={imagenUrl} alt={nombre} />
+                    {imagenUrl ? <img src={imagenUrl} alt={nombre} /> : <div className="detalle-sin-imagen">Imagen no disponible</div>}
                 </figure>
 
                 <div className="detalle-info">
-                    <p className="detalle-categoria">{categoria}</p>
+                    {categoria && <p className="detalle-categoria">{categoria}</p>}
                     <h1>{nombre}</h1>
 
                     <div className="detalle-compra">
@@ -169,17 +174,21 @@ function ProductDetail({ producto, productoId, onAddToCart, onBack }) {
                         {agregado && `${nombre} se agregó al carrito.`}
                     </p>
 
-                    <p className="detalle-descripcion">{descripcion}</p>
+                    <p className="detalle-descripcion">{descripcion || "Este producto todavía no tiene descripción."}</p>
 
-                    <h2>Detalles de taller</h2>
-                    <dl className="detalle-specs">
-                        {Object.entries(detalles).map(([clave, valor]) => (
-                            <div key={clave} className="detalle-spec">
-                                <dt>{etiquetaDetalle(clave)}</dt>
-                                <dd>{valor}</dd>
-                            </div>
-                        ))}
-                    </dl>
+                    {especificaciones.length > 0 && (
+                        <>
+                            <h2>Detalles de taller</h2>
+                            <dl className="detalle-specs">
+                                {especificaciones.map(([clave, valor]) => (
+                                    <div key={clave} className="detalle-spec">
+                                        <dt>{etiquetaDetalle(clave)}</dt>
+                                        <dd>{valor}</dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        </>
+                    )}
                 </div>
             </div>
         </section>
