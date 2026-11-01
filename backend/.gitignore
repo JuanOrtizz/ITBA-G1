@@ -1,4 +1,9 @@
 node_modules/
 .env
+.env.local
+.env.*.local
 *.log
 npm-debug.log*
+
+# Mantener plantilla de variables
+!.env.example

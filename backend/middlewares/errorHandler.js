@@ -1,9 +1,3 @@
-const ERROR_POR_ESTADO = {
-    400: "Bad Request",
-    404: "Not Found",
-    500: "Internal Server Error",
-};
-
 const notFound = (req, res, next) => {
     const error = new Error(`Ruta no encontrada: ${req.method} ${req.originalUrl}`);
     error.status = 404;
@@ -11,17 +5,30 @@ const notFound = (req, res, next) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-    const codigoEstado = err.status || 500;
-    const mensaje = err.message || "Ha ocurrido un error en el servidor";
+    let codigoEstado = err.status || 500;
+    let mensaje = err.message || "Ha ocurrido un error inesperado en el servidor";
 
-    console.error(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} -> ${codigoEstado} ${mensaje}`);
+    // Manejo de errores específicos de Mongoose
+    if (err.name === "CastError") {
+        codigoEstado = 400;
+        mensaje = "Identificador o parámetro con formato inválido";
+    } else if (err.name === "ValidationError") {
+        codigoEstado = 400;
+        mensaje = Object.values(err.errors)
+            .map((val) => val.message)
+            .join(", ") || "Error de validación en los datos enviados";
+    }
+
+    // Registro seguro en consola del servidor (sin exponer secretos)
+    console.error(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} -> ${codigoEstado}: ${mensaje}`);
+    
     if (process.env.NODE_ENV !== "production" && err.stack) {
         console.error(err.stack);
     }
 
+    // Respuesta limpia y consistente al cliente según el contrato acordado
     res.status(codigoEstado).json({
-        error: ERROR_POR_ESTADO[codigoEstado] || "Error",
-        mensaje,
+        message: mensaje,
     });
 };
 

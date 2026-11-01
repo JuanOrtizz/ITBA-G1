@@ -793,6 +793,12 @@ h3,
         width: 25%;
         overflow: hidden;
     }
+    
+    /* Agregá esto para que entren las 4 en una sola fila en Destacados */
+    .products-grid .tarjeta-producto {
+        width: calc(25% - var(--space-lg));
+        flex: 1 1 calc(25% - var(--space-lg));
+    }
 }
 
 /* -----------------------------------------------------------------------------
@@ -805,6 +811,59 @@ h3,
     padding: var(--space-xl) 0 var(--space-2xl);
     text-align: left;
 }
+
+#cabecera-detalle {
+    max-width: 1100px;
+    margin: 20px auto 20px auto;
+    padding: 0 6%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+#cabecera-detalle a {
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.controles-admin {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    align-self: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.alerta-eliminar {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.texto-alerta {
+    color: #d9534f;
+    font-weight: bold;
+}
+
+.detalle-error-eliminar {
+    align-self: center;
+    margin: 0;
+    color: #d9534f;
+    font-weight: 600;
+}
+
+.detalle-sin-imagen {
+    display: grid;
+    place-items: center;
+    min-height: 320px;
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+}
+
+
 
 .detalle-volver {
     display: inline-block;
@@ -884,6 +943,20 @@ h3,
     font-weight: 700;
 }
 
+.detalle-stock {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--fs-sm);
+}
+
+.detalle-producto .btn:disabled {
+    background: #b5aba1;
+    border-color: #b5aba1;
+    color: #fff;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .detalle-feedback {
     min-height: 1.2em;
     color: var(--color-secondary);
@@ -933,6 +1006,16 @@ h3,
     max-width: 40ch;
     margin-inline: auto;
 }
+
+@media (min-width: 768px) {
+    #cabecera-detalle {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+    }
+}
+
 /* -----------------------------------------------------------------------------
    Contacto
    ----------------------------------------------------------------------------- */
@@ -1232,4 +1315,128 @@ h3,
 .boton-eliminar-item:hover {
   color: #b33a2b;
   border-color: #b33a2b;
+}
+
+/* --- Botón Crear Producto al final del Catálogo (ProductList.jsx) --- */
+
+.contenedor-botones-admin {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 3rem 0;
+    margin-top: 2rem;
+}
+
+.btn-admin-outline {
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: var(--color-bg-alt);
+    color: var(--color-primary);
+    border: 3px solid var(--color-primary);
+    border-radius: 20px;
+    box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-admin-outline:hover {
+    transform: translateY(1px);
+    background-color: var(--color-primary);
+    color: var(--color-bg-alt);
+}
+
+@media (min-width: 768px) {
+    .btn-admin-outline {
+        font-size: 1.2rem;
+    }
+}
+
+/* --- Alta de Producto y Edicion de Producto (CreateProduct.jsx / EditProduct.jsx) --- */
+
+#contenedor-crear-producto, #contenedor-editar-producto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 20px auto 40px auto;
+    text-align: center;
+}
+
+.formulario-base {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    background-color: white;
+    border-radius: 20px;
+    gap: 0;
+    padding: 20px 30px 30px 30px;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+}
+
+.formulario-base label {
+    margin-left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 8px;
+    margin-top: 0px;
+}
+
+.formulario-base input,
+.formulario-base textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--color-primary);
+    border-radius: 10px;
+    margin-bottom: 25px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.formulario-base button[type="submit"] {
+    align-self: center;
+}
+
+.fieldset-detalles {
+    border: 1px solid var(--color-primary);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    background-color: var(--color-header);
+}
+
+.fieldset-detalles legend {
+    color: var(--color-primary);
+    font-weight: bold;
+    font-size: 0.9rem;
+    padding: 0 10px;
+}
+
+.fila-detalle {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.fila-detalle input {
+    margin-bottom: 0;
+}
+
+.input-clave {
+    flex: 1;
+}
+
+.input-valor {
+    flex: 2;
 }
