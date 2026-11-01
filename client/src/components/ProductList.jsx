@@ -50,13 +50,11 @@ function ProductsList({ productos, cargando, error, agregarAlCarrito }) {
                 </div>
             )}
                 <div className="contenedor-botones-admin">
+                    
                     <Link to="/admin/crear-producto" className="btn-admin-outline">
                              + Nuevo Producto
                     </Link>
 
-                    <Link to="/admin/seleccionar-edicion" className="btn-admin-outline">
-                            ✎ Editar Producto
-                    </Link>
                 </div>
             
         </section>

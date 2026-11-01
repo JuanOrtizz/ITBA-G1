@@ -1,261 +1,190 @@
-//p1:Imports, URL del Backend y Estado Inicial
-import { useState, useEffect } from "react";   
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-const PRODUCTO_INICIAL = {
-  nombre: "",
-  descripcion: "",
-  precio: "",
-  stock: "",
-  imagenUrl: "",
-};  
+const getDetallesVacios = () => Array.from({ length: 5 }, () => ({ clave: "", valor: "" }));
+const ESTADO_VACIO = {
+    nombre: "",
+    categoria: "",
+    precio: "",
+    imagenUrl: "",
+    descripcion: "",
+    detalles: getDetallesVacios(),
+    stock: "",
+};
 
-//p2: Estados del Componente y Precarga para Edición (GET por ID)
-function ProductForm() {
+function ProductForm({ recargarProductos }) {
     const { id } = useParams();
     const navigate = useNavigate();
-    const esEdicion = Boolean(id); //true si hay ID en la URL , false si estamos creando un nuevo producto
+    const esEdicion = Boolean(id);
+    const [enviado, setEnviado] = useState(false);
+    const [formData, setFormData] = useState(ESTADO_VACIO);
+    const [cargando, setCargando] = useState(false);
+    const [error, setError] = useState(null);
 
-    const [formData, setFormData] = useState(PRODUCTO_INICIAL);
-    const [errores, setErrores] = useState({});
-    const [exito, setExito] = useState("");
-    const [errorEnvio, setErrorEnvio] = useState("");
-    const [enviando, setEnviando] = useState(false);
+    useEffect(() => {
+        if (!esEdicion) {
+            setTimeout(() => setFormData(ESTADO_VACIO), 0);
+            return;
+        }
 
-    useEffect (() => {
-        if (!esEdicion) return;
-
-        const cargarProducto = async () => {
-            try {
-                setEnviando(true);
-                const respuesta = await fetch(`${API_URL}/api/productos/${id}`);
-                const data = await respuesta.json();
-
-            if(!respuesta.ok) {
-                throw new Error(data.message || data.error || "No se pudo encontrar el producto.");
-            }
-
+        const url = `${API_URL}/api/productos/${id}`;
+        fetch(url)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Error al conectar con el servidor");
+                }
+                return res.json();
+            })
+            .then((data) => {
+                const detallesBD = data.detalles ? Object.entries(data.detalles).map(([c, v]) => ({ clave: c, valor: v })) : [];
+                const detallesCompletos = [...detallesBD, ...getDetallesVacios()].slice(0, 5);
                 setFormData({
                     nombre: data.nombre || "",
+                    categoria: data.categoria || "",
+                    precio: data.precio !== undefined ? data.precio : "",
+                    imagenUrl: data.imagenUrl || data.imagen || "",      
                     descripcion: data.descripcion || "",
-                    precio: data.precio != undefined ? String(data.precio) : "",
-                    stock: data.stock != undefined ? String(data.stock) : "",
-                    imagenUrl: data.imagenUrl || "",
+                    detalles: detallesCompletos,
+                    stock: data.stock !== undefined ? data.stock : "",
                 });
-            } catch (error) {
-                console.error(error);
-                setErrorEnvio(error.message || "Error al cargar los datos del producto.");
-            } finally {
-                setEnviando(false);
-            }
-        };
+                setError(null);
+            })
+            .catch((err) => {
+                console.error("Error al cargar el detalle:", err);
+                setError(err.message);
+            })
+            .finally(() => {
+                setCargando(false);
+            });
+    }, [id, esEdicion]);
 
-    cargarProducto();
-}, [id, esEdicion]);
-
-
-//P3: Lectura de Inputs (handleChange) y Validaciones (validar)
-
-const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    if (errores[name]) {
-        setErrores ((prev) => ({ ...prev, [name]: "" }));
-    }
-};
-
-const validar = () => {
-    const nuevosErrores = {};
-
-    if(formData.nombre.trim() === "") {
-        nuevosErrores.nombre = "El nombre del producto no puede estar vacío.";
-    }
-
-    const precioTexto = String(formData.precio).trim();
-    if (precioTexto === "") {
-        nuevosErrores.precio = "El precio del producto es obligatorio.";
-    }
-    else if (isNaN(Number(precioTexto)) || Number(precioTexto) < 0) {
-        nuevosErrores.precio = "El precio debe ser un numero mayor a 0.";
-    }
-
-    const stockTexto = String(formData.stock).trim();
-    if (stockTexto !== "" && (isNaN(Number(stockTexto)) || Number(stockTexto) < 0)) {
-        nuevosErrores.stock = "El stock debe ser un numero mayor a 0.";
-    }
-
-    return nuevosErrores;
-};
-
-//P4: Envio al Backend (POST/PUT) con handleSubmit
-const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    setExito("");
-    setErrorEnvio("");
-
-    const nuevosErrores = validar();
-    setErrores(nuevosErrores);
-
-    if (Object.keys(nuevosErrores).length > 0) return;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
     
-    setEnviando(true);
-
-    const payLoadLimpio = {
-        nombre: formData.nombre.trim(),
-        descripcion: formData.descripcion.trim(),
-        precio: Number(formData.precio),
-        ...String(formData.stock).trim() !== "" && { stock: Number(formData.stock) },
-        imagenUrl: formData.imagenUrl.trim(),
+    const handleDetalleChange = (index, campo, valor) => {
+        const nuevosDetalles = [...formData.detalles];
+        nuevosDetalles[index][campo] = valor;
+        setFormData({ ...formData, detalles: nuevosDetalles });
     };
 
-    try {
-        const url = esEdicion
-            ? `${API_URL}/api/productos/${id}`
-            : `${API_URL}/api/productos`;
-        const metodo = esEdicion ? "PUT" : "POST";
-
-        const respuesta = await fetch(url, {
-            method: metodo,
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payLoadLimpio),
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setCargando(true);
+        setError(null);
+        
+        // Limpieza y camelCase de los detalles antes de enviar
+        const objetoDetalles = {};
+        formData.detalles.forEach(item => {
+            if (item.clave.trim() !== "" && item.valor.trim() !== "") {
+                const claveCamelCase = item.clave.trim().split(/\s+/).map((palabra, index) => {
+                    if (index === 0) return palabra.toLowerCase();
+                    return palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase();
+                }).join("");
+                objetoDetalles[claveCamelCase] = item.valor;
+            }
         });
         
-        const data = await respuesta.json();
+        try {
+            const productoAEnviar = {
+                ...formData,
+                precio: Number(formData.precio),
+                stock: Number(formData.stock),
+                detalles: objetoDetalles,
+            };
 
-        if (respuesta.ok) {
-            setExito(
-                esEdicion
-                    ? "Producto actualizado correctamente en la base de datos"
-                    : "El producto fue creado correctamente en MongoDB Atlas"
-            );
-            if (!esEdicion) {
-                setFormData(PRODUCTO_INICIAL);
+            // Definimos dinámicamente si es un POST (crear) o PUT (editar)
+            const url = esEdicion ? `${API_URL}/api/productos/${id}` : `${API_URL}/api/productos`;
+            const method = esEdicion ? "PUT" : "POST";
+            
+            const response = await fetch(url, {
+                method: method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(productoAEnviar),
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message || "Error al guardar el producto");
             }
+
+            // Refrescamos la lista de productos en App.jsx para que el catálogo se actualice al instante
+            if (recargarProductos) {
+                await recargarProductos();
+            }
+
+            setEnviado(true);
 
             setTimeout(() => {
+                setEnviado(false);
                 navigate("/productos");
-            }, 1200);
-        } else {
-                setErrorEnvio(data.error || "Hubo un problema al guardar el producto en el servidor.");
-            }
-        } catch (error) {
-            console.error(error);
-            setErrorEnvio("Error de conexion con el servidor backend.");
+            }, 1500);
+            
+        } catch (err) {
+            setError(err.message);
         } finally {
-            setEnviando(false);
+            setCargando(false);
         }
     };
 
-//P5: Exportamos las mismas clases de CSS de ContactForm
-return (
-    <section className="seccion-contacto">
-      <h2>{esEdicion ? "Editar un Producto" : "Crear un Nuevo Producto"}</h2>
-      <p>
-        {esEdicion
-          ? "Modificá los datos del mueble y guardá los cambios."
-          : "Completá los datos del mueble para sumarlo al catálogo."}
-      </p>
+    return (
+        <>
+            <form className="formulario-base" onSubmit={handleSubmit}>
+                <label>Nombre del mueble *</label>
+                <input type="text" name="nombre" required value={formData.nombre} onChange={handleChange} />
 
-      <form id="formulario-contacto" onSubmit={handleSubmit} noValidate>
-        <label htmlFor="nombre">Nombre del Producto*: </label>
-        <input
-          type="text"
-          id="nombre"
-          name="nombre"
-          value={formData.nombre}
-          onChange={handleChange}
-          disabled={enviando}
-          required
-        />
-        {errores.nombre && (
-          <span className="error-span" role="alert">
-            {errores.nombre}
-          </span>
-        )}
+                <label>Categoría *</label>
+                <input type="text" name="categoria" required value={formData.categoria} onChange={handleChange} />
+                
+                <label>Precio ($) *</label>
+                <input type="number" name="precio" min="0" step="any" required value={formData.precio} onChange={handleChange} />
+                
+                <label>URL de la imagen</label>
+                <input type="text" name="imagenUrl" value={formData.imagenUrl} onChange={handleChange} />
+                
+                <label>Descripción</label>
+                <textarea name="descripcion" rows="4" value={formData.descripcion} onChange={handleChange}></textarea>
 
-        <label htmlFor="precio">Precio* ($): </label>
-        <input
-          type="number"
-          id="precio"
-          name="precio"
-          min="0"
-          step="any"
-          value={formData.precio}
-          onChange={handleChange}
-          disabled={enviando}
-          required
-        />
-        {errores.precio && (
-          <span className="error-span" role="alert">
-            {errores.precio}
-          </span>
-        )}
+                <fieldset className="fieldset-detalles">
+                    <legend>Especificaciones (Tus 5 campos. Dejá vacío el que no uses)</legend>
+                    {formData.detalles.map((detalle, index) => (
+                        <div key={index} className="fila-detalle">
+                            <input 
+                                type="text" 
+                                className="input-clave" 
+                                placeholder="Clave (Ej: Material)" 
+                                value={detalle.clave} 
+                                onChange={(e) => handleDetalleChange(index, "clave", e.target.value)} 
+                            />
+                            <input 
+                                type="text" 
+                                className="input-valor" 
+                                placeholder="Valor (Ej: Nogal Macizo)" 
+                                value={detalle.valor} 
+                                onChange={(e) => handleDetalleChange(index, "valor", e.target.value)} 
+                            />
+                        </div>
+                    ))}
+                </fieldset>
 
-        <label htmlFor="stock">Stock Disponible (Opcional):</label>
-        <input
-          type="number"
-          id="stock"
-          name="stock"
-          min="0"
-          value={formData.stock}
-          onChange={handleChange}
-          disabled={enviando}
-        />
-        {errores.stock && (
-          <span className="error-span" role="alert">
-            {errores.stock}
-          </span>
-        )}
-
-        <label htmlFor="imagenUrl">URL de la Imagen (Opcional):</label>
-        <input
-          type="url"
-          id="imagenUrl"
-          name="imagenUrl"
-          placeholder="https://ejemplo.com/imagen.jpg"
-          value={formData.imagenUrl}
-          onChange={handleChange}
-          disabled={enviando}
-        />
-
-        <label htmlFor="descripcion">Descripción (Opcional):</label>
-        <textarea
-          id="descripcion"
-          name="descripcion"
-          rows="4"
-          value={formData.descripcion}
-          onChange={handleChange}
-          disabled={enviando}
-        />
-
-        <button type="submit" id="btn-enviar" disabled={enviando}>
-          {enviando
-            ? "Guardando..."
-            : esEdicion
-            ? "Guardar Cambios"
-            : "Crear Producto"}
-        </button>
-      </form>
-
-      <div id="mensaje-feedback" aria-live="polite">
-        {exito && <p className="mensaje-exito">{exito}</p>}
-        {errorEnvio && (
-          <p className="error-span" role="alert">
-            {errorEnvio}
-          </p>
-        )}
-      </div>
-    </section>
-  );
+                <label>Stock disponible</label>
+                <input type="number" name="stock" min="0" value={formData.stock} onChange={handleChange} />
+                
+                <button type="submit" className="btn btn-primary" disabled={cargando}>
+                    {cargando ? "Guardando..." : esEdicion ? "Guardar Cambios" : "Crear Producto"}
+                </button>
+            </form>
+            <h3 className="mensaje-estado" style={{ display: enviado || error ? "block" : "none", marginTop: "1rem", color: error ? "#d93025" : "var(--color-secondary)" }}>
+                {error ? error : esEdicion ? "¡El producto fue actualizado exitosamente!" : "¡El producto fue creado exitosamente!"}
+            </h3>
+        </>
+    );
 }
 
 export default ProductForm;
-
-    
