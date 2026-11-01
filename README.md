@@ -1,86 +1,101 @@
-# ITBA-G1
+# ITBA-G1 — Mueblería Hermanos Jota
 
-Proyecto grupal del curso de **Desarrollo Web (ITBA)**. Sitio web de una mueblería que permite explorar el catálogo de productos, ver el detalle de cada pieza, enviar consultas por medio de un formulario de contacto y armar un carrito de compras con contador dinámico.
+Proyecto grupal desarrollado para la materia de **Desarrollo Web (ITBA)**. Consiste en una plataforma de e-commerce para una mueblería que permite explorar el catálogo, consultar los detalles de cada producto, gestionar un carrito de compras y enviar consultas mediante un formulario de contacto.
+
+La aplicación utiliza una arquitectura cliente-servidor: un frontend desarrollado en React y una API REST desarrollada con Node.js y Express. Los productos se almacenan en MongoDB.
 
 ## Integrantes
 
-| Nombre |
-|--------|
-| Ortiz, Juan Ignacio |
-| Llanquín, Franco Ariel|
-| Lingordo, Manuel |
-| Valdez, Juan Pablo |
-| Céspedes, Tadeo |
+| Nombre                 |
+| ---------------------- |
+| Ortiz, Juan Ignacio    |
+| Llanquín, Franco Ariel |
+| Lingordo, Manuel       |
+| Valdez, Juan Pablo     |
+| Céspedes, Tadeo        |
 
 ## Estado del proyecto
 
-El repositorio convive con dos etapas del mismo trabajo:
+El repositorio contiene dos etapas del trabajo:
 
-- **Sitio estático (Sprints 1 y 2).** En la raíz viven `index.html`, `productos.html`, `producto.html` y `contacto.html` junto a `css/`, `js/` y `assets/`. Es la versión publicada en GitHub Pages y se mantiene sin cambios.
-- **Arquitectura cliente-servidor (Sprints 3 y 4).** En `backend/` y `client/` está la migración a una API REST y una SPA en React que consume esa API por `fetch`.
+- **Sitio estático (Sprints 1 y 2).** En la raíz se conservan `index.html`, `productos.html`, `producto.html` y `contacto.html`, junto con `css/`, `js/` y `assets/`. Corresponden a la primera versión del proyecto.
+- **Aplicación cliente-servidor (Sprints posteriores).** La versión actual se encuentra en `client/` y `backend/`. El frontend consume la API REST y el backend obtiene los productos desde MongoDB.
 
 ## Arquitectura
 
-El objetivo de la migración es desacoplar el frontend de los datos. El catálogo deja de estar embebido en el cliente y pasa a tener una única fuente de verdad: la API.
+La aplicación está separada en dos partes:
 
+```text
+┌──────────────────────────┐       ┌──────────────────────────────┐
+│ client/                  │       │ backend/                     │
+│ React + Vite             │       │ Node.js + Express            │
+│                          │ HTTP  │                              │
+│ Inicio                   |       |                              |
+| Catálogo                 ◀──────▶ API REST                     │
+│ Detalle de productos     │       │ Rutas de productos           │
+│ Carrito                  │       │ Modelos con Mongoose         │
+│ Administración           │       │ MongoDB                      │
+│ Formulario de contacto   │       │                              │
+└──────────────────────────┘       └──────────────────────────────┘
 ```
-┌──────────────────────┐        ┌───────────────────────────────────┐
-│  client/ (React SPA) │        │  backend/ (Node.js + Express)     │
-│                      │        │                                   │
-│  fetch()  ───────────┼───────▶│  GET /api/productos               │
-│  Sin datos locales   │◀───────┼──  JSON 200                       │
-│  localhost:3000      │        │  GET /api/productos/:id           │
-└──────────────────────┘        │  localhost:5000                   │
-                                │                                   │
-                                │  data/productos.js  (en memoria)  │
-                                │  assets/img/        (estáticos)   │
-                                └───────────────────────────────────┘
-```
 
-**Decisiones técnicas tomadas:**
+**Responsabilidades principales:**
 
-- **Persistencia en memoria.** El catálogo vive en `backend/data/productos.js` como un array exportable. Es suficiente para el alcance del trabajo y permite cambiarlo por una base de datos sin tocar las rutas, porque los handlers solo conocen el array.
-- **Ruteo modular con `express.Router`.** Las rutas de productos están aisladas en `backend/routes/productosRoutes.js`, y `server.js` solo las monta. Sumar un recurso nuevo no obliga a tocar el arranque del servidor.
-- **Cadena de middlewares explícita.** `logger` → `cors` → `express.json` → estáticos → rutas → `notFound` → `errorHandler`. Cada petición se registra con marca de tiempo ISO 8601, y cualquier respuesta de error sale siempre con la misma forma JSON, sin importar dónde se originó.
-- **Errores sin filtrar internos.** El `errorHandler` centralizado responde `{ error, mensaje }` y deja el stack únicamente en la consola del servidor. Una respuesta de error nunca expone rutas absolutas del proyecto.
-- **Puerto y URL de la API por variable de entorno.** El servidor lee `process.env.PORT` y el catálogo arma las URLs de sus imágenes a partir de `process.env.API_BASE_URL`, con valores por defecto para desarrollo local. El mismo código sirve en la máquina de cada integrante y en un hosting, sin editar archivos.
-- **Los assets se resuelven con `__dirname`.** La carpeta de imágenes se resuelve relativa al archivo del servidor y no al directorio desde donde se lo invoca, así se sirve el directorio correcto sin importar el `cwd`.
-- **Navegación por estado, sin router.** `App.jsx` guarda la vista actual (`inicio`, `catalogo`, `detalle`, `contacto`) en un `useState` y renderiza condicionalmente cada pantalla. No hay recargas ni cambios de URL.
-- **Estado global en `App.jsx`.** El catálogo, el carrito y el producto seleccionado viven en `App` y bajan por props. El catálogo se pide una sola vez a `GET /api/productos` y se reutiliza en el inicio (destacados) y en el listado, con estados de carga y error. El detalle pide su producto a `GET /api/productos/:id`.
+- **Frontend.** Renderiza la tienda, gestiona la navegación, el estado del carrito y los formularios, y realiza solicitudes HTTP a la API.
+- **Backend.** Expone los endpoints de productos, valida y procesa las solicitudes y se comunica con MongoDB mediante Mongoose.
+- **Base de datos.** MongoDB almacena la información persistente de los productos.
+
+## Funcionalidades
+
+### Tienda
+
+- Visualización del catálogo de productos.
+- Búsqueda y filtrado de productos.
+- Visualización de productos destacados.
+- Página de detalle de cada producto.
+- Carrito de compras con modificación de cantidades y contador dinámico.
+- Formulario de contacto para enviar consultas a la mueblería.
+
+### Administración de productos
+
+- **Alta:** creación de nuevos productos.
+- **Consulta:** listado y selección de productos existentes.
+- **Edición:** modificación de los datos de un producto.
+- **Eliminación:** eliminación de productos.
+- **Persistencia:** almacenamiento de los cambios en MongoDB.
+
+### Navegación
+
+La aplicación utiliza **React Router** para gestionar la navegación entre páginas sin recargar el documento.
+
+Rutas administrativas:
+
+| Ruta                         | Descripción                                                       |
+| ---------------------------- | ----------------------------------------------------------------- |
+| `/admin/crear-producto`      | Formulario para crear un producto.                                |
+| `/admin/seleccionar-edicion` | Selección del producto que se desea editar.                       |
+| `/admin/editar-producto/:id` | Formulario para editar el producto indicado por su identificador. |
 
 ## Estructura del proyecto
 
-```
+```text
 /
 ├── backend/                    # API REST (Node.js + Express)
-│   ├── data/
-│   │   └── productos.js        # Catálogo en memoria
-│   ├── middlewares/
-│   │   ├── errorHandler.js     # notFound (404) + errorHandler (500) centralizado
-│   │   └── logger.js           # Log de cada petición con timestamp ISO
-│   ├── routes/
-│   │   └── productosRoutes.js  # Router de /api/productos
-│   ├── assets/img/             # Imágenes servidas en /assets
+│   ├── models/                 # Modelos de Mongoose
+│   ├── routes/                 # Rutas de la API
+│   ├── middlewares/            # Middlewares del servidor
 │   ├── package.json
-│   └── server.js               # Arranque del servidor (puerto 5000)
-├── client/                     # SPA React (Vite)
-│   ├── assets/img/             # Logo y portada (las fotos las sirve la API)
+│   └── server.js               # Arranque del servidor
+├── client/                     # Aplicación frontend (React + Vite)
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx              # Navegación y contador del carrito
-│   │   │   ├── Hero.jsx                # Portada con CTA al catálogo
-│   │   │   ├── FeaturedProducts.jsx    # Productos destacados del inicio
-│   │   │   ├── ProductList.jsx         # Catálogo con buscador, carga y error
-│   │   │   ├── ProductCard.jsx         # Tarjeta de un producto
-│   │   │   ├── ProductDetail.jsx       # Detalle por id, con fallbacks
-│   │   │   ├── ContactForm.jsx         # Formulario controlado con validaciones
-│   │   │   └── Footer.jsx
-│   │   ├── styles/styles.css           # Estilos globales y variables de marca
-│   │   ├── App.jsx                     # Vista actual, catálogo y carrito
+│   │   ├── components/         # Componentes reutilizables
+│   │   ├── pages/              # Páginas de la aplicación
+│   │   ├── styles/             # Estilos
+│   │   ├── App.jsx
 │   │   └── main.jsx
 │   ├── package.json
 │   └── vite.config.js
-├── index.html                  # Sitio estático de los Sprints 1 y 2
+├── index.html                  # Versión estática inicial
 ├── productos.html
 ├── producto.html
 ├── contacto.html
@@ -91,151 +106,191 @@ El objetivo de la migración es desacoplar el frontend de los datos. El catálog
 
 ## Requisitos
 
-- **Node.js 20.19 o superior** (se recomienda la LTS actual, que hoy es la 24). Vite 8, que es el que usa `client/`, no arranca en versiones anteriores.
-- Git.
+- **Node.js 20.19 o superior.**
+- **npm**, incluido con Node.js.
+- **Git.**
+- Una instancia de **MongoDB** local o una base de datos en MongoDB Atlas.
 
-Verificar la instalación:
+Verificar las instalaciones:
 
 ```bash
 node -v
 npm -v
+git --version
 ```
 
 ## Instalación
 
-Instalar las dependencias de cada aplicación por separado. Se usa `npm ci` en lugar de `npm install` porque ambos proyectos tienen `package-lock.json` y así se replican exactamente las versiones probadas.
+Clonar el repositorio:
 
 ```bash
-# Backend
-cd backend
-npm ci
+git clone https://github.com/JuanOrtizz/ITBA-G1.git
+cd ITBA-G1
+```
 
-# Cliente
+Instalar las dependencias del backend:
+
+```bash
+cd backend
+npm install
+```
+
+Instalar las dependencias del frontend:
+
+```bash
 cd ../client
-npm ci
+npm install
 ```
 
 ## Ejecución en simultáneo
 
-Hacen falta **dos terminales abiertas al mismo tiempo**: una para la API y otra para el cliente.
+Se necesitan **dos terminales abiertas al mismo tiempo**: una para el backend y otra para el frontend.
 
-**Terminal 1 — Backend (puerto 5000):**
+**Terminal 1 — Backend:**
 
 ```bash
 cd backend
 npm run dev
 ```
 
-Debería imprimir:
+La API queda disponible en `http://localhost:5000` (si no se configuró otro puerto).
 
-```
-Servidor corriendo exitosamente en http://localhost:5000
-```
-
-**Terminal 2 — Cliente (puerto 3000):**
+**Terminal 2 — Frontend:**
 
 ```bash
 cd client
 npm run dev
 ```
 
-Vite imprime la URL del cliente: `http://localhost:3000`.
+Vite inicia el frontend en `http://localhost:3000`, según la configuración del proyecto.
 
-En las dos carpetas también funciona `npm start`, que es el comando de la guía del plan técnico: en `backend/` levanta el servidor sin recarga automática (`node server.js`) y en `client/` es equivalente a `npm run dev`.
-
-El puerto del cliente no es el que trae Vite por defecto (5173), sino que está fijado en `client/vite.config.js` junto con `strictPort`. Con `strictPort` activo, si el 3000 está ocupado Vite falla con un mensaje claro en vez de moverse en silencio a otro puerto, que es lo que rompería la configuración de CORS y de la API.
-
-Los dos puertos están fijados a propósito: **5000 para la API y 3000 para el cliente**. No se pisan, así que se pueden levantar en cualquier orden.
+Una vez iniciados ambos servicios, se puede acceder a la aplicación desde el navegador.
 
 ### Nota para quienes usan PowerShell
 
-Si al ejecutar `npm` aparece un error del tipo *"no se puede cargar el archivo npm.ps1 porque la ejecución de scripts está deshabilitada"*, es la política de ejecución de PowerShell y no un problema de Node. Hay dos salidas:
-
-1. Usar `npm.cmd` en lugar de `npm`:
-   ```powershell
-   npm.cmd ci
-   ```
-2. Habilitar scripts locales para el usuario actual (no requiere administrador):
-   ```powershell
-   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-   ```
-
-## API
-
-Base: `http://localhost:5000`
-
-| Método | Ruta | Descripción | Respuesta |
-|--------|------|-------------|-----------|
-| `GET` | `/api/productos` | Lista completa del catálogo | `200` con el array de productos |
-| `GET` | `/api/productos/:id` | Un producto por su id numérico | `200` con el objeto, `404` si no existe o `400` si el id no es un número |
-| `GET` | `/assets/img/:archivo` | Imágenes de los productos | `200` con la imagen |
-| `GET` | `/` | Mensaje de bienvenida | `200` con texto plano |
-| `POST` | `/api/productos` | Recibe un producto y lo devuelve en el eco. No persiste: sirve para verificar el parseo de JSON | `201` con el cuerpo recibido |
-
-Errores: cualquier respuesta de error tiene la forma
-
-```json
-{ "error": "Not Found", "mensaje": "Producto no encontrado" }
-```
-
-### Campos de un producto
-
-| Campo | Tipo | Descripción |
-|-------|------|-------------|
-| `id` | number | Identificador numérico |
-| `nombre` | string | Nombre de la pieza |
-| `categoria` | string | Almacenamiento, Asientos, Mesas u Oficina |
-| `precio` | number | Precio en pesos, sin formatear |
-| `imagen` | string | Ruta relativa de la imagen (`/assets/img/...`), para resolver contra la API |
-| `imagenURL` | string | URL absoluta de la imagen, ya armada con `API_BASE_URL` |
-| `materiales` | string | Materiales principales, en la raíz del objeto |
-| `descripcion` | string | Descripción comercial |
-| `detalles` | object | Ficha técnica: medidas, acabado y demás |
-| `destacado` | boolean | Si se muestra en el home |
-
-### Probar la API
-
-Con Git Bash, WSL o macOS/Linux:
-
-```bash
-# Catálogo completo
-curl http://localhost:5000/api/productos
-
-# Un producto
-curl http://localhost:5000/api/productos/3
-
-# Un id que no existe -> 404
-curl -i http://localhost:5000/api/productos/999
-
-# Una ruta que no existe -> 404
-curl -i http://localhost:5000/no-existe
-```
-
-En PowerShell `curl` es un alias de `Invoke-WebRequest` y se comporta distinto. Ahí conviene:
+Si PowerShell muestra un error indicando que no puede ejecutar `npm.ps1` porque la ejecución de scripts está deshabilitada, se puede utilizar:
 
 ```powershell
-Invoke-RestMethod http://localhost:5000/api/productos
-curl.exe -i http://localhost:5000/api/productos/999
+npm.cmd install
 ```
+
+También se puede habilitar la ejecución de scripts locales para el usuario actual:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+## API REST
+
+La API permite consultar y administrar los productos almacenados en MongoDB.
+
+**Base URL local:** `http://localhost:5000`
+
+| Método   | Ruta                 | Descripción                               |
+| -------- | -------------------- | ----------------------------------------- |
+| `GET`    | `/api/productos`     | Obtiene el catálogo de productos.         |
+| `GET`    | `/api/productos/:id` | Obtiene un producto por su identificador. |
+| `POST`   | `/api/productos`     | Crea un producto.                         |
+| `PUT`    | `/api/productos/:id` | Actualiza un producto existente.          |
+| `DELETE` | `/api/productos/:id` | Elimina un producto.                      |
+
+Las respuestas de la API utilizan **JSON** y códigos de estado HTTP para indicar el resultado de cada operación.
+
+### Modelo de producto
+
+Los productos se almacenan en MongoDB mediante un modelo de Mongoose.
+
+| Campo         | Tipo     | Descripción                                         |
+| ------------- | -------- | --------------------------------------------------- |
+| `_id`         | ObjectId | Identificador único generado por MongoDB.           |
+| `nombre`      | String   | Nombre del producto.                                |
+| `categoria`   | String   | Categoría del producto.                             |
+| `precio`      | Number   | Precio del producto.                                |
+| `imagenUrl`   | String   | Dirección de la imagen del producto.                |
+| `descripcion` | String   | Descripción comercial.                              |
+| `detalles`    | Object   | Información técnica del producto.                   |
+| `stock`       | Number   | Cantidad disponible.                                |
+| `destacado`   | Boolean  | Indica si el producto aparece entre los destacados. |
+
+## Formulario de contacto
+
+El formulario de contacto permite que los visitantes envíen consultas a la mueblería.
+
+Incluye los campos de **nombre**, **correo electrónico** y **mensaje**. Cuenta con validaciones y utiliza **Formspree** para gestionar el envío de las consultas.
+
+El formulario de contacto es independiente de la administración de productos y no modifica los registros almacenados en MongoDB.
 
 ## Variables de entorno
 
-Ninguna es obligatoria: todas tienen un valor por defecto pensado para desarrollo local.
+La aplicación utiliza variables de entorno para configurar la conexión entre el frontend, el backend y MongoDB.
 
-| Variable | Archivo | Por defecto | Descripción |
-|----------|---------|-------------|-------------|
-| `PORT` | `backend` | `5000` | Puerto de la API. Las plataformas de hosting lo inyectan solas. |
-| `API_BASE_URL` | `backend` | `http://localhost:5000` | Host con el que se arma `imagenURL`. En producción debe ser la URL pública del backend. |
-| `NODE_ENV` | `backend` | — | En `production` el stack de los errores no se imprime en consola. |
-| `VITE_API_URL` | `client` | `http://localhost:5000` | URL base de la API que consume el cliente. |
+### Backend
 
-En el cliente, Vite expone las variables con prefijo `VITE_` a través de `import.meta.env`. El archivo `.env` no se versiona; hay un `.env.example` como referencia.
+Crear un archivo `.env` dentro de `backend/`:
+
+```env
+PORT=5000
+NODE_ENV=development
+MONGODB_URI=tu_uri_de_mongodb
+CLIENT_URL=http://localhost:3000
+API_BASE_URL=http://localhost:5000
+```
+
+| Variable       | Descripción                                                            |
+| -------------- | ---------------------------------------------------------------------- |
+| `PORT`         | Puerto en el que se ejecuta el servidor.                               |
+| `NODE_ENV`     | Entorno de ejecución (`development` o `production`).                   |
+| `MONGODB_URI`  | Cadena de conexión a MongoDB.                                          |
+| `CLIENT_URL`   | URL del frontend autorizada para acceder a la API mediante CORS.       |
+| `API_BASE_URL` | URL base del backend utilizada para construir direcciones de recursos. |
+
+### Frontend
+
+Crear un archivo `.env` dentro de `client/`:
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+| Variable       | Descripción                                 |
+| -------------- | ------------------------------------------- |
+| `VITE_API_URL` | URL base de la API que consume el frontend. |
+
+**Importante:** los archivos `.env` pueden contener credenciales y no deben subirse al repositorio. En producción, las variables se configuran desde el panel del proveedor de hosting.
+
+## Formulario de contacto
+
+El envío de consultas se realiza mediante Formspree. Para que funcione correctamente, el formulario debe conservar la configuración del servicio correspondiente.
 
 ## Deploy
 
-El sitio estático de la raíz se publica en **GitHub Pages** desde la rama `main`, que es como está configurado el repositorio.
+La aplicación se publica mediante dos servicios independientes:
 
-**GitHub Pages no puede ejecutar la API**, porque solo sirve archivos estáticos y un servidor Express necesita un proceso de Node corriendo. Para publicar la arquitectura nueva hacen falta dos destinos:
+### Frontend — Vercel
 
-1. **Cliente:** se puede publicar en GitHub Pages compilando `client/` con `npm run build` y publicando el contenido de `client/dist`. Si se lo publica en una URL con subcarpeta, hay que pasarle esa subcarpeta a Vite con la opción `base` en `vite.config.js`.
-2. **Backend:** requiere un hosting de Node (Render, Railway, Fly.io, Vercel, etc.). El código ya está preparado: toma el puerto de `PORT` y solo hace falta definir `API_BASE_URL` con la URL pública que asigne el proveedor, para que las imágenes se resuelvan bien. **Si se olvida esa variable, las imágenes van a seguir apuntando a `localhost` y no se van a ver desde afuera.**
+- **URL pública:** https://itba-g1.vercel.app/
+- **Directorio raíz:** `client`.
+- **Framework:** Vite.
+- **Comando de instalación:** `npm install`.
+- **Comando de compilación:** `npm run build`.
+- **Directorio de salida:** `dist`.
+- **Variable de entorno:** `VITE_API_URL`, con la URL pública del backend.
+
+### Backend — Render
+
+- **URL pública:** https://itba-g1.onrender.com/
+- **API de productos:** https://itba-g1.onrender.com/api/productos
+- **Directorio raíz:** `backend`.
+- **Comando de instalación:** `npm install`.
+- **Comando de inicio:** `npm start`.
+- **Variables de entorno:** `NODE_ENV`, `MONGODB_URI`, `CLIENT_URL` y `API_BASE_URL`.
+
+La variable `CLIENT_URL` debe contener el dominio público del frontend para permitir las solicitudes mediante CORS.
+
+La variable `API_BASE_URL` debe contener el dominio público del backend para que las direcciones de los recursos sean accesibles desde producción.
+
+Después de modificar las variables de entorno del frontend en Vercel, es necesario generar un nuevo deployment para que Vite las incorpore durante la compilación.
+
+## Repositorio
+
+**GitHub:** https://github.com/JuanOrtizz/ITBA-G1
