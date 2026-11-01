@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
     process.env.CLIENT_URL,
     "http://localhost:5173",
-    "http://localhost:3000",
+    "https://itba-g1.vercel.app",
 ].filter(Boolean);
 
 const corsOptions = {
