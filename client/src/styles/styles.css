@@ -1317,7 +1317,46 @@ h3,
   border-color: #b33a2b;
 }
 
-/* --- Alta de Producto y Edicion de Producto (CreateProductPage.jsx/EditProductPage) --- */
+/* --- Botón Crear Producto al final del Catálogo (ProductList.jsx) --- */
+
+.contenedor-botones-admin {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 3rem 0;
+    margin-top: 2rem;
+}
+
+.btn-admin-outline {
+    display: inline-block;
+    padding: 15px 25px;
+    background-color: var(--color-bg-alt);
+    color: var(--color-primary);
+    border: 3px solid var(--color-primary);
+    border-radius: 20px;
+    box-shadow: 2px 4px 10px rgba(160, 82, 45, 0.15);
+    font-size: 1rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-admin-outline:hover {
+    transform: translateY(1px);
+    background-color: var(--color-primary);
+    color: var(--color-bg-alt);
+}
+
+@media (min-width: 768px) {
+    .btn-admin-outline {
+        font-size: 1.2rem;
+    }
+}
+
+/* --- Alta de Producto y Edicion de Producto (CreateProduct.jsx / EditProduct.jsx) --- */
 
 #contenedor-crear-producto, #contenedor-editar-producto {
     display: flex;
@@ -1401,4 +1440,3 @@ h3,
 .input-valor {
     flex: 2;
 }
-

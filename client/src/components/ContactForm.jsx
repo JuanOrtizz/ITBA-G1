@@ -15,6 +15,10 @@ function ContactForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (errores[name]) {
+      setErrores((prev) => ({ ...prev, [name]: ""}));
+    }
   };
 
   const validar = () => {
@@ -57,6 +61,12 @@ function ContactForm() {
 
     setEnviando(true);
 
+    const payloadLimpio = {
+      nombre: formData.nombre.trim(),
+      email: formData.email.trim(),
+      mensaje: formData.mensaje.trim(),
+    };
+
     try {
       const respuesta = await fetch(FORMSPREE_URL, {
         method: "POST",
@@ -64,12 +74,19 @@ function ContactForm() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payloadLimpio),
       });
 
       if (respuesta.ok) {
-        setExito("¡Tu consulta fue enviada correctamente y ya la recibimos!");
+        setExito(
+          <>
+          ¡Tu consulta fue enviada correctamente y ya la recibimos!
+          <br />
+          ¡Gracias por confiar en el equipo Hermanos Jota!
+          </>
+        );
         setFormData(FORM_INICIAL);
+        setErrores({});
       } else {
         setErrorEnvio(
           "Hubo un problema de conexión con el servidor de correos."
@@ -98,10 +115,11 @@ function ContactForm() {
           name="nombre"
           value={formData.nombre}
           onChange={handleChange}
+          disabled={enviando} 
           required
         />
         {errores.nombre && (
-          <span className="error-span">
+          <span className="error-span" role="alert">
             {errores.nombre}
           </span>
         )}
@@ -113,10 +131,11 @@ function ContactForm() {
           name="email"
           value={formData.email}
           onChange={handleChange}
+          disabled={enviando}
           required
         />
         {errores.email && (
-          <span className="error-span">
+          <span className="error-span" role="alert">
             {errores.email}
           </span>
         )}
@@ -128,10 +147,11 @@ function ContactForm() {
           rows="4"
           value={formData.mensaje}
           onChange={handleChange}
+          disabled={enviando}
           required
         />
         {errores.mensaje && (
-          <span className="error-span">
+          <span className="error-span" role="alert">
             {errores.mensaje}
           </span>
         )}
@@ -141,10 +161,10 @@ function ContactForm() {
         </button>
       </form>
 
-      <div id="mensaje-feedback">
+      <div id="mensaje-feedback" aria-live="polite">
         {exito && <p className="mensaje-exito">{exito}</p>}
         {errorEnvio && (
-          <p className="error-span">
+          <p className="error-span" role="alert">
             {errorEnvio}
           </p>
         )}

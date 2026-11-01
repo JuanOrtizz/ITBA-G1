@@ -7,10 +7,10 @@ import ProductList from "./components/ProductList";
 import ProductDetail from "./components/ProductDetail";
 import ContactForm from "./components/ContactForm";
 import FeaturedProducts from "./components/FeaturedProducts";
-
-import "./styles/styles.css";
 import CreateProduct from "./components/CreateProduct";
 import EditProduct from "./components/EditProduct";
+
+import "./styles/styles.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -44,7 +44,6 @@ function App() {
     }
 
     // Se llama al montar y después de eliminar un producto, para que el catálogo
-    // refleje lo que quedó en la base
     function cargarProductos() {
         return fetch(`${API_URL}/api/productos`)
             .then((res) => {
@@ -220,9 +219,9 @@ function App() {
 
                     <Route path="/contacto" element={<ContactForm />} />
                     
-                    <Route path="/admin/crear-producto" element={<CreateProduct />} />
+                   <Route path="/admin/crear-producto" element={<CreateProduct recargarProductos={cargarProductos} />} />
                     
-                    <Route path="/admin/editar-producto/:id" element={<EditProduct />} />
+                    <Route path="/admin/editar-producto/:id" element={<EditProduct recargarProductos={cargarProductos} />} />
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL || "";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const getDetallesVacios = () => Array.from({ length: 5 }, () => ({ clave: "", valor: "" }));
 const ESTADO_VACIO = {
@@ -14,7 +14,7 @@ const ESTADO_VACIO = {
     stock: "",
 };
 
-function ProductForm() {
+function ProductForm({ recargarProductos }) {
     const { id } = useParams();
     const navigate = useNavigate();
     const esEdicion = Boolean(id);
@@ -43,11 +43,11 @@ function ProductForm() {
                 setFormData({
                     nombre: data.nombre || "",
                     categoria: data.categoria || "",
-                    precio: data.precio || "",
+                    precio: data.precio !== undefined ? data.precio : "",
                     imagenUrl: data.imagenUrl || data.imagen || "",      
                     descripcion: data.descripcion || "",
                     detalles: detallesCompletos,
-                    stock: data.stock || "",
+                    stock: data.stock !== undefined ? data.stock : "",
                 });
                 setError(null);
             })
@@ -111,20 +111,20 @@ function ProductForm() {
 
             if (!response.ok) {
                 const errData = await response.json();
-                throw new Error(errData.message || "Error al crear el producto");
+                throw new Error(errData.message || "Error al guardar el producto");
+            }
+
+            // Refrescamos la lista de productos en App.jsx para que el catálogo se actualice al instante
+            if (recargarProductos) {
+                await recargarProductos();
             }
 
             setEnviado(true);
 
-            // Si estábamos creando, limpiamos el form. Si editábamos, volvemos al catálogo.
-            if (!esEdicion) {
-                setTimeout(() => {
-                    setEnviado(false);
-                    navigate("/productos");
-                }, 3000);
-            } else {
-                setTimeout(() => navigate("/productos"), 3000);
-            }
+            setTimeout(() => {
+                setEnviado(false);
+                navigate("/productos");
+            }, 1500);
             
         } catch (err) {
             setError(err.message);
@@ -139,11 +139,11 @@ function ProductForm() {
                 <label>Nombre del mueble *</label>
                 <input type="text" name="nombre" required value={formData.nombre} onChange={handleChange} />
 
-                <label>Categoría</label>
+                <label>Categoría *</label>
                 <input type="text" name="categoria" required value={formData.categoria} onChange={handleChange} />
                 
                 <label>Precio ($) *</label>
-                <input type="number" name="precio" min="0" required value={formData.precio} onChange={handleChange} />
+                <input type="number" name="precio" min="0" step="any" required value={formData.precio} onChange={handleChange} />
                 
                 <label>URL de la imagen</label>
                 <input type="text" name="imagenUrl" value={formData.imagenUrl} onChange={handleChange} />
@@ -180,7 +180,7 @@ function ProductForm() {
                     {cargando ? "Guardando..." : esEdicion ? "Guardar Cambios" : "Crear Producto"}
                 </button>
             </form>
-            <h3 className="mensaje-estado" style={{ display: enviado || error ? "block" : "none" }}>
+            <h3 className="mensaje-estado" style={{ display: enviado || error ? "block" : "none", marginTop: "1rem", color: error ? "#d93025" : "var(--color-secondary)" }}>
                 {error ? error : esEdicion ? "¡El producto fue actualizado exitosamente!" : "¡El producto fue creado exitosamente!"}
             </h3>
         </>
