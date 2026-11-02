@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Routes,
   Route,
@@ -51,36 +51,39 @@ function App() {
   }
 
   // Se llama al montar y después de eliminar un producto, para que el catálogo
-  function cargarProductos() {
+  const cargarProductos = useCallback(async () => {
     const cargaActual = ++ultimaCarga.current;
 
-    fetch(`${API_URL}/api/productos`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Error al conectar con el servidor");
-        }
+    try {
+      const res = await fetch(`${API_URL}/api/productos`);
 
-        return res.json();
-      })
-      .then((data) => {
-        // Evita que una consulta vieja sobrescriba datos nuevos
-        if (cargaActual !== ultimaCarga.current) return;
+      if (!res.ok) {
+        throw new Error("Error al conectar con el servidor");
+      }
 
-        setProductos(data);
+      const data = await res.json();
+
+      if (cargaActual !== ultimaCarga.current) return;
+
+      setProductos(data);
+      setError(null);
+    } catch (err) {
+      if (cargaActual !== ultimaCarga.current) return;
+
+      console.error("Error al cargar los productos:", err);
+      setError(err.message);
+    } finally {
+      if (cargaActual === ultimaCarga.current) {
         setCargando(false);
-      })
-      .catch((err) => {
-        if (cargaActual !== ultimaCarga.current) return;
-
-        console.error("Error al cargar los productos:", err);
-        setError(err.message);
-        setCargando(false);
-      });
-  }
-
-  useEffect(() => {
-    cargarProductos();
+      }
+    }
   }, []);
+
+  // Carga inicial de productos desde la API
+  useEffect(() => {
+    //eslint-disable-next-line react-hooks/set-state-in-effect
+    cargarProductos();
+  }, [cargarProductos]);
 
   // Saca el producto de la lista al instante y confirma contra la base
   function quitarProductoEliminado(productoId) {
