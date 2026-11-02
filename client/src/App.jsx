@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Routes,
   Route,
@@ -39,6 +39,7 @@ function App() {
 
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const ultimaCarga = useRef(0);
 
   function navegarVista(vista, productoId = null) {
     if (vista === "inicio") navegarA("/");
@@ -51,7 +52,9 @@ function App() {
 
   // Se llama al montar y después de eliminar un producto, para que el catálogo
   function cargarProductos() {
-    return fetch(`${API_URL}/api/productos`)
+    const cargaActual = ++ultimaCarga.current;
+
+    fetch(`${API_URL}/api/productos`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Error al conectar con el servidor");
@@ -60,10 +63,15 @@ function App() {
         return res.json();
       })
       .then((data) => {
+        // Evita que una consulta vieja sobrescriba datos nuevos
+        if (cargaActual !== ultimaCarga.current) return;
+
         setProductos(data);
         setCargando(false);
       })
       .catch((err) => {
+        if (cargaActual !== ultimaCarga.current) return;
+
         console.error("Error al cargar los productos:", err);
         setError(err.message);
         setCargando(false);
@@ -76,9 +84,12 @@ function App() {
 
   // Saca el producto de la lista al instante y confirma contra la base
   function quitarProductoEliminado(productoId) {
+    ultimaCarga.current++;
+
     setProductos((actuales) =>
       actuales.filter((producto) => producto._id !== productoId),
     );
+
     cargarProductos();
   }
 
