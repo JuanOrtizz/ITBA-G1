@@ -51,7 +51,7 @@ function App() {
 
   // Se llama al montar y después de eliminar un producto, para que el catálogo
   function cargarProductos() {
-    return fetch("https://itba-g1.onrender.com/api/productos")
+    return fetch(`${API_URL}/api/productos`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Error al conectar con el servidor");
