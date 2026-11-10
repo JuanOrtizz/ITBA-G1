@@ -1,6 +1,6 @@
 # ITBA-G1 — Mueblería Hermanos Jota
 
-Proyecto grupal desarrollado para la materia de **Desarrollo Web (ITBA)**. Consiste en una plataforma de e-commerce para una mueblería que permite explorar el catálogo, consultar los detalles de cada producto, gestionar un carrito de compras y enviar consultas mediante un formulario de contacto.
+Proyecto grupal desarrollado para el curso **Desarrollo Fullstack (ITBA)**. Consiste en una plataforma de e-commerce para una mueblería que permite explorar el catálogo, consultar los detalles de cada producto, gestionar un carrito de compras y enviar consultas mediante un formulario de contacto.
 
 La aplicación utiliza una arquitectura cliente-servidor: un frontend desarrollado en React y una API REST desarrollada con Node.js y Express. Los productos se almacenan en MongoDB.
 
