@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { AuthContext} from "../contexts/AuthContext.jsx";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 
 function LoginPage() {
     const { login } = useContext(AuthContext);
@@ -27,31 +27,30 @@ function LoginPage() {
     };
 
     return (
-        <section id="contenedor-login">
+        <section id="contenedor-usuario">
             <h2>Iniciar sesión</h2>
             <p>Ingresá con tu cuenta de Mueblería Jota</p>
 
-            <form onSubmit={handleSubmit} className="formulario">
-                <label>
-                    Email
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                </label>
+            <form className="formulario-base" onSubmit={handleSubmit}>
+                <label htmlFor="login-email">Email</label>
+                <input id="login-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
-                <label>
-                    Contraseña
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </label>
+                <label htmlFor="login-password">Contraseña</label>
+                <input id="login-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
                 {error && <p className="mensaje-estado">{error}</p>}
 
-                <button type="submit" disabled={enviando}>
+                <button type="submit" disabled={enviando} className="boton-primario">
                     {enviando ? "Ingresando..." : "Ingresar"}
                 </button>
-            </form>
 
-            <p>
-                ¿No tenés cuenta? <Link to="/registro">Registrate acá</Link>
-            </p>
+                <p className="texto-alternativo-usuario">
+                    ¿No tenés cuenta?{" "}
+                    <Link to="/registro">
+                        <span className="link-usuario">Registrate acá</span>
+                    </Link>
+                </p>
+            </form>
         </section>
     );
 }

@@ -2,7 +2,7 @@ import ProductForm from "./ProductForm";
 
 function CreateProduct() {
     return (
-        <section id="contenedor-crear-producto">
+        <section id="contenedor-editar-crear-producto">
             <h2>Alta de Nuevo Producto</h2>
             <p>Completá los detalles del nuevo mueble para sumarlo al catálogo</p>
             <ProductForm />
