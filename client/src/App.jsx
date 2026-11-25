@@ -15,6 +15,8 @@ import ContactForm from "./components/ContactForm";
 import FeaturedProducts from "./components/FeaturedProducts";
 import CreateProduct from "./components/CreateProduct";
 import EditProduct from "./components/EditProduct";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 import "./styles/styles.css";
 
@@ -26,6 +28,22 @@ function NotFound() {
       <h1>Página no encontrada</h1>
       <p>La página que buscás no existe.</p>
       <Link to="/">Volver al inicio</Link>
+    </section>
+  );
+}
+
+function PerfilProvisorio() {
+  return (
+    <section className="catalogo-estado">
+      <h1>Perfil de usuario</h1>
+    </section>
+  );
+}
+
+function MisPedidosProvisorio() {
+  return (
+    <section className="catalogo-estado">
+      <h1>Mis pedidos</h1>
     </section>
   );
 }
@@ -308,6 +326,24 @@ function App() {
           <Route
             path="/admin/editar-producto/:id"
             element={<EditProduct recargarProductos={cargarProductos} />}
+          />
+
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <PerfilProvisorio />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/mis-pedidos"
+            element={
+              <ProtectedRoute>
+                <MisPedidosProvisorio />
+              </ProtectedRoute>
+            }
           />
 
           <Route path="*" element={<NotFound />} />
