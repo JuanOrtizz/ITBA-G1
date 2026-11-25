@@ -8,6 +8,9 @@ const connectDB = require("./config/db");
 const logger = require("./middlewares/logger");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const productosRoutes = require("./routes/productosRoutes");
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -41,11 +44,27 @@ app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 // Rutas de la API
 app.use("/api/productos", productosRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.get("/", (req, res) => {
     res.json({
         mensaje: "API REST de Mueblería Hermanos Jota operativa",
-        documentacion: "/api/productos",
+        endpoints: {
+            productos: "/api/productos",
+            auth: {
+                registro: "POST /api/auth/register",
+                login: "POST /api/auth/login"
+            },
+            usuarios: {
+                perfil: "GET /api/users/me (JWT requerido)"
+            },
+            pedidos: {
+                crear: "POST /api/orders (JWT requerido)",
+                misPedidos: "GET /api/orders/my (JWT requerido)"
+            }
+        },
     });
 });
 
