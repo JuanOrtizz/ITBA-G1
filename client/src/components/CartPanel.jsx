@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
+import { getImageUrl } from "../utils/imageUrl";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -145,8 +146,8 @@ function CartPanel({ recargarProductos }) {
               const productoId = producto._id || producto.id;
               return (
                 <div className="carrito-item" key={productoId}>
-                  {producto.imagenUrl && (
-                    <img src={producto.imagenUrl} alt={producto.nombre} />
+                  {getImageUrl(producto.imagenUrl) && (
+                    <img src={getImageUrl(producto.imagenUrl)} alt={producto.nombre} />
                   )}
 
                   <div>

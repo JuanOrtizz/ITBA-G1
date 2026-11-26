@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
+import { getImageUrl } from "../utils/imageUrl";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -206,7 +207,7 @@ function ProductDetail({ onBack, onDelete }) {
 
             <div className="detalle-contenido">
                 <figure className="detalle-media">
-                    {imagenUrl ? <img src={imagenUrl} alt={nombre} /> : <div className="detalle-sin-imagen">Imagen no disponible</div>}
+                    {getImageUrl(imagenUrl) ? <img src={getImageUrl(imagenUrl)} alt={nombre} /> : <div className="detalle-sin-imagen">Imagen no disponible</div>}
                 </figure>
 
                 <div className="detalle-info">

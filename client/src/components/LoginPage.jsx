@@ -124,7 +124,11 @@ function LoginPage() {
           </p>
         )}
 
-        <button type="submit" disabled={enviando} className="boton-primario">
+        <button
+          type="submit"
+          disabled={enviando}
+          className="btn btn-primary boton-primario"
+        >
           {enviando ? "Ingresando..." : "Ingresar"}
         </button>
 
