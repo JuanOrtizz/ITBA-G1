@@ -104,7 +104,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <CartPanel />
+      <CartPanel recargarProductos={cargarProductos} />
 
       <main>
         <Routes>

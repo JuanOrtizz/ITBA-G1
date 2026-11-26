@@ -2,8 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const Product = require("../models/Product");
+const authMiddleware = require("../middlewares/authMiddleware");
+const { esAdmin } = authMiddleware;
 
-// GET /api/productos - Listar todos los productos
+// GET /api/productos - Listar todos los productos (Público)
 router.get("/", async (req, res, next) => {
     try {
         const productos = await Product.find().sort({ createdAt: -1 });
@@ -13,7 +15,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-// GET /api/productos/:id - Obtener detalle de un producto por ID
+// GET /api/productos/:id - Obtener detalle de un producto por ID (Público)
 router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
 
@@ -32,8 +34,8 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-// POST /api/productos - Crear un nuevo producto
-router.post("/", async (req, res, next) => {
+// POST /api/productos - Crear un nuevo producto (Solo Admin)
+router.post("/", authMiddleware, esAdmin, async (req, res, next) => {
     try {
         const { nombre, categoria, precio, imagenUrl, descripcion, detalles, stock } = req.body;
 
@@ -69,8 +71,8 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-// PUT /api/productos/:id - Actualizar un producto existente
-router.put("/:id", async (req, res, next) => {
+// PUT /api/productos/:id - Actualizar un producto existente (Solo Admin)
+router.put("/:id", authMiddleware, esAdmin, async (req, res, next) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -97,8 +99,8 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-// DELETE /api/productos/:id - Eliminar un producto por ID
-router.delete("/:id", async (req, res, next) => {
+// DELETE /api/productos/:id - Eliminar un producto por ID (Solo Admin)
+router.delete("/:id", authMiddleware, esAdmin, async (req, res, next) => {
     const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {

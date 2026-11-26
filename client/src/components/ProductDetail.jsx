@@ -59,7 +59,7 @@ function ProductDetail({ onBack, onDelete }) {
     const navigate = useNavigate();
     const { usuario, token } = useAuth();
     const esAdmin = usuario?.rol === "admin";
-    const { agregarAlCarrito } = useCart();
+    const { carrito, agregarAlCarrito } = useCart();
     const [confirmando, setConfirmando] = useState(false);
     const [eliminando, setEliminando] = useState(false);
     const [errorEliminar, setErrorEliminar] = useState(null);
@@ -121,10 +121,18 @@ function ProductDetail({ onBack, onDelete }) {
     }
 
     const { _id, nombre, categoria, precio, descripcion, detalles = {}, imagenUrl, stock = 0 } = productoMostrado;
-    const sinStock = !(stock > 0);
+    const idActual = _id || productoMostrado.id;
+    const stockDisponible = Number(stock) || 0;
+    const itemEnCarrito = carrito.find((item) => (item._id || item.id) === idActual);
+    const cantidadEnCarrito = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+
+    const sinStock = stockDisponible <= 0;
+    const llegoAlLimite = !sinStock && cantidadEnCarrito >= stockDisponible;
+    const botonDeshabilitado = sinStock || llegoAlLimite;
     const especificaciones = Object.entries(detalles || {});
 
     const handleAgregar = () => {
+        if (botonDeshabilitado) return;
         agregarAlCarrito(productoMostrado);
         setAgregado(true);
     };
@@ -208,11 +216,13 @@ function ProductDetail({ onBack, onDelete }) {
 
                     <div className="detalle-compra">
                         <p className="detalle-precio">{formatearPrecio(precio)}</p>
-                        <button type="button" className="btn btn-primary" onClick={handleAgregar} disabled={sinStock}>
-                            {sinStock ? "Sin stock" : "Añadir al carrito"}
+                        <button type="button" className="btn btn-primary" onClick={handleAgregar} disabled={botonDeshabilitado}>
+                            {sinStock ? "Sin stock" : llegoAlLimite ? "Sin Stock" : "Añadir al carrito"}
                         </button>
                     </div>
-                    <p className="detalle-stock">{sinStock ? "No hay unidades disponibles por ahora." : `Stock: ${stock} ${stock === 1 ? "unidad" : "unidades"}`}</p>
+                    <p className="detalle-stock">
+                        {sinStock ? "No hay unidades disponibles por ahora." : `Stock: ${stockDisponible} ${stockDisponible === 1 ? "unidad" : "unidades"}`}
+                    </p>
                     <p className="detalle-feedback" role="status">
                         {agregado && `${nombre} se agregó al carrito.`}
                     </p>

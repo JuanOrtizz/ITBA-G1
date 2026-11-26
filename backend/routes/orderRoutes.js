@@ -1,18 +1,33 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const Order = require("../models/Order");
-require("../models/Product"); // Asegura que el esquema Product esté registrado en Mongoose para el populate
+const Product = require("../models/Product");
 const authMiddleware = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
 /**
  * @route   POST /api/orders
- * @desc    Crear un nuevo pedido asociado al usuario autenticado
+ * @desc    Crear un nuevo pedido y descontar stock en MongoDB
  * @access  Privado (JWT)
  */
 router.post("/", authMiddleware, async (req, res, next) => {
+    const descontados = [];
+
+    const revertirStock = async () => {
+        for (const item of descontados) {
+            try {
+                await Product.findByIdAndUpdate(item.id, {
+                    $inc: { stock: item.cantidad },
+                });
+            } catch (revertError) {
+                console.error("Error al revertir stock:", revertError);
+            }
+        }
+    };
+
     try {
-        const { items, total } = req.body;
+        const { items } = req.body;
 
         if (!items || !Array.isArray(items) || items.length === 0) {
             return res.status(400).json({
@@ -20,28 +35,94 @@ router.post("/", authMiddleware, async (req, res, next) => {
             });
         }
 
-        // Validación y sanitización de ítems
-        const itemsSanitizados = items.map((item) => {
-            const prodId = item.producto || item._id || item.id;
-            return {
-                producto: prodId,
-                nombre: item.nombre || "Producto sin nombre",
-                precio: Number(item.precio) || 0,
-                cantidad: Number(item.cantidad) || 1,
-                imagenUrl: item.imagenUrl || "",
-            };
-        });
+        // 1. Validar IDs/cantidades y agrupar si algún producto viene repetido
+        const cantidadesPorProducto = new Map();
 
-        // Calcular total si no viene dado o verificarlo
-        const totalCalculado =
-            typeof total === "number" && total >= 0
-                ? total
-                : itemsSanitizados.reduce(
-                      (acc, item) => acc + item.precio * item.cantidad,
-                      0
-                  );
+        for (const item of items) {
+            const prodId = String(item.producto || item._id || item.id || "").trim();
+            const cantidad = Number(item.cantidad);
 
-        // Fuente de verdad: el ID proviene del token validado por authMiddleware
+            if (!mongoose.Types.ObjectId.isValid(prodId)) {
+                return res.status(400).json({
+                    error: "Uno de los productos del carrito tiene un ID inválido",
+                });
+            }
+
+            if (!Number.isInteger(cantidad) || cantidad <= 0) {
+                return res.status(400).json({
+                    error: "La cantidad de cada producto debe ser un número entero mayor a 0",
+                });
+            }
+
+            cantidadesPorProducto.set(
+                prodId,
+                (cantidadesPorProducto.get(prodId) || 0) + cantidad
+            );
+        }
+
+        // 2. Consultar los productos reales en MongoDB y validar stock disponible
+        const ids = Array.from(cantidadesPorProducto.keys());
+        const productosBD = await Product.find({ _id: { $in: ids } });
+        const mapaProductos = new Map(
+            productosBD.map((prod) => [String(prod._id), prod])
+        );
+
+        for (const [prodId, cantidad] of cantidadesPorProducto.entries()) {
+            const productoBD = mapaProductos.get(prodId);
+
+            if (!productoBD) {
+                return res.status(404).json({
+                    error: "Uno de los productos del carrito ya no existe en el catálogo",
+                });
+            }
+
+            if (productoBD.stock < cantidad) {
+                return res.status(400).json({
+                    error: `Stock insuficiente para "${productoBD.nombre}". Disponible: ${productoBD.stock}`,
+                });
+            }
+        }
+
+        // 3. Descontar stock en MongoDB de forma atómica (evita stock negativo)
+        for (const [prodId, cantidad] of cantidadesPorProducto.entries()) {
+            const productoBD = mapaProductos.get(prodId);
+
+            const actualizado = await Product.findOneAndUpdate(
+                { _id: prodId, stock: { $gte: cantidad } },
+                { $inc: { stock: -cantidad } },
+                { new: true }
+            );
+
+            if (!actualizado) {
+                await revertirStock();
+                return res.status(400).json({
+                    error: `Stock insuficiente para "${productoBD.nombre}". Actualizá la página e intentá de nuevo.`,
+                });
+            }
+
+            descontados.push({ id: prodId, cantidad });
+        }
+
+        // 4. Armar ítems y total usando los datos reales de la base
+        const itemsSanitizados = Array.from(cantidadesPorProducto.entries()).map(
+            ([prodId, cantidad]) => {
+                const productoBD = mapaProductos.get(prodId);
+                return {
+                    producto: productoBD._id,
+                    nombre: productoBD.nombre,
+                    precio: Number(productoBD.precio) || 0,
+                    cantidad,
+                    imagenUrl: productoBD.imagenUrl || "",
+                };
+            }
+        );
+
+        const totalCalculado = itemsSanitizados.reduce(
+            (acc, item) => acc + item.precio * item.cantidad,
+            0
+        );
+
+        // 5. Crear el pedido asociado al usuario autenticado
         const nuevoPedido = await Order.create({
             usuario: req.user.id,
             items: itemsSanitizados,
@@ -54,6 +135,9 @@ router.post("/", authMiddleware, async (req, res, next) => {
             order: nuevoPedido,
         });
     } catch (error) {
+        if (descontados.length > 0) {
+            await revertirStock();
+        }
         next(error);
     }
 });

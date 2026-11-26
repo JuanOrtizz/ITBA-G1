@@ -5,6 +5,27 @@ const User = require("../models/User");
 
 const router = express.Router();
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validarPassword(password) {
+    if (typeof password !== "string" || password === "") {
+        return "La contraseña es obligatoria";
+    }
+    if (password.length < 8) {
+        return "La contraseña debe tener al menos 8 caracteres";
+    }
+    if (/\s/.test(password)) {
+        return "La contraseña no puede contener espacios";
+    }
+    if (!/[A-Z]/.test(password)) {
+        return "La contraseña debe incluir al menos una letra mayúscula";
+    }
+    if (!/[^A-Za-z0-9\s]/.test(password)) {
+        return "La contraseña debe incluir al menos un símbolo (ej: . _ - ! @ # $)";
+    }
+    return null;
+}
+
 /**
  * @route   POST /api/auth/register
  * @desc    Registrar un nuevo usuario
@@ -14,22 +35,51 @@ router.post("/register", async (req, res, next) => {
     try {
         const { nombre, email, password } = req.body;
 
-        // 1. Validaciones básicas de entrada
-        if (!nombre || !email || !password) {
+        // 1. Validar tipos y presencia
+        if (
+            typeof nombre !== "string" ||
+            typeof email !== "string" ||
+            typeof password !== "string"
+        ) {
             return res.status(400).json({
                 error: "Por favor complete todos los campos obligatorios: nombre, email y password",
             });
         }
 
-        if (password.length < 6) {
+        const normalizedNombre = nombre.trim();
+        const normalizedEmail = email.trim().toLowerCase();
+
+        // 2. Validar nombre de usuario
+        if (!normalizedNombre) {
             return res.status(400).json({
-                error: "La contraseña debe tener al menos 6 caracteres",
+                error: "El nombre de usuario no puede estar vacío",
+            });
+        }
+        if (normalizedNombre.length < 3 || normalizedNombre.length > 20) {
+            return res.status(400).json({
+                error: "El nombre de usuario debe tener entre 3 y 20 caracteres",
+            });
+        }
+        if (/\s/.test(normalizedNombre)) {
+            return res.status(400).json({
+                error: "El nombre de usuario no puede tener espacios",
             });
         }
 
-        const normalizedEmail = email.trim().toLowerCase();
+        // 3. Validar email
+        if (!EMAIL_REGEX.test(normalizedEmail)) {
+            return res.status(400).json({
+                error: "Por favor ingrese un email válido",
+            });
+        }
 
-        // 2. Comprobar si el usuario ya existe
+        // 4. Validar contraseña fuerte antes de hashear
+        const errorPassword = validarPassword(password);
+        if (errorPassword) {
+            return res.status(400).json({ error: errorPassword });
+        }
+
+        // 5. Comprobar si el usuario ya existe
         const userExists = await User.findOne({ email: normalizedEmail });
         if (userExists) {
             return res.status(400).json({
@@ -37,18 +87,18 @@ router.post("/register", async (req, res, next) => {
             });
         }
 
-        // 3. Hashear password con salt rounds
+        // 6. Hashear password con salt rounds
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // 4. Crear usuario en MongoDB
+        // 7. Crear usuario en MongoDB
         const nuevoUsuario = await User.create({
-            nombre: nombre.trim(),
+            nombre: normalizedNombre,
             email: normalizedEmail,
             password: hashedPassword,
         });
 
-        // 5. Responder limpio (el método toJSON de User omite password)
+        // 8. Responder limpio (el método toJSON de User omite password)
         return res.status(201).json({
             mensaje: "Usuario registrado con éxito",
             user: nuevoUsuario,
@@ -67,13 +117,24 @@ router.post("/login", async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
+        if (typeof email !== "string" || typeof password !== "string" || !email.trim() || !password) {
             return res.status(400).json({
                 error: "Debe ingresar email y contraseña",
             });
         }
 
         const normalizedEmail = email.trim().toLowerCase();
+
+        if (!EMAIL_REGEX.test(normalizedEmail)) {
+            return res.status(400).json({
+                error: "Por favor ingrese un email válido",
+            });
+        }
+
+        const errorPassword = validarPassword(password);
+        if (errorPassword) {
+            return res.status(400).json({ error: errorPassword });
+        }
 
         // 1. Buscar usuario
         const usuario = await User.findOne({ email: normalizedEmail });

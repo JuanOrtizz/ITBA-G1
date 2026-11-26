@@ -4,8 +4,19 @@ import { getImageUrl } from "../utils/imageUrl";
 
 function ProductCard({ producto, esDestacado = false }) {
   const navigate = useNavigate();
-  const { agregarAlCarrito } = useCart();
+  const { carrito, agregarAlCarrito } = useCart();
   const imgSrc = getImageUrl(producto.imagenUrl || producto.imagen);
+
+  const productoId = producto._id || producto.id;
+  const stockDisponible = Number(producto.stock) || 0;
+  const itemEnCarrito = carrito.find(
+    (item) => (item._id || item.id) === productoId
+  );
+  const cantidadEnCarrito = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+
+  const sinStock = stockDisponible <= 0;
+  const llegoAlLimite = !sinStock && cantidadEnCarrito >= stockDisponible;
+  const botonDeshabilitado = sinStock || llegoAlLimite;
 
   return (
     <div
@@ -25,14 +36,19 @@ function ProductCard({ producto, esDestacado = false }) {
         <p className="producto-descripcion">{producto.descripcion}</p>
       )}
       <button
+        type="button"
         className="btn btn-primary"
         onClick={(e) => {
           e.stopPropagation();
-          e.preventDefault();
           agregarAlCarrito(producto);
         }}
+        disabled={botonDeshabilitado}
       >
-        Añadir al carrito
+        {sinStock
+          ? "Sin stock"
+          : llegoAlLimite
+            ? "Sin Stock"
+            : "Añadir al carrito"}
       </button>
     </div>
   );
