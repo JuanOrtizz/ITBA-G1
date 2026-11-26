@@ -1494,15 +1494,29 @@ h3,
     }
 }
 
-/* --- Alta de Producto y Edicion de Producto (CreateProduct.jsx / EditProduct.jsx) --- */
+/* --- Alta de Producto y Edicion de Producto (CreateProduct.jsx/EditProduct.jsx) --- */
+/* --- Login y Registro de Usuario (LoginPage.jsx/RegisterPage.jsx) --- */
 
-#contenedor-crear-producto, #contenedor-editar-producto {
+#contenedor-editar-crear-producto, #contenedor-usuario {
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 600px;
     margin: 20px auto 40px auto;
     text-align: center;
+}
+
+#contenedor-usuario .boton-primario {
+    margin-bottom: 18px;
+}
+
+#contenedor-usuario .texto-alternativo-usuario {
+    margin-top: 4px;
+}
+
+#contenedor-usuario .link-usuario {
+    text-decoration: underline;
+    font-weight: 600;
 }
 
 .formulario-base {

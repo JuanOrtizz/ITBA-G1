@@ -240,9 +240,20 @@ API_BASE_URL=http://localhost:5000
 | -------------- | ---------------------------------------------------------------------- |
 | `PORT`         | Puerto en el que se ejecuta el servidor.                               |
 | `NODE_ENV`     | Entorno de ejecución (`development` o `production`).                   |
-| `MONGODB_URI`  | Cadena de conexión a MongoDB.                                          |
+| `MONGODB_URI`  | Cadena de conexión a MongoDB Atlas.                                    |
 | `CLIENT_URL`   | URL del frontend autorizada para acceder a la API mediante CORS.       |
-| `API_BASE_URL` | URL base del backend utilizada para construir direcciones de recursos. |
+| `JWT_SECRET`   | Clave secreta para la firma y verificación de tokens JWT.              |
+
+### Endpoints de la API (Sprints 7 y 8)
+
+#### Autenticación y Usuarios
+- `POST /api/auth/register`: Registro de usuario (`nombre`, `email`, `password`). Devuelve el usuario creado sin contraseña (`201`).
+- `POST /api/auth/login`: Autenticación de usuario (`email`, `password`). Devuelve JWT y datos mínimos (`200`).
+- `GET /api/users/me`: Perfil del usuario autenticado. Requiere header `Authorization: Bearer <token>` (`200`).
+
+#### Pedidos (Orders)
+- `POST /api/orders`: Creación de pedido con los ítems del carrito. Requiere header `Authorization: Bearer <token>` (`201`).
+- `GET /api/orders/my`: Historial de pedidos exclusivo del usuario autenticado. Requiere header `Authorization: Bearer <token>` (`200`).
 
 ### Frontend
 
