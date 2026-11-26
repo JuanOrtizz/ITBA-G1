@@ -16,6 +16,8 @@ import FeaturedProducts from "./components/FeaturedProducts";
 import CreateProduct from "./components/CreateProduct";
 import EditProduct from "./components/EditProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Perfil from "./components/Perfil";
+import MisPedidos from "./components/MisPedidos";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 
@@ -29,22 +31,6 @@ function NotFound() {
       <h1>Página no encontrada</h1>
       <p>La página que buscás no existe.</p>
       <Link to="/">Volver al inicio</Link>
-    </section>
-  );
-}
-
-function PerfilProvisorio() {
-  return (
-    <section className="catalogo-estado">
-      <h1>Perfil de usuario</h1>
-    </section>
-  );
-}
-
-function MisPedidosProvisorio() {
-  return (
-    <section className="catalogo-estado">
-      <h1>Mis pedidos</h1>
     </section>
   );
 }
@@ -343,7 +329,7 @@ function App() {
             path="/perfil"
             element={
               <ProtectedRoute>
-                <PerfilProvisorio />
+                <Perfil />
               </ProtectedRoute>
             }
           />
@@ -352,7 +338,7 @@ function App() {
             path="/mis-pedidos"
             element={
               <ProtectedRoute>
-                <MisPedidosProvisorio />
+                <MisPedidos />
               </ProtectedRoute>
             }
           />
