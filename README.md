@@ -14,6 +14,25 @@ La aplicación utiliza una arquitectura cliente-servidor: un frontend desarrolla
 | Valdez, Juan Pablo     |
 | Céspedes, Tadeo        |
 
+## Tecnologías utilizadas
+
+### Frontend
+- **React 19** y **Vite** para la construcción y empaquetado de la interfaz.
+- **React Router** para el enrutamiento SPA y la protección de rutas.
+- **HTML5**, **CSS3** (variables CSS y diseño responsivo) y **JavaScript (ES6+)**.
+- **Formspree** para la gestión y envío del formulario de contacto.
+
+### Backend y Base de Datos
+- **Node.js** y **Express** para el desarrollo de la API REST.
+- **MongoDB Atlas** y **Mongoose** para el modelado y persistencia de productos, usuarios y pedidos.
+- **JSON Web Tokens (JWT)** para la autenticación y autorización por roles (`user` / `admin`).
+- **CORS** y **dotenv** para la seguridad de orígenes cruzados y variables de entorno.
+
+### Despliegue y Control de Versiones
+- **Vercel** para el hosting del frontend.
+- **Render** para el despliegue del servidor backend.
+- **Git** y **GitHub** para el control de versiones y trabajo colaborativo.
+
 ## Estado del proyecto
 
 El repositorio contiene dos etapas del trabajo:
