@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-function CartPanel() {
+function CartPanel({ recargarProductos }) {
   const {
     carrito,
     carritoAbierto,
@@ -92,6 +92,9 @@ function CartPanel() {
 
       // Aqui solo vaciamos el carrito tras confirmar éxito del backend
       vaciarCarrito();
+      if (recargarProductos) {
+        await recargarProductos();
+      }
       setCompraExitosa(data.mensaje || "¡Pedido creado con éxito!");
     } catch (err) {
       const mensaje =
@@ -161,6 +164,7 @@ function CartPanel() {
                       <button
                         type="button"
                         onClick={() => cambiarCantidad(productoId, 1)}
+                        disabled={producto.cantidad >= (Number(producto.stock) || 0)}
                       >
                         +
                       </button>

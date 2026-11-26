@@ -1,10 +1,12 @@
 import { useState } from "react";
 import ProductCard from "./ProductCard";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 function ProductsList({ productos, cargando, error }) {
-    
     const [busqueda, setBusqueda] = useState("");
+    const { usuario } = useAuth();
+    const esAdmin = usuario?.rol === "admin";
 
     const quitarAcentos = (str) => {
         return str
@@ -24,41 +26,50 @@ function ProductsList({ productos, cargando, error }) {
     if (cargando) {
         return <h2 className="mensaje-estado">Cargando catálogo...</h2>;
     }
-    
+
     if (error) {
-        return <h2 className="mensaje-estado">Error al cargar el catálogo:<br />
-                "{error}"</h2>;
+        return (
+            <h2 className="mensaje-estado">
+                Error al cargar el catálogo:<br />
+                "{error}"
+            </h2>
+        );
     }
-    
+
     return (
         <section>
             <h2 id="titulo-catalogo">Nuestro Catalogo</h2>
 
-            <input type="text" id="buscador" placeholder="Busque su mueble aquí" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} />
+            <input
+                type="text"
+                id="buscador"
+                placeholder="Busque su mueble aquí"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+            />
 
             {productosFiltrados.length === 0 ? (
                 <h2 className="mensaje-estado">No se encontraron muebles que coincidan con la búsqueda</h2>
             ) : (
                 <div id="contenedor-catalogo">
                     {productosFiltrados.map((producto) => (
-                        <ProductCard 
-                            key={producto._id} 
-                            producto={producto}  
+                        <ProductCard
+                            key={producto._id}
+                            producto={producto}
                         />
                     ))}
                 </div>
             )}
-                <div className="contenedor-botones-admin">
-                    
-                    <Link to="/admin/crear-producto" className="btn-admin-outline">
-                             + Nuevo Producto
-                    </Link>
 
+            {esAdmin && (
+                <div className="contenedor-botones-admin">
+                    <Link to="/admin/crear-producto" className="btn-admin-outline">
+                        + Nuevo Producto
+                    </Link>
                 </div>
-            
+            )}
         </section>
     );
-    
 }
 
 export default ProductsList;

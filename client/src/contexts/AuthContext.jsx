@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         checkAuth();
     }, []);
 
-    async function login({ email, password }){
+    async function login({ email, password }) {
         const respuesta = await fetch(`${API_URL}/api/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -66,13 +66,34 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser({ ...decodedUser, ...datos.user });
     }
 
-    function logout() {
+    const logout = useCallback(() => {
         localStorage.removeItem("authToken");
         localStorage.removeItem("authUser");
         setToken(null);
         setCurrentUser(null);
-    }
-    
+    }, []);
+
+    const actualizarSesion = useCallback((nuevoUsuario, nuevoToken) => {
+        let decodedUser = {};
+        if (nuevoToken) {
+            localStorage.setItem("authToken", nuevoToken);
+            setToken(nuevoToken);
+            try {
+                decodedUser = jwtDecode(nuevoToken);
+            } catch {
+                decodedUser = {};
+            }
+        }
+        if (nuevoUsuario) {
+            localStorage.setItem("authUser", JSON.stringify(nuevoUsuario));
+            setCurrentUser((prev) => ({
+                ...prev,
+                ...decodedUser,
+                ...nuevoUsuario,
+            }));
+        }
+    }, []);
+
     async function register({ username, email, password }) {
         const res = await fetch(`${API_URL}/api/auth/register`, {
             method: "POST",
@@ -85,10 +106,19 @@ export const AuthProvider = ({ children }) => {
         }
         await login({ email, password });
     }
-    
+
     // usuario: mismo dato que currentUser, con el nombre que usan Navbar y ProtectedRoute
-    const value = { currentUser, usuario: currentUser, token, cargando, login, register, logout };
-    
+    const value = {
+        currentUser,
+        usuario: currentUser,
+        token,
+        cargando,
+        login,
+        register,
+        logout,
+        actualizarSesion,
+    };
+
     return (
         <AuthContext.Provider value={value}>
             {children}

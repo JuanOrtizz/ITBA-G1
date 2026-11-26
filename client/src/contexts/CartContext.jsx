@@ -34,46 +34,49 @@ export function CartProvider({ children }) {
     }
   }, [carrito]);
 
-  function agregarAlCarrito(producto) {
-    const productoId = obtenerIdProducto(producto);
-    if (!productoId) return;
+function agregarAlCarrito(producto) {
+  const stockDisponible = Number(producto.stock) || 0;
+  if (stockDisponible <= 0) return;
 
-    setCarrito((prevCarrito) => {
-      const existente = prevCarrito.find(
-        (item) => obtenerIdProducto(item) === productoId,
+  const productoId = producto._id || producto.id;
+
+  setCarrito((prev) => {
+    const existente = prev.find((item) => (item._id || item.id) === productoId);
+
+    if (existente) {
+      // No supera el stock disponible
+      if (existente.cantidad >= stockDisponible) return prev;
+
+      return prev.map((item) =>
+        (item._id || item.id) === productoId
+          ? { ...item, cantidad: item.cantidad + 1, stock: stockDisponible }
+          : item
       );
+    }
 
-      if (existente) {
-        return prevCarrito.map((item) =>
-          obtenerIdProducto(item) === productoId
-            ? { ...item, cantidad: (item.cantidad || 1) + 1 }
-            : item,
-        );
-      }
+    return [...prev, { ...producto, cantidad: 1, stock: stockDisponible }];
+  });
+}
 
-      return [
-        ...prevCarrito,
-        {
-          ...producto,
-          _id: productoId,
-          precio: Number(producto.precio) || 0,
-          cantidad: 1,
-        },
-      ];
-    });
-  }
+function cambiarCantidad(productoId, delta) {
+  setCarrito((prev) =>
+    prev
+      .map((item) => {
+        if ((item._id || item.id) !== productoId) return item;
 
-  function cambiarCantidad(productoId, cambio) {
-    setCarrito((prevCarrito) =>
-      prevCarrito
-        .map((item) =>
-          obtenerIdProducto(item) === productoId
-            ? { ...item, cantidad: item.cantidad + cambio }
-            : item,
-        )
-        .filter((item) => item.cantidad > 0),
-    );
-  }
+        const nuevaCantidad = item.cantidad + delta;
+        const stockMaximo = Number(item.stock) || 0;
+
+        // Si intenta sumar más que el stock, lo frenamos en el máximo
+        if (delta > 0 && nuevaCantidad > stockMaximo) {
+          return item;
+        }
+
+        return { ...item, cantidad: nuevaCantidad };
+      })
+      .filter((item) => item.cantidad > 0)
+  );
+}
 
   function eliminarDelCarrito(productoId) {
     setCarrito((prevCarrito) =>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -18,6 +19,7 @@ const ESTADO_VACIO = {
 function ProductForm({ recargarProductos }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { token } = useAuth();
   const esEdicion = Boolean(id);
   const [enviado, setEnviado] = useState(false);
   const [formData, setFormData] = useState(ESTADO_VACIO);
@@ -122,13 +124,18 @@ function ProductForm({ recargarProductos }) {
 
       const response = await fetch(url, {
         method: method,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(productoAEnviar),
       });
 
       if (!response.ok) {
         const errData = await response.json();
-        throw new Error(errData.message || "Error al guardar el producto");
+        throw new Error(
+          errData.message || errData.error || "Error al guardar el producto"
+        );
       }
 
       // Refrescamos la lista de productos en App.jsx para que el catálogo se actualice al instante

@@ -1800,7 +1800,7 @@ h3,
     border: 1px solid var(--color-secondary);
     color: var(--color-secondary);
 }
-/* --- Aviso de sesión requerida en carrito (B4) --- */
+/* --- Aviso de sesión requerida en carrito P4 --- */
 .carrito-login-aviso {
     display: flex;
     flex-direction: column;
@@ -1812,4 +1812,43 @@ h3,
     margin: 0;
     font-size: var(--fs-sm);
     color: var(--color-text-muted, #555);
+}
+/* Botones deshabilitados (sin stock, tope en carrito, enviando pedido) */
+.btn:disabled,
+.controles-cantidad button:disabled,
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.tarjeta-producto .btn:disabled {
+  background-color: #9e9e9e;
+  border-color: #9e9e9e;
+  color: #ffffff;
+}
+
+/* Mensajes de validación en Login y Registro */
+#contenedor-usuario .formulario-base .error-span {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #8b3a1e; /* marrón tostado/rojizo a tono con los labels y bordes */
+  margin-top: -12px;
+  margin-bottom: 12px;
+  padding-left: 4px;
+  line-height: 1.3;
+}
+
+/* Error general del servidor (ej: credenciales inválidas) */
+#contenedor-usuario .formulario-base p.error-span {
+  text-align: center;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: #f6ebe4;
+  border: 1px solid #c9967a;
+  border-radius: 8px;
 }
