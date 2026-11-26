@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -54,6 +55,8 @@ async function mensajeDeError(res, porDefecto) {
 function ProductDetail({ onAddToCart, onBack, onDelete }) {
     const { id: productoId } = useParams();
     const navigate = useNavigate();
+    const { usuario, token } = useAuth();
+    const esAdmin = usuario?.rol === "admin";
     const [confirmando, setConfirmando] = useState(false);
     const [eliminando, setEliminando] = useState(false);
     const [errorEliminar, setErrorEliminar] = useState(null);
@@ -130,6 +133,7 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
         try {
             const res = await fetch(`${API_URL}/api/productos/${_id}`, {
                 method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (!res.ok) {
@@ -153,34 +157,36 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
                 <button type="button" className="detalle-volver" onClick={onBack}>
                     &larr; Volver al catálogo
                 </button>
-                <div className="controles-admin">
-                    {confirmando ? (
-                        <div className="alerta-eliminar" role="alertdialog" aria-label="Confirmar eliminación">
-                            <span className="texto-alerta">¿Eliminar &quot;{nombre}&quot; definitivamente?</span>
-                            <button type="button" className="btn btn-primary" onClick={handleDelete} disabled={eliminando}>
-                                {eliminando ? "Eliminando…" : "Sí, eliminar"}
-                            </button>
-                            <button type="button" className="btn btn-ghost" onClick={() => setConfirmando(false)} disabled={eliminando}>
-                                Cancelar
-                            </button>
-                        </div>
-                    ) : (
-                        <>
-                            <button type="button" className="btn btn-primary" onClick={() => navigate(`/admin/editar-producto/${_id}`)}>
-                                Editar Producto
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={() => {
-                                    setErrorEliminar(null);
-                                    setConfirmando(true);
-                                }}>
-                                Eliminar Producto
-                            </button>
-                        </>
-                    )}
-                </div>
+                {esAdmin && (
+                    <div className="controles-admin">
+                        {confirmando ? (
+                            <div className="alerta-eliminar" role="alertdialog" aria-label="Confirmar eliminación">
+                                <span className="texto-alerta">¿Eliminar &quot;{nombre}&quot; definitivamente?</span>
+                                <button type="button" className="btn btn-primary" onClick={handleDelete} disabled={eliminando}>
+                                    {eliminando ? "Eliminando…" : "Sí, eliminar"}
+                                </button>
+                                <button type="button" className="btn btn-ghost" onClick={() => setConfirmando(false)} disabled={eliminando}>
+                                    Cancelar
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <button type="button" className="btn btn-primary" onClick={() => navigate(`/admin/editar-producto/${_id}`)}>
+                                    Editar Producto
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={() => {
+                                        setErrorEliminar(null);
+                                        setConfirmando(true);
+                                    }}>
+                                    Eliminar Producto
+                                </button>
+                            </>
+                        )}
+                    </div>
+                )}
                 {errorEliminar && (
                     <p className="detalle-error-eliminar" role="alert">
                         {errorEliminar}
