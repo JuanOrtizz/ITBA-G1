@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const API_URL = import.meta.env.VITE_API_URL || "";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -44,8 +45,8 @@ export const AuthProvider = ({ children }) => {
         checkAuth();
     }, []);
 
-    async function login(email, password){
-        const respuesta = await fetch(`${API_URL}/api/usuarios/login`, {
+    async function login({ email, password }){
+        const respuesta = await fetch(`${API_URL}/api/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
@@ -66,8 +67,8 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(null);
     }
     
-    async function registrar(username, email, password) {
-        const res = await fetch(`${API_URL}/api/usuarios/register`, {
+    async function register({ username, email, password }) {
+        const res = await fetch(`${API_URL}/api/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, email, password }),
@@ -76,10 +77,10 @@ export const AuthProvider = ({ children }) => {
         if (!res.ok) {
             throw new Error(data.mensaje || "Error al registrarse");
         }
-        await login(email, password);
+        await login({ email, password });
     }
     
-    const value = { currentUser, token, cargando, login, logout, registrar };
+    const value = { currentUser, token, cargando, login, register, logout };
     
     return (
         <AuthContext.Provider value={value}>

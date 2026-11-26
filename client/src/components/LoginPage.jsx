@@ -16,7 +16,7 @@ function LoginPage() {
         setError(null);
         setEnviando(true);
         try {
-            await login(email, password);
+            await login({ email, password });
             const destino = location.state?.desde || "/";
             navigate(destino, { replace: true });
         } catch (err) {

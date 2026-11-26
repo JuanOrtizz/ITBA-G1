@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 
 function RegisterPage() {
-    const { registrar } = useContext(AuthContext);
+    const { register } = useContext(AuthContext);
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
@@ -15,13 +15,23 @@ function RegisterPage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+
+        if (!username.trim() || !email.trim()) {
+            setError("Completá el nombre de usuario y el email");
+            return;
+        }
+        if (password.length < 6) {
+            setError("La contraseña debe tener al menos 6 caracteres");
+            return;
+        }
+
         if (password !== confirmPassword) {
             setError("Las contraseñas no coinciden");
             return;
         }
         setEnviando(true);
         try {
-            await registrar({ username, email, password });
+            await register({ username, email, password });
             navigate("/", { replace: true });
         } catch (err) {
             setError(err.message);
