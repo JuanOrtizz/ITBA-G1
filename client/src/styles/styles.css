@@ -1497,17 +1497,45 @@ h3,
 /* --- Alta de Producto y Edicion de Producto (CreateProduct.jsx/EditProduct.jsx) --- */
 /* --- Login y Registro de Usuario (LoginPage.jsx/RegisterPage.jsx) --- */
 
-#contenedor-editar-crear-producto, #contenedor-usuario {
+#contenedor-editar-crear-producto,
+#contenedor-usuario {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: min(calc(100% - 2rem), 600px);
     max-width: 600px;
     margin: 20px auto 40px auto;
     text-align: center;
 }
 
 #contenedor-usuario .boton-primario {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    width: fit-content;
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     margin-bottom: 18px;
+    transition:
+        background var(--transition),
+        transform var(--transition);
+}
+
+#contenedor-usuario .boton-primario:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+}
+
+#contenedor-usuario .boton-primario:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
 }
 
 #contenedor-usuario .texto-alternativo-usuario {
@@ -1515,6 +1543,7 @@ h3,
 }
 
 #contenedor-usuario .link-usuario {
+    color: var(--color-primary);
     text-decoration: underline;
     font-weight: 600;
 }
