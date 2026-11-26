@@ -1,21 +1,31 @@
-import { useContext } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 function ProtectedRoute({ children, soloAdmin = false }) {
-    
-    const { currentUser } = useContext(AuthContext);
-    const location = useLocation();
-    
-    if (!currentUser) {
-        return <Navigate to="/login" replace state={{ desde: location.pathname }} />;
-    }
-    
-    if (soloAdmin && currentUser.rol !== "admin") {
-        return <p className="mensaje-estado">Necesitás ser administrador para ver esta página.</p>;
-    }
-    
-    return children;
+  const { usuario, cargando } = useAuth();
+  const location = useLocation();
+
+  if (cargando) {
+    return (
+      <section className="catalogo-estado">
+        <p>Cargando... </p>
+      </section>
+    );
+  }
+
+  if (!usuario) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  if (soloAdmin && usuario.rol !== "admin") {
+    return (
+      <section className="catalogo-estado">
+        <p>Necesitás ser administrador para ver esta página.</p>
+      </section>
+    );
+  }
+
+  return children;
 }
 
 export default ProtectedRoute;

@@ -1,11 +1,11 @@
 import ProductForm from "./ProductForm";
 
-function EditProduct() {
+function EditProduct({ recargarProductos }) {
     return (
         <section id="contenedor-editar-crear-producto">
             <h2>Edición de Producto</h2>
             <p>Modifique los campos que quiera para actualizar el catálogo</p>
-            <ProductForm />
+            <ProductForm recargarProductos={recargarProductos} />
         </section>
     );
 }

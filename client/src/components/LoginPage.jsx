@@ -17,7 +17,7 @@ function LoginPage() {
         setEnviando(true);
         try {
             await login({ email, password });
-            const destino = location.state?.desde || "/";
+            const destino = location.state?.from?.pathname || location.state?.desde || "/";
             navigate(destino, { replace: true });
         } catch (err) {
             setError(err.message);
