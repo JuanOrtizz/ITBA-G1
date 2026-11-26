@@ -1592,3 +1592,52 @@ h3,
 .input-valor {
     flex: 2;
 }
+/* --- Checkout en panel del carrito P4 --- */ 
+.carrito-panel__pie {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+}
+
+.carrito-panel__checkout-btn {
+    width: 100%;
+}
+
+.carrito-panel__checkout-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+/* --- Mensajes de feedback del checkout P4 --- */
+.carrito-alerta {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.carrito-alerta--error {
+    background: #fdecea;
+    border: 1px solid #f5c2c0;
+    color: #b3261e;
+}
+
+.carrito-alerta--exito {
+    background: #edf5ec;
+    border: 1px solid var(--color-secondary);
+    color: var(--color-secondary);
+}
+/* --- Aviso de sesión requerida en carrito (B4) --- */
+.carrito-login-aviso {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.carrito-login-aviso p {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted, #555);
+}
