@@ -1592,6 +1592,178 @@ h3,
 .input-valor {
     flex: 2;
 }
+/* -----------------------------------------------------------------------------
+   Cuenta: perfil y mis pedidos
+   ----------------------------------------------------------------------------- */
+
+.cuenta {
+    width: min(calc(100% - 2rem), 48rem);
+    margin: 0 auto;
+    padding: var(--space-xl) 0 var(--space-2xl);
+}
+
+.cuenta-encabezado {
+    margin-bottom: var(--space-lg);
+}
+
+.cuenta-encabezado h1 {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    line-height: 1.2;
+}
+
+.cuenta-encabezado p {
+    color: var(--color-text-muted);
+}
+
+.cuenta-tarjeta {
+    padding: var(--space-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.cuenta-estado {
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.cuenta-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.cuenta-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.perfil-datos {
+    display: grid;
+    gap: var(--space-xs);
+}
+
+.perfil-datos dt {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.perfil-datos dd {
+    margin: 0 0 var(--space-sm);
+    overflow-wrap: anywhere;
+}
+
+.pedidos-lista {
+    display: grid;
+    gap: var(--space-lg);
+    padding: 0;
+    list-style: none;
+}
+
+.pedido-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.pedido-cabecera h2 {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+}
+
+.pedido-fecha {
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+}
+
+.pedido-estado {
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+}
+
+.pedido-estado--confirmado,
+.pedido-estado--entregado {
+    background: #e3ecdf;
+    color: var(--color-secondary);
+}
+
+.pedido-estado--enviado {
+    background: #f3e8cc;
+    color: #7a5d16;
+}
+
+.pedido-estado--cancelado {
+    background: #f6dcda;
+    color: #a3322b;
+}
+
+.pedido-items {
+    display: grid;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    list-style: none;
+}
+
+.pedido-item {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr auto;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.pedido-item img,
+.pedido-item-sin-imagen {
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: cover;
+    border-radius: calc(var(--radius) / 2);
+    background: var(--color-bg);
+}
+
+.pedido-item-nombre {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+}
+
+.pedido-item-cantidad {
+    font-size: var(--fs-sm);
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+.pedido-item-subtotal {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.pedido-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--fs-md);
+}
 /* --- Checkout en panel del carrito P4 --- */ 
 .carrito-panel__pie {
     flex-direction: column;
