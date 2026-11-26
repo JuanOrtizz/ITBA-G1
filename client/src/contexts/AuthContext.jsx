@@ -1,7 +1,7 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
-const API_URL = import.meta.env.VITE_API_URL || "";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext(null);
@@ -25,16 +25,20 @@ export const AuthProvider = ({ children }) => {
                 // Comprobar si el token expiró
                 if (decodedUser.exp && decodedUser.exp * 1000 < Date.now()) {
                     localStorage.removeItem("authToken");
+                    localStorage.removeItem("authUser");
                     setCurrentUser(null);
                     setToken(null);
                     return;
                 }
 
-                // Si el token sigue vigente, restaurar la sesión
+                // Si el token sigue vigente, restaurar la sesión.
+                // El JWT trae id, email y rol; el nombre sale del user que devolvió el login
+                const savedUser = JSON.parse(localStorage.getItem("authUser") || "null");
                 setToken(savedToken);
-                setCurrentUser(decodedUser);
+                setCurrentUser({ ...decodedUser, ...savedUser });
             } catch (error) {
                 localStorage.removeItem("authToken");
+                localStorage.removeItem("authUser");
                 setCurrentUser(null);
                 setToken(null);
                 console.error("Error al restaurar la sesión:", error);
@@ -53,16 +57,18 @@ export const AuthProvider = ({ children }) => {
         });
         const datos = await respuesta.json();
         if (!respuesta.ok) {
-            throw new Error(datos.message || datos.mensaje || "No se pudo iniciar sesión");
+            throw new Error(datos.error || datos.message || "No se pudo iniciar sesión");
         }
         localStorage.setItem("authToken", datos.token);
+        localStorage.setItem("authUser", JSON.stringify(datos.user));
         const decodedUser = jwtDecode(datos.token);
         setToken(datos.token);
-        setCurrentUser(decodedUser);
+        setCurrentUser({ ...decodedUser, ...datos.user });
     }
 
     function logout() {
         localStorage.removeItem("authToken");
+        localStorage.removeItem("authUser");
         setToken(null);
         setCurrentUser(null);
     }
@@ -71,16 +77,17 @@ export const AuthProvider = ({ children }) => {
         const res = await fetch(`${API_URL}/api/auth/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, email, password }),
+            body: JSON.stringify({ nombre: username, email, password }),
         });
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data.mensaje || "Error al registrarse");
+            throw new Error(data.error || data.message || "Error al registrarse");
         }
         await login({ email, password });
     }
     
-    const value = { currentUser, token, cargando, login, register, logout };
+    // usuario: mismo dato que currentUser, con el nombre que usan Navbar y ProtectedRoute
+    const value = { currentUser, usuario: currentUser, token, cargando, login, register, logout };
     
     return (
         <AuthContext.Provider value={value}>
@@ -88,3 +95,8 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function useAuth() {
+    return useContext(AuthContext);
+}

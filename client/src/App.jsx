@@ -16,7 +16,8 @@ import FeaturedProducts from "./components/FeaturedProducts";
 import CreateProduct from "./components/CreateProduct";
 import EditProduct from "./components/EditProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { AuthProvider } from "./context/AuthContext.jsx";
+import LoginPage from "./components/LoginPage";
+import RegisterPage from "./components/RegisterPage";
 
 import "./styles/styles.css";
 
@@ -317,15 +318,25 @@ function App() {
           />
 
           <Route path="/contacto" element={<ContactForm />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/registro" element={<RegisterPage />} />
 
           <Route
             path="/admin/crear-producto"
-            element={<CreateProduct recargarProductos={cargarProductos} />}
+            element={
+              <ProtectedRoute soloAdmin>
+                <CreateProduct recargarProductos={cargarProductos} />
+              </ProtectedRoute>
+            }
           />
 
           <Route
             path="/admin/editar-producto/:id"
-            element={<EditProduct recargarProductos={cargarProductos} />}
+            element={
+              <ProtectedRoute soloAdmin>
+                <EditProduct recargarProductos={cargarProductos} />
+              </ProtectedRoute>
+            }
           />
 
           <Route
