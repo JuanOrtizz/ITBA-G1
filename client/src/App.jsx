@@ -7,6 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import CartPanel from "./components/CartPanel";
 import Hero from "./components/Hero";
 import Footer from "./components/Footer";
 import ProductList from "./components/ProductList";
@@ -38,8 +39,6 @@ function NotFound() {
 function App() {
   const navegarA = useNavigate();
   const location = useLocation();
-  const [carrito, setCarrito] = useState([]);
-  const [carritoAbierto, setCarritoAbierto] = useState(false);
   const [productos, setProductos] = useState([]);
 
   const [cargando, setCargando] = useState(true);
@@ -55,7 +54,6 @@ function App() {
     }
   }
 
-  // Se llama al montar y después de eliminar un producto, para que el catálogo
   const cargarProductos = useCallback(async () => {
     const cargaActual = ++ultimaCarga.current;
 
@@ -84,13 +82,11 @@ function App() {
     }
   }, []);
 
-  // Carga inicial de productos desde la API
   useEffect(() => {
     //eslint-disable-next-line react-hooks/set-state-in-effect
     cargarProductos();
   }, [cargarProductos]);
 
-  // Saca el producto de la lista al instante y confirma contra la base
   function quitarProductoEliminado(productoId) {
     ultimaCarga.current++;
 
@@ -102,164 +98,13 @@ function App() {
   }
 
   useEffect(() => {
-    if (!carritoAbierto) return;
-
-    const cerrarConEscape = (e) => {
-      if (e.key === "Escape") setCarritoAbierto(false);
-    };
-
-    document.addEventListener("keydown", cerrarConEscape);
-    return () => document.removeEventListener("keydown", cerrarConEscape);
-  }, [carritoAbierto]);
-
-  // Cada cambio de vista arranca desde arriba de la página. "instant" evita
-  // la animación del scroll-behavior: smooth que tiene el html en styles.css
-  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname]);
 
-  function agregarAlCarrito(producto) {
-    setCarrito((prevCarrito) => {
-      const productoExistente = prevCarrito.find(
-        (item) => item.id === producto.id,
-      );
-
-      if (productoExistente) {
-        return prevCarrito.map((item) =>
-          item.id === producto.id
-            ? {
-                ...item,
-                cantidad: (item.cantidad || 1) + 1,
-              }
-            : item,
-        );
-      }
-
-      return [
-        ...prevCarrito,
-        {
-          ...producto,
-          cantidad: 1,
-        },
-      ];
-    });
-  }
-
-  function cambiarCantidad(productoId, cambio) {
-    setCarrito((carritoActual) =>
-      carritoActual
-        .map((producto) =>
-          producto.id === productoId
-            ? {
-                ...producto,
-                cantidad: producto.cantidad + cambio,
-              }
-            : producto,
-        )
-        .filter((producto) => producto.cantidad > 0),
-    );
-  }
-
-  function eliminarDelCarrito(productoId) {
-    setCarrito((carritoActual) =>
-      carritoActual.filter((producto) => producto.id !== productoId),
-    );
-  }
-
-  const cartCount = carrito.reduce(
-    (total, producto) => total + producto.cantidad,
-    0,
-  );
-
-  const totalCarrito = carrito.reduce(
-    (total, producto) => total + producto.precio * producto.cantidad,
-    0,
-  );
-
   return (
     <>
-      <Navbar
-        cartCount={cartCount}
-        onCartClick={() => setCarritoAbierto(true)}
-      />
-
-      {carritoAbierto && (
-        <div
-          id="panel-carrito"
-          className="is-open"
-          onClick={(e) => {
-            // Solo cierra si el click fue en el fondo, no dentro del panel
-            if (e.target === e.currentTarget) setCarritoAbierto(false);
-          }}
-        >
-          <div className="carrito-panel__contenido">
-            <div className="carrito-panel__encabezado">
-              <h2>Tu carrito</h2>
-
-              <button
-                type="button"
-                className="carrito-panel__cerrar"
-                aria-label="Cerrar carrito"
-                onClick={() => setCarritoAbierto(false)}
-              >
-                &times;
-              </button>
-            </div>
-
-            <div className="carrito-panel__productos">
-              {carrito.length === 0 ? (
-                <p>Tu carrito está vacío.</p>
-              ) : (
-                carrito.map((producto) => (
-                  <div className="carrito-item" key={producto._id}>
-                    <img src={producto.imagenUrl} alt={producto.nombre} />
-
-                    <div>
-                      <h3>{producto.nombre}</h3>
-                      <div className="controles-cantidad">
-                        <button
-                          type="button"
-                          onClick={() => cambiarCantidad(producto.id, -1)}
-                        >
-                          -
-                        </button>
-
-                        <span>{producto.cantidad}</span>
-
-                        <button
-                          type="button"
-                          onClick={() => cambiarCantidad(producto.id, 1)}
-                        >
-                          +
-                        </button>
-                      </div>
-                      <p>
-                        $
-                        {(producto.precio * producto.cantidad).toLocaleString(
-                          "es-AR",
-                        )}
-                      </p>
-                      <button
-                        type="button"
-                        className="boton-eliminar-item"
-                        onClick={() => eliminarDelCarrito(producto.id)}
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-            <div className="carrito-panel__pie">
-              <div className="carrito-panel__total">
-                <span>Total:</span>
-                <strong>${totalCarrito.toLocaleString("es-AR")}</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <Navbar />
+      <CartPanel />
 
       <main>
         <Routes>
@@ -274,7 +119,6 @@ function App() {
                   setVista={navegarVista}
                   cargando={cargando}
                   error={error}
-                  agregarAlCarrito={agregarAlCarrito}
                 />
               </>
             }
@@ -287,7 +131,6 @@ function App() {
                 productos={productos}
                 cargando={cargando}
                 error={error}
-                agregarAlCarrito={agregarAlCarrito}
               />
             }
           />
@@ -296,7 +139,6 @@ function App() {
             path="/productos/:id"
             element={
               <ProductDetail
-                onAddToCart={agregarAlCarrito}
                 onBack={() => navegarA("/productos")}
                 onDelete={quitarProductoEliminado}
               />

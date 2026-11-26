@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useCart } from "../contexts/CartContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -52,11 +53,12 @@ async function mensajeDeError(res, porDefecto) {
 }
 
 // Toma el id de la ruta /productos/:id y lo pide a GET /api/productos/:id
-function ProductDetail({ onAddToCart, onBack, onDelete }) {
+function ProductDetail({ onBack, onDelete }) {
     const { id: productoId } = useParams();
     const navigate = useNavigate();
     const { usuario, token } = useAuth();
     const esAdmin = usuario?.rol === "admin";
+    const { agregarAlCarrito } = useCart();
     const [confirmando, setConfirmando] = useState(false);
     const [eliminando, setEliminando] = useState(false);
     const [errorEliminar, setErrorEliminar] = useState(null);
@@ -122,7 +124,7 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
     const especificaciones = Object.entries(detalles || {});
 
     const handleAgregar = () => {
-        onAddToCart(productoMostrado);
+        agregarAlCarrito(productoMostrado);
         setAgregado(true);
     };
 

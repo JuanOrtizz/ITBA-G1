@@ -1,13 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useCart } from "../contexts/CartContext";
 
 import logo from "../../assets/img/logo.svg";
 
-function Navbar({ cartCount, onCartClick }) {
+function Navbar() {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [dropdownAbierto, setDropdownAbierto] = useState(false);
   const { usuario, cargando, logout } = useAuth();
+  const { cartCount, abrirCarrito } = useCart();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -227,7 +229,7 @@ function Navbar({ cartCount, onCartClick }) {
             className="cart-btn"
             type="button"
             aria-label={`Carrito con ${cartCount} productos`}
-            onClick={onCartClick}
+            onClick={abrirCarrito}
           >
             <svg
               width="22"
