@@ -14,6 +14,25 @@ La aplicación utiliza una arquitectura cliente-servidor: un frontend desarrolla
 | Valdez, Juan Pablo     |
 | Céspedes, Tadeo        |
 
+## Tecnologías utilizadas
+
+### Frontend
+- **React 19** y **Vite** para la construcción y empaquetado de la interfaz.
+- **React Router** para el enrutamiento SPA y la protección de rutas.
+- **HTML5**, **CSS3** (variables CSS y diseño responsivo) y **JavaScript (ES6+)**.
+- **Formspree** para la gestión y envío del formulario de contacto.
+
+### Backend y Base de Datos
+- **Node.js** y **Express** para el desarrollo de la API REST.
+- **MongoDB Atlas** y **Mongoose** para el modelado y persistencia de productos, usuarios y pedidos.
+- **JSON Web Tokens (JWT)** para la autenticación y autorización por roles (`user` / `admin`).
+- **CORS** y **dotenv** para la seguridad de orígenes cruzados y variables de entorno.
+
+### Despliegue y Control de Versiones
+- **Vercel** para el hosting del frontend.
+- **Render** para el despliegue del servidor backend.
+- **Git** y **GitHub** para el control de versiones y trabajo colaborativo.
+
 ## Estado del proyecto
 
 El repositorio contiene dos etapas del trabajo:
@@ -124,7 +143,7 @@ git --version
 Clonar el repositorio:
 
 ```bash
-git clone https://github.com/JuanOrtizz/ITBA-G1.git
+git clone [https://github.com/JuanOrtizz/ITBA-G1.git](https://github.com/JuanOrtizz/ITBA-G1.git)
 cd ITBA-G1
 ```
 
@@ -182,17 +201,22 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 ## API REST
 
-La API permite consultar y administrar los productos almacenados en MongoDB.
+La API permite consultar y administrar productos, gestionar usuarios y registrar pedidos en MongoDB. Las rutas protegidas requieren el header `Authorization: Bearer <token>`.
 
 **Base URL local:** `http://localhost:5000`
 
-| Método   | Ruta                 | Descripción                               |
-| -------- | -------------------- | ----------------------------------------- |
-| `GET`    | `/api/productos`     | Obtiene el catálogo de productos.         |
-| `GET`    | `/api/productos/:id` | Obtiene un producto por su identificador. |
-| `POST`   | `/api/productos`     | Crea un producto.                         |
-| `PUT`    | `/api/productos/:id` | Actualiza un producto existente.          |
-| `DELETE` | `/api/productos/:id` | Elimina un producto.                      |
+| Método   | Ruta                 | Acceso        | Descripción                                                        |
+| -------- | -------------------- | ------------- | ------------------------------------------------------------------ |
+| `GET`    | `/api/productos`     | Público       | Obtiene el catálogo de productos.                                  |
+| `GET`    | `/api/productos/:id` | Público       | Obtiene un producto por su identificador.                          |
+| `POST`   | `/api/productos`     | Token + Admin | Crea un producto nuevo.                                            |
+| `PUT`    | `/api/productos/:id` | Token + Admin | Actualiza un producto existente.                                   |
+| `DELETE` | `/api/productos/:id` | Token + Admin | Elimina un producto.                                               |
+| `POST`   | `/api/auth/register` | Público       | Registra un nuevo usuario (`nombre`, `email`, `password`).         |
+| `POST`   | `/api/auth/login`    | Público       | Autentica al usuario y devuelve el JWT.                            |
+| `GET`    | `/api/users/me`      | Token         | Devuelve los datos del perfil del usuario autenticado.             |
+| `POST`   | `/api/orders`        | Token         | Crea un pedido con los ítems del carrito del usuario autenticado.  |
+| `GET`    | `/api/orders/my`     | Token         | Obtiene el historial de pedidos exclusivo del usuario autenticado. |
 
 Las respuestas de la API utilizan **JSON** y códigos de estado HTTP para indicar el resultado de cada operación.
 
@@ -226,7 +250,7 @@ La aplicación utiliza variables de entorno para configurar la conexión entre e
 
 ### Backend
 
-Crear un archivo `.env` dentro de `backend/`:
+Crear un archivo `.env` dentro de `backend/` a partir de `backend/.env.example`:
 
 ```env
 PORT=5000
@@ -234,19 +258,21 @@ NODE_ENV=development
 MONGODB_URI=tu_uri_de_mongodb
 CLIENT_URL=http://localhost:3000
 API_BASE_URL=http://localhost:5000
+JWT_SECRET=tu_clave_secreta_jwt
 ```
 
-| Variable       | Descripción                                                            |
-| -------------- | ---------------------------------------------------------------------- |
-| `PORT`         | Puerto en el que se ejecuta el servidor.                               |
-| `NODE_ENV`     | Entorno de ejecución (`development` o `production`).                   |
-| `MONGODB_URI`  | Cadena de conexión a MongoDB.                                          |
-| `CLIENT_URL`   | URL del frontend autorizada para acceder a la API mediante CORS.       |
-| `API_BASE_URL` | URL base del backend utilizada para construir direcciones de recursos. |
+| Variable       | Descripción                                                             |
+| -------------- | ----------------------------------------------------------------------- |
+| `PORT`         | Puerto en el que se ejecuta el servidor.                                |
+| `NODE_ENV`     | Entorno de ejecución (`development` o `production`).                    |
+| `MONGODB_URI`  | Cadena de conexión a MongoDB Atlas.                                     |
+| `CLIENT_URL`   | URL del frontend autorizada para acceder a la API mediante CORS.        |
+| `API_BASE_URL` | URL base del backend para resolver las rutas de las imágenes estáticas. |
+| `JWT_SECRET`   | Clave secreta para la firma y verificación de tokens JWT.               |
 
 ### Frontend
 
-Crear un archivo `.env` dentro de `client/`:
+Crear un archivo `.env` dentro de `client/` a partir de `client/.env.example`:
 
 ```env
 VITE_API_URL=http://localhost:5000
@@ -257,10 +283,6 @@ VITE_API_URL=http://localhost:5000
 | `VITE_API_URL` | URL base de la API que consume el frontend. |
 
 **Importante:** los archivos `.env` pueden contener credenciales y no deben subirse al repositorio. En producción, las variables se configuran desde el panel del proveedor de hosting.
-
-## Formulario de contacto
-
-El envío de consultas se realiza mediante Formspree. Para que funcione correctamente, el formulario debe conservar la configuración del servicio correspondiente.
 
 ## Deploy
 
@@ -283,7 +305,9 @@ La aplicación se publica mediante dos servicios independientes:
 - **Directorio raíz:** `backend`.
 - **Comando de instalación:** `npm install`.
 - **Comando de inicio:** `npm start`.
-- **Variables de entorno:** `NODE_ENV`, `MONGODB_URI`, `CLIENT_URL` y `API_BASE_URL`.
+- **Variables de entorno:** `NODE_ENV`, `MONGODB_URI`, `CLIENT_URL`, `API_BASE_URL` y `JWT_SECRET`.
+
+> **Aviso:** El backend está en el plan gratis de Render: la primera carga puede tardar un minuto.
 
 La variable `CLIENT_URL` debe contener el dominio público del frontend para permitir las solicitudes mediante CORS.
 

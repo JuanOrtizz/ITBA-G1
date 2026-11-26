@@ -255,6 +255,129 @@ h3,
     gap: var(--space-xs);
 }
 
+.nav-logout {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.nav-logout:hover {
+    color: var(--color-primario, #a0522d);
+}
+
+/* Menú desplegable de usuario */
+.user-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 var(--space-sm);
+    border-radius: 999px;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    transition:
+        background var(--transition),
+        color var(--transition);
+}
+
+.user-menu-btn:hover,
+.user-menu-btn.is-open {
+    background: var(--color-bg);
+    color: var(--color-primary);
+}
+
+.user-menu-chevron {
+    transition: transform var(--transition);
+}
+
+.user-menu-btn.is-open .user-menu-chevron {
+    transform: rotate(180deg);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + var(--space-xs));
+    right: 0;
+    min-width: 13rem;
+    padding: var(--space-xs);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.user-dropdown-header {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-xs) var(--space-sm);
+    margin-bottom: 0.2rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.user-dropdown-greeting {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.user-dropdown-email {
+    font-size: var(--fs-xs);
+    color: var(--color-text-muted);
+    word-break: break-all;
+}
+
+.user-dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: 0.4rem;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    transition:
+        background var(--transition),
+        color var(--transition);
+}
+
+.user-dropdown-item:hover,
+.user-dropdown-item[aria-current="page"],
+.user-dropdown-item.activo {
+    background: var(--color-bg);
+    color: var(--color-primary);
+}
+
+.user-dropdown-divider {
+    height: 1px;
+    background: var(--color-border);
+    margin: 0.2rem 0;
+}
+
+.user-dropdown-logout {
+    color: #b33a2b;
+}
+
+.user-dropdown-logout:hover {
+    background: rgba(179, 58, 43, 0.08);
+    color: #b33a2b;
+}
+
 /* -----------------------------------------------------------------------------
    Hero
    ----------------------------------------------------------------------------- */
@@ -637,6 +760,21 @@ h3,
     }
     .detalle-media img {
         max-height: 560px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-menu-btn {
+        width: 2.5rem;
+        padding: 0;
+    }
+
+    .user-menu-name {
+        display: none;
+    }
+
+    .user-dropdown {
+        right: -2.25rem;
     }
 }
 
@@ -1356,15 +1494,58 @@ h3,
     }
 }
 
-/* --- Alta de Producto y Edicion de Producto (CreateProduct.jsx / EditProduct.jsx) --- */
+/* --- Alta de Producto y Edicion de Producto (CreateProduct.jsx/EditProduct.jsx) --- */
+/* --- Login y Registro de Usuario (LoginPage.jsx/RegisterPage.jsx) --- */
 
-#contenedor-crear-producto, #contenedor-editar-producto {
+#contenedor-editar-crear-producto,
+#contenedor-usuario {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: min(calc(100% - 2rem), 600px);
     max-width: 600px;
     margin: 20px auto 40px auto;
     text-align: center;
+}
+
+#contenedor-usuario .boton-primario {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    width: fit-content;
+    padding: 0.85rem 1.4rem;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: #fff;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+    transition:
+        background var(--transition),
+        transform var(--transition);
+}
+
+#contenedor-usuario .boton-primario:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+}
+
+#contenedor-usuario .boton-primario:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#contenedor-usuario .texto-alternativo-usuario {
+    margin-top: 4px;
+}
+
+#contenedor-usuario .link-usuario {
+    color: var(--color-primary);
+    text-decoration: underline;
+    font-weight: 600;
 }
 
 .formulario-base {
@@ -1439,4 +1620,264 @@ h3,
 
 .input-valor {
     flex: 2;
+}
+/* -----------------------------------------------------------------------------
+   Cuenta: perfil y mis pedidos
+   ----------------------------------------------------------------------------- */
+
+.cuenta {
+    width: min(calc(100% - 2rem), 48rem);
+    margin: 0 auto;
+    padding: var(--space-xl) 0 var(--space-2xl);
+}
+
+.cuenta-encabezado {
+    margin-bottom: var(--space-lg);
+}
+
+.cuenta-encabezado h1 {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    line-height: 1.2;
+}
+
+.cuenta-encabezado p {
+    color: var(--color-text-muted);
+}
+
+.cuenta-tarjeta {
+    padding: var(--space-lg);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.cuenta-estado {
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.cuenta-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.cuenta-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-lg);
+}
+
+.perfil-datos {
+    display: grid;
+    gap: var(--space-xs);
+}
+
+.perfil-datos dt {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.perfil-datos dd {
+    margin: 0 0 var(--space-sm);
+    overflow-wrap: anywhere;
+}
+
+.pedidos-lista {
+    display: grid;
+    gap: var(--space-lg);
+    padding: 0;
+    list-style: none;
+}
+
+.pedido-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.pedido-cabecera h2 {
+    font-family: var(--font-display);
+    font-size: var(--fs-md);
+}
+
+.pedido-fecha {
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted);
+}
+
+.pedido-estado {
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--color-bg);
+    color: var(--color-text-muted);
+}
+
+.pedido-estado--confirmado,
+.pedido-estado--entregado {
+    background: #e3ecdf;
+    color: var(--color-secondary);
+}
+
+.pedido-estado--enviado {
+    background: #f3e8cc;
+    color: #7a5d16;
+}
+
+.pedido-estado--cancelado {
+    background: #f6dcda;
+    color: #a3322b;
+}
+
+.pedido-items {
+    display: grid;
+    gap: var(--space-sm);
+    padding: var(--space-sm) 0;
+    list-style: none;
+}
+
+.pedido-item {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr auto;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.pedido-item img,
+.pedido-item-sin-imagen {
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: cover;
+    border-radius: calc(var(--radius) / 2);
+    background: var(--color-bg);
+}
+
+.pedido-item-nombre {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+}
+
+.pedido-item-cantidad {
+    font-size: var(--fs-sm);
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+.pedido-item-subtotal {
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.pedido-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--fs-md);
+}
+/* --- Checkout en panel del carrito P4 --- */ 
+.carrito-panel__pie {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+}
+
+.carrito-panel__checkout-btn {
+    width: 100%;
+}
+
+.carrito-panel__checkout-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+/* --- Mensajes de feedback del checkout P4 --- */
+.carrito-alerta {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.carrito-alerta--error {
+    background: #fdecea;
+    border: 1px solid #f5c2c0;
+    color: #b3261e;
+}
+
+.carrito-alerta--exito {
+    background: #edf5ec;
+    border: 1px solid var(--color-secondary);
+    color: var(--color-secondary);
+}
+/* --- Aviso de sesión requerida en carrito P4 --- */
+.carrito-login-aviso {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.carrito-login-aviso p {
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--color-text-muted, #555);
+}
+/* Botones deshabilitados (sin stock, tope en carrito, enviando pedido) */
+.btn:disabled,
+.controles-cantidad button:disabled,
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.tarjeta-producto .btn:disabled {
+  background-color: #9e9e9e;
+  border-color: #9e9e9e;
+  color: #ffffff;
+}
+
+/* Mensajes de validación en Login y Registro */
+#contenedor-usuario .formulario-base .error-span {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #8b3a1e; /* marrón tostado/rojizo a tono con los labels y bordes */
+  margin-top: -12px;
+  margin-bottom: 12px;
+  padding-left: 4px;
+  line-height: 1.3;
+}
+
+/* Error general del servidor (ej: credenciales inválidas) */
+#contenedor-usuario .formulario-base p.error-span {
+  text-align: center;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background-color: #f6ebe4;
+  border: 1px solid #c9967a;
+  border-radius: 8px;
 }

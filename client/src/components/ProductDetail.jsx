@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { useCart } from "../contexts/CartContext";
+import { getImageUrl } from "../utils/imageUrl";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -51,9 +54,12 @@ async function mensajeDeError(res, porDefecto) {
 }
 
 // Toma el id de la ruta /productos/:id y lo pide a GET /api/productos/:id
-function ProductDetail({ onAddToCart, onBack, onDelete }) {
+function ProductDetail({ onBack, onDelete }) {
     const { id: productoId } = useParams();
     const navigate = useNavigate();
+    const { usuario, token } = useAuth();
+    const esAdmin = usuario?.rol === "admin";
+    const { carrito, agregarAlCarrito } = useCart();
     const [confirmando, setConfirmando] = useState(false);
     const [eliminando, setEliminando] = useState(false);
     const [errorEliminar, setErrorEliminar] = useState(null);
@@ -115,11 +121,19 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
     }
 
     const { _id, nombre, categoria, precio, descripcion, detalles = {}, imagenUrl, stock = 0 } = productoMostrado;
-    const sinStock = !(stock > 0);
+    const idActual = _id || productoMostrado.id;
+    const stockDisponible = Number(stock) || 0;
+    const itemEnCarrito = carrito.find((item) => (item._id || item.id) === idActual);
+    const cantidadEnCarrito = itemEnCarrito ? itemEnCarrito.cantidad : 0;
+
+    const sinStock = stockDisponible <= 0;
+    const llegoAlLimite = !sinStock && cantidadEnCarrito >= stockDisponible;
+    const botonDeshabilitado = sinStock || llegoAlLimite;
     const especificaciones = Object.entries(detalles || {});
 
     const handleAgregar = () => {
-        onAddToCart(productoMostrado);
+        if (botonDeshabilitado) return;
+        agregarAlCarrito(productoMostrado);
         setAgregado(true);
     };
 
@@ -130,6 +144,7 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
         try {
             const res = await fetch(`${API_URL}/api/productos/${_id}`, {
                 method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (!res.ok) {
@@ -153,34 +168,36 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
                 <button type="button" className="detalle-volver" onClick={onBack}>
                     &larr; Volver al catálogo
                 </button>
-                <div className="controles-admin">
-                    {confirmando ? (
-                        <div className="alerta-eliminar" role="alertdialog" aria-label="Confirmar eliminación">
-                            <span className="texto-alerta">¿Eliminar &quot;{nombre}&quot; definitivamente?</span>
-                            <button type="button" className="btn btn-primary" onClick={handleDelete} disabled={eliminando}>
-                                {eliminando ? "Eliminando…" : "Sí, eliminar"}
-                            </button>
-                            <button type="button" className="btn btn-ghost" onClick={() => setConfirmando(false)} disabled={eliminando}>
-                                Cancelar
-                            </button>
-                        </div>
-                    ) : (
-                        <>
-                            <button type="button" className="btn btn-primary" onClick={() => navigate(`/admin/editar-producto/${_id}`)}>
-                                Editar Producto
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={() => {
-                                    setErrorEliminar(null);
-                                    setConfirmando(true);
-                                }}>
-                                Eliminar Producto
-                            </button>
-                        </>
-                    )}
-                </div>
+                {esAdmin && (
+                    <div className="controles-admin">
+                        {confirmando ? (
+                            <div className="alerta-eliminar" role="alertdialog" aria-label="Confirmar eliminación">
+                                <span className="texto-alerta">¿Eliminar &quot;{nombre}&quot; definitivamente?</span>
+                                <button type="button" className="btn btn-primary" onClick={handleDelete} disabled={eliminando}>
+                                    {eliminando ? "Eliminando…" : "Sí, eliminar"}
+                                </button>
+                                <button type="button" className="btn btn-ghost" onClick={() => setConfirmando(false)} disabled={eliminando}>
+                                    Cancelar
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <button type="button" className="btn btn-primary" onClick={() => navigate(`/admin/editar-producto/${_id}`)}>
+                                    Editar Producto
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={() => {
+                                        setErrorEliminar(null);
+                                        setConfirmando(true);
+                                    }}>
+                                    Eliminar Producto
+                                </button>
+                            </>
+                        )}
+                    </div>
+                )}
                 {errorEliminar && (
                     <p className="detalle-error-eliminar" role="alert">
                         {errorEliminar}
@@ -190,7 +207,7 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
 
             <div className="detalle-contenido">
                 <figure className="detalle-media">
-                    {imagenUrl ? <img src={imagenUrl} alt={nombre} /> : <div className="detalle-sin-imagen">Imagen no disponible</div>}
+                    {getImageUrl(imagenUrl) ? <img src={getImageUrl(imagenUrl)} alt={nombre} /> : <div className="detalle-sin-imagen">Imagen no disponible</div>}
                 </figure>
 
                 <div className="detalle-info">
@@ -199,11 +216,13 @@ function ProductDetail({ onAddToCart, onBack, onDelete }) {
 
                     <div className="detalle-compra">
                         <p className="detalle-precio">{formatearPrecio(precio)}</p>
-                        <button type="button" className="btn btn-primary" onClick={handleAgregar} disabled={sinStock}>
-                            {sinStock ? "Sin stock" : "Añadir al carrito"}
+                        <button type="button" className="btn btn-primary" onClick={handleAgregar} disabled={botonDeshabilitado}>
+                            {sinStock ? "Sin stock" : llegoAlLimite ? "Sin Stock" : "Añadir al carrito"}
                         </button>
                     </div>
-                    <p className="detalle-stock">{sinStock ? "No hay unidades disponibles por ahora." : `Stock: ${stock} ${stock === 1 ? "unidad" : "unidades"}`}</p>
+                    <p className="detalle-stock">
+                        {sinStock ? "No hay unidades disponibles por ahora." : `Stock: ${stockDisponible} ${stockDisponible === 1 ? "unidad" : "unidades"}`}
+                    </p>
                     <p className="detalle-feedback" role="status">
                         {agregado && `${nombre} se agregó al carrito.`}
                     </p>
