@@ -1,6 +1,6 @@
 import ProductCard from "./ProductCard";
 
-function FeaturedProducts({ productos, cargando, error, setVista, agregarAlCarrito }) {
+function FeaturedProducts({ productos, cargando, error, setVista }) {
     const productosDestacados = productos.filter((producto) => producto.destacado);
 
     return (
@@ -21,7 +21,7 @@ function FeaturedProducts({ productos, cargando, error, setVista, agregarAlCarri
 
                     <div className="products-grid">
                         {productosDestacados.map((producto) => (
-                            <ProductCard key={producto._id} producto={producto} agregarAlCarrito={agregarAlCarrito} esDestacado={true} />
+                            <ProductCard key={producto._id} producto={producto} esDestacado={true} />
                         ))}
                     </div>
                 </>

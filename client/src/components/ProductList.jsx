@@ -2,7 +2,7 @@ import { useState } from "react";
 import ProductCard from "./ProductCard";
 import { Link } from "react-router-dom";
 
-function ProductsList({ productos, cargando, error, agregarAlCarrito }) {
+function ProductsList({ productos, cargando, error }) {
     
     const [busqueda, setBusqueda] = useState("");
 
@@ -43,8 +43,7 @@ function ProductsList({ productos, cargando, error, agregarAlCarrito }) {
                     {productosFiltrados.map((producto) => (
                         <ProductCard 
                             key={producto._id} 
-                            producto={producto} 
-                            agregarAlCarrito={agregarAlCarrito} 
+                            producto={producto}  
                         />
                     ))}
                 </div>
