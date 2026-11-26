@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { getPrivado, formatearPrecio, formatearFecha } from "../utils/apiPrivada";
+import { getImageUrl } from "../utils/imageUrl";
 
 const ETIQUETAS_ESTADO = {
     pendiente: "Pendiente",
@@ -99,8 +100,8 @@ function MisPedidos() {
                             <ul className="pedido-items">
                                 {pedido.items.map((item, i) => (
                                     <li key={`${pedido._id}-${i}`} className="pedido-item">
-                                        {item.imagenUrl ? (
-                                            <img src={item.imagenUrl} alt="" />
+                                        {getImageUrl(item.imagenUrl) ? (
+                                            <img src={getImageUrl(item.imagenUrl)} alt="" />
                                         ) : (
                                             <span className="pedido-item-sin-imagen" aria-hidden="true" />
                                         )}
